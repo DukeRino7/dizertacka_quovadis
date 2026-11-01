@@ -4,6 +4,7 @@ Texty, z ktorých sa budú preberať informácie do práce. Číslované podľa 
 
 | Súbor | Obsah | Stav |
 |---|---|---|
+| `00_vyskumne_otazky.md` | výskumné otázky a pravidlá výberu modelov (učiteľ, študent) | otázky dohodnuté, pravidlá = NÁVRH |
 | `01_audit_dat.md` | štruktúra datasetov, párovanie, označenia, zistené problémy | EMBER overený, Speakeasy čiastočne |
 | `02_staticke_data.md` | spoločné rozdelenie a predspracovanie statických dát | hotové |
 | `03_protokol_a_modely.md` | dohodnutá sada modelov a spoločný trénovací protokol | protokol = NÁVRH |
