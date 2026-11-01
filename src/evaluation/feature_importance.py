@@ -178,13 +178,8 @@ Permutácia jedného príznaku podhodnocuje skupinu korelovaných príznakov –
 
 def main(approach: str, models: list[str] | None):
     acfg = load_config("configs/analysis/feature_importance.yaml")
-    from src.data.providers import feature_names
-    names = feature_names(approach)
-    if approach == "static":
-        from src.data.static_dataset import feature_names as fn
-        feats = fn()[["name", "group"]]
-    else:
-        feats = pd.DataFrame({"name": names, "group": "all"})
+    from src.data.providers import feature_table
+    feats = feature_table(approach)
     data = load_tabular(approach, splits=("validation",))["validation"]
     results = []
     for name, run in latest_runs(approach).items():

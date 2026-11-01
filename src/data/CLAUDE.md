@@ -12,9 +12,15 @@ Spúšťať z koreňa projektu cez `.venv\Scripts\python.exe -m src.data.<modul>
 | `build_static.py` | statický dataset, štatistiky, grafy → `processed/static` | hotové |
 | `static_dataset.py` | načítanie `processed/static` pre modely (`load_split`) | hotové |
 | `static_transforms.py` | učené transformácie pre modely (`StaticPreprocessor`: konštantné stĺpce, signed log1p, štandardizácia) | hotové |
-| dynamická časť | cache Speakeasy reportov | čaká na stiahnutie dát |
+| `speakeasy_source.py` | nájdenie a robustné čítanie Speakeasy reportov, súhrn reportu | hotové (overené na teste) |
+| `audit_dynamic.py` | audit dynamických dát → `processed/dynamic/audit` | pripravené, čaká na dáta |
+| `build_dynamic.py` | normalizovaná cache reportov → `processed/dynamic/cache` | pripravené, čaká na dáta |
+| `dynamic_features.py` | vektor z n-gramov API, udalostí a súhrnu (slovník iba z tréningu) | pripravené |
+| `build_dynamic_tabular.py` | dynamický dataset pre rebríček → `processed/dynamic/tabular` | pripravené, čaká na dáta |
+| `providers.py` | jednotné načítanie static / dynamic / hybrid (zarovnanie podľa SHA-256) | hotové |
 
-Konfigurácie: `configs/data/index.yaml`, `configs/data/static.yaml`.
+Konfigurácie: `configs/data/index.yaml`, `configs/data/static.yaml`, `configs/data/dynamic.yaml`.
+Dynamické dáta: `docs/04_dynamicke_data.md` (formát, postup, poradie spustenia).
 
 Overené úskalia (detaily v `docs/01_audit_dat.md`):
 - V EMBER `features.npy` sa riadok vzorky určuje **indexom z prvého stĺpca `hashes.txt`**, nie poradím riadku.

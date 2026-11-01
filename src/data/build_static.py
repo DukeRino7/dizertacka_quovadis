@@ -74,7 +74,7 @@ def drift_table(X: dict, cfg: dict, seed: int) -> pd.DataFrame:
     sub = {s: np.asarray(X[s][np.sort(rng.choice(len(X[s]), min(k, len(X[s])), replace=False))])
            for s in SPLIT_ORDER}
     rows = [(j, ks_statistic(sub["train"][:, j], sub["validation"][:, j]),
-             ks_statistic(sub["train"][:, j], sub["test"][:, j])) for j in range(EMBER_DIM)]
+             ks_statistic(sub["train"][:, j], sub["test"][:, j])) for j in range(sub["train"].shape[1])]
     return pd.DataFrame(rows, columns=["column", "ks_train_validation", "ks_train_test"])
 
 

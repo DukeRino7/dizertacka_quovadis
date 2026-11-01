@@ -1,7 +1,14 @@
 # configs/hybrid/
 
-Konfigurácie pre `hybrid`, jeden súbor na model alebo variant (napr. `lr.yaml`).
-Kód modelu: `src/models/hybrid/`. Výsledky: `runs/hybrid/<model>/`. Konvencie: `configs/CLAUDE.md`.
+Spoločný rebríček modelov pre prístup `hybrid` – **rovnaké modely a priestory hyperparametrov ako `configs/static/`**,
+líši sa iba vstup: spojenie statického EMBER vektora a dynamického vektora (ranná fúzia). Spoločné pravidlá: `configs/protocol.yaml`.
 
-## Konfigurácie
-_Zatiaľ žiadne._
+| Súbor | Model | Výsledky |
+|---|---|---|
+| `lr.yaml` | logistická regresia | `runs/hybrid/lr/` |
+| `rf.yaml` | Random Forest | `runs/hybrid/rf/` |
+| `lightgbm.yaml` | LightGBM | `runs/hybrid/lightgbm/` |
+| `mlp_small.yaml` | malé MLP | `runs/hybrid/mlp_small/` |
+| `mlp_large.yaml` | veľké MLP | `runs/hybrid/mlp_large/` |
+
+Spustiť až po príprave dynamických dát: `.venv\Scripts\python.exe -m src.training.run_suite --approach hybrid`.

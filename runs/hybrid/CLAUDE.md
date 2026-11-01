@@ -1,7 +1,6 @@
 # runs/hybrid/
 
-Výsledky pre `hybrid`. Každý model má vlastný podpriečinok (`runs/hybrid/<model>/`) so svojím `CLAUDE.md` a behmi.
-Konvencie popisuje `runs/CLAUDE.md`.
+Výsledky prístupu `hybrid` (spoločný rebríček: lr, rf, lightgbm, mlp_small, mlp_large; neskôr špecifické modely).
+Každý model má vlastný podpriečinok s prehľadom behov v `CLAUDE.md`. Porovnanie: `runs/comparison/hybrid/README.md`.
 
-## Modely a behy
-_Zatiaľ žiadne._
+_Zatiaľ žiadne behy – čaká sa na dynamické dáta._

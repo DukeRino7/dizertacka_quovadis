@@ -1,0 +1,26 @@
+# Príprava dynamických (Speakeasy) dát. Výstup: processed/dynamic/
+# Hodnoty označené NÁVRH sa potvrdia až po audite TRÉNINGOVÝCH reportov (nie podľa testu).
+
+speakeasy_listing: data/quovadis-speakeasy/.cache/huggingface/trees/fc2e98fac0b4d43a5557ccab70c877af6cce9f4d.json
+
+audit:
+  workers: 10
+  tiny_max_api_calls: 5        # "malý report" pre audit (iba popis)
+  api_limit: 500               # max_api_count v speakeasy-config.json; vstupný bod s >= 500 volaniami bol orezaný
+  top_k: 15
+
+# Normalizovaná cache reportov (deterministická, nič sa neučí): processed/dynamic/cache/
+cache:
+  workers: 10
+  lowercase_api: true          # kernel32.X a KERNEL32.X = to isté volanie
+  max_arg_chars: 64            # argumenty sa ukladajú orezané (samostatný súbor, voliteľné použitie)
+  keep_args: true
+
+# Pevný vektor pre spoločný rebríček modelov (vrstva A) – slovník sa učí IBA na tréningu. NÁVRH.
+tabular:
+  ngram_range: [1, 2]          # jednotlivé API volania a dvojice po sebe idúcich volaní
+  min_doc_freq: 5              # n-gram musí byť aspoň v 5 tréningových vzorkách
+  max_features: 2000           # najčastejšie n-gramy podľa dokumentovej frekvencie na tréningu
+  count_transform: none        # uložia sa surové počty; log1p a škálovanie robí model (ako pri statických dátach)
+  include_events: true         # počty udalostí (súbory, register, sieť, procesy, ...)
+  include_summary: true        # súhrnné príznaky: počet vstupných bodov, vlákien, volaní, chýb emulácie, ...
