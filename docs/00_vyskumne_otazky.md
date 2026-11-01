@@ -2,6 +2,20 @@
 
 Stav k 2026-11-01. Otázky sformuloval autor práce; pravidlá výberu a vykazovania sú **dohodnuté**.
 
+## Tézy dizertačnej práce (znenie autora, 2026-11-01)
+1. Hybridný prístup kombinujúci statické a dynamické príznaky dosahuje vyššiu presnosť a stabilitu v zero-day scenároch.
+2. Hybridný prístup pri nízkej prevalencii malvéru dosahuje nižšiu mieru falošných poplachov pri zachovaní vysokej
+   citlivosti v porovnaní so samostatným statickým alebo dynamickým modelom.
+3. Destilácia vedomostí umožňuje vytvoriť rýchlejší model, ktorý si zachová porovnateľnú presnosť detekcie zero-day
+   malvéru ako komplexný hybridný model.
+4. Viacstupňová architektúra detekcie, v ktorej rýchle statické a destilované modely slúžia ako prvotný filter
+   a komplexný dynamický/hybridný model je aplikovaný iba na neisté prípady, zníži celkovú výpočtovú náročnosť systému.
+
+**Mapovanie téz na experimenty (NÁVRH, na dohodnutie):** zero-day = časový test (už teraz) + vynechanie rodiny
+z tréningu (leave-one-family-out, plánované); nízka prevalencia = metriky prepočítané na nízky podiel malvéru
+(plánované); stabilita = rozptyl cez seedy, rodiny a čas; „neisté prípady“ = eskalácia pri nezhode (teraz)
+a doplnkovo pri neistom skóre (plánované).
+
 ## Výskumné otázky
 1. **Najlepší hybridný model:** ktorý hybridný model (rebríček s rannou fúziou, dvojvetvová sieť, neskorá fúzia)
    dosahuje najlepšiu detekčnú kvalitu? Stane sa učiteľom študentov a veľkým modelom v kaskáde.
