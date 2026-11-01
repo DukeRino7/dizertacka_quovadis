@@ -18,6 +18,15 @@ baseline modelov). Implementácia destilácie nasleduje po výsledkoch učiteľo
    tréningových dátach príliš istý (napr. RF má na tréningu ROC-AUC 1,0), mäkké označenia by nič neniesli.
 5. **Kontrola:** rovnaký študent natrénovaný bez destilácie (iba skutočné označenia) – dôkaz prínosu destilácie.
 
+## Implementácia (pripravená, overená technicky s LR v úlohe učiteľa)
+1. Učiteľ sa vyberie podľa `docs/00_vyskumne_otazky.md` a zapíše do `configs/students_*/mlp_kd.yaml` (`distillation.teacher`).
+2. `python -m src.training.teacher_oof --teacher <prístup>/<model>` → `runs/teachers/<prístup>_<model>/<beh>/train_oof.parquet`.
+3. `python -m src.training.run_tabular --config configs/students_static/mlp_kd.yaml` (a `mlp_nokd.yaml`, a to isté pre dynamic).
+4. Benchmark študentov a overenie pravidla „aspoň 10× lacnejší než učiteľ“; potom kaskáda (`configs/cascade/`).
+
+Študent: MLP s 1 skrytou vrstvou (16–64 neurónov, NÁVRH), ladí sa aj α ∈ [0,1; 0,9] a T ∈ [1; 8].
+Kontrola `mlp_nokd`: identický priestor bez destilácie.
+
 ## Kaskáda (podľa zadania práce)
 Statický a dynamický študent ohodnotia vzorku; ak sa zhodnú (oba malware alebo oba benign pri svojich prahoch
 z validácie), rozhodnutie je konečné; inak rozhodne veľký hybridný model.

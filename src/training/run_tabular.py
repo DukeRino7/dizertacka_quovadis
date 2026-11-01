@@ -43,6 +43,21 @@ def latest_run(approach_model: str, root: Path = RUNS_DIR) -> Path:
     return runs[-1]
 
 
+def load_soft_targets(dcfg: dict, train_meta: pd.DataFrame, root: Path) -> tuple[np.ndarray, Path]:
+    """Mäkké označenia učiteľa zarovnané podľa SHA-256 s tréningovými riadkami."""
+    if not dcfg.get("teacher"):
+        raise ValueError("distillation.teacher nie je vyplnený – učiteľ sa vyberá podľa docs/00_vyskumne_otazky.md")
+    base = root / "teachers" / dcfg["teacher"].replace("/", "_")
+    runs = sorted(r for r in base.iterdir() if (r / "train_oof.parquet").exists()) if base.exists() else []
+    if not runs:
+        raise FileNotFoundError(f"chýbajú mäkké označenia učiteľa v {base} – spustiť src.training.teacher_oof")
+    oof = pd.read_parquet(runs[-1] / "train_oof.parquet")
+    m = train_meta[["sha256"]].merge(oof[["sha256", "p_teacher"]], on="sha256", how="left")
+    if m["p_teacher"].isna().any():
+        raise ValueError(f"{int(m['p_teacher'].isna().sum())} tréningových vzoriek nemá mäkké označenie učiteľa")
+    return m["p_teacher"].to_numpy(np.float32), runs[-1]
+
+
 def class_weights(y: np.ndarray, mode: str | None) -> np.ndarray:
     if mode != "balanced":
         return np.ones(len(y), dtype=np.float32)
@@ -67,7 +82,7 @@ def flatten(m: dict, prefix="") -> dict:
 
 # ----------------------------------------------------------------------------- ladenie
 
-def run_hpo(model_cls, cfg, protocol, data, w, run: Path, log) -> tuple[dict, pd.DataFrame, float]:
+def run_hpo(model_cls, cfg, protocol, data, w, run: Path, log, soft=None) -> tuple[dict, pd.DataFrame, float]:
     hpo = protocol["hpo"]
     Xtr, ytr, _ = data["train"]; Xva, yva, _ = data["validation"]
     fixed = cfg.get("fixed_params", {}) or {}
@@ -76,6 +91,7 @@ def run_hpo(model_cls, cfg, protocol, data, w, run: Path, log) -> tuple[dict, pd
         params = {**fixed, **suggest(trial, cfg["search_space"])}
         set_seed(hpo["trial_seed"])
         m = model_cls(params, seed=hpo["trial_seed"], threads=protocol["timing"]["throughput_threads"])
+        m.soft_targets = soft
         t = time.perf_counter()
         info = m.fit(Xtr, ytr, w, Xva, yva)
         trial.set_user_attr("fit_s", time.perf_counter() - t)
@@ -159,6 +175,13 @@ def main(config_path: str, runs_root: Path | None, tag: str | None, smoke: bool)
 
     w = class_weights(data["train"][1], protocol.get("class_weight"))
 
+    # destilácia vedomostí: mäkké označenia učiteľa pre tréning (out-of-fold, src/training/teacher_oof.py)
+    soft = None
+    if cfg.get("distillation"):
+        soft, src_oof = load_soft_targets(cfg["distillation"], data["train"][2], runs_root or RUNS_DIR)
+        timings["teacher_oof"] = rel(src_oof)
+        log(f"Destilácia: mäkké označenia učiteľa z {rel(src_oof)}")
+
     if cfg.get("params_from"):
         src_run = latest_run(cfg["params_from"], runs_root or RUNS_DIR)
         best = json.loads((src_run / "metrics.json").read_text(encoding="utf-8"))["best_params"]
@@ -167,7 +190,7 @@ def main(config_path: str, runs_root: Path | None, tag: str | None, smoke: bool)
         log(f"Bez ladenia: hyperparametre prevzaté z {rel(src_run)}")
     else:
         log(f"Ladenie: {protocol['hpo']['n_trials']} pokusov, cieľ {protocol['hpo']['objective']} na validácii")
-        best, trials, timings["hpo_s"] = run_hpo(model_cls, cfg, protocol, data, w, run, log)
+        best, trials, timings["hpo_s"] = run_hpo(model_cls, cfg, protocol, data, w, run, log, soft)
     timings["hpo_trials_completed"] = int((trials["state"] == "COMPLETE").sum())
     log(f"Najlepšie parametre: {best}")
     plots.hpo_history(trials, run / "plots" / "hpo_history.png", f"{cfg['name']}: priebeh ladenia")
@@ -180,6 +203,7 @@ def main(config_path: str, runs_root: Path | None, tag: str | None, smoke: bool)
     for seed in protocol["final"]["seeds"]:
         set_seed(seed)
         m = model_cls(best, seed=seed, threads=protocol["timing"]["throughput_threads"])
+        m.soft_targets = soft
         t = time.perf_counter()
         info = m.fit(Xtr, ytr, w, Xva, yva)
         fit_s = time.perf_counter() - t

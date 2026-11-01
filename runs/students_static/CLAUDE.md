@@ -1,7 +1,6 @@
 # runs/students_static/
 
-Výsledky pre `students_static`. Každý model má vlastný podpriečinok (`runs/students_static/<model>/`) so svojím `CLAUDE.md` a behmi.
-Konvencie popisuje `runs/CLAUDE.md`.
+Výsledky ľahkých static študentov: `mlp_kd` (destilácia) a `mlp_nokd` (kontrola bez destilácie).
+Konfigurácie: `configs/students_static/`. Porovnanie: `python -m src.evaluation.compare --approach students_static`.
 
-## Modely a behy
-_Zatiaľ žiadne._
+_Zatiaľ žiadne behy – čaká sa na výber učiteľa._

@@ -12,6 +12,7 @@ Každý prístup a model má vlastný priečinok, aby sa výsledky nemiešali.
 | `students_dynamic/` | ľahké dynamické študentské modely |
 | `cascade/` | finálna kaskáda a jej varianty |
 | `static_ablations/` | kontrolné experimenty statických modelov (bez vybraných príznakov) |
+| `teachers/` | mäkké označenia učiteľov na tréningu (out-of-fold) pre destiláciu |
 | `comparison/` | spoločné porovnanie prístupov (tabuľky, grafy) |
 
 Návrh obsahu priečinka modelu (zatiaľ neschválené):

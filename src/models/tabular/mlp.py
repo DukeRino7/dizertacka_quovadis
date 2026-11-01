@@ -1,4 +1,5 @@
 """Viacvrstvový perceptrón (PyTorch). Malé aj veľké MLP sú ten istý model s iným priestorom hyperparametrov.
+Ten istý model slúži aj ako študent pri destilácii (ak má nastavené soft_targets a parametre kd_alpha, kd_temperature).
 
 Učenie: AdamW, vážená binárna krížová entropia, early stopping podľa ROC-AUC na validácii
 (obnoví sa najlepšia epocha), zníženie learning rate pri stagnácii.
@@ -69,6 +70,12 @@ class MLP(TabularModel):
         wt = torch.as_tensor(w, dtype=torch.float32, device=dev)
         Xv = _to_tensor(X_val, dev)
         gen = torch.Generator(device=dev).manual_seed(self.seed)
+        # destilácia vedomostí: mäkké označenia učiteľa (nastavuje spúšťač cez self.soft_targets, iba pre tréning)
+        soft = getattr(self, "soft_targets", None)
+        if soft is not None:
+            alpha, T = float(p["kd_alpha"]), float(p["kd_temperature"])
+            st = torch.as_tensor(np.clip(soft, 1e-6, 1 - 1e-6), dtype=torch.float32, device=dev)
+            st = torch.sigmoid(torch.log(st / (1 - st)) / T)   # zmäkčenie pravdepodobností učiteľa teplotou T
         bs, best, best_state, bad, hist = p["batch_size"], -1.0, None, 0, {"train_loss": [], "validation_auc": []}
         for epoch in range(p.get("max_epochs", 100)):
             self.net.train()
@@ -79,7 +86,11 @@ class MLP(TabularModel):
                 if len(b) < 2:
                     continue
                 opt.zero_grad(set_to_none=True)
-                loss = (loss_fn(self.net(Xt[b]), yt[b]) * wt[b]).sum() / wt[b].sum()
+                logits = self.net(Xt[b])
+                loss = (loss_fn(logits, yt[b]) * wt[b]).sum() / wt[b].sum()
+                if soft is not None:  # α · strata so skutočným označením + (1 − α) · T² · strata s mäkkým označením učiteľa
+                    kd = (loss_fn(logits / T, st[b]) * wt[b]).sum() / wt[b].sum()
+                    loss = alpha * loss + (1 - alpha) * T * T * kd
                 loss.backward()
                 opt.step()
                 total += loss.item() * len(b)
