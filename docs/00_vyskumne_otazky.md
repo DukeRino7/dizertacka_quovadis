@@ -16,6 +16,21 @@ z tréningu (leave-one-family-out, plánované); nízka prevalencia = metriky pr
 (plánované); stabilita = rozptyl cez seedy, rodiny a čas; „neisté prípady“ = eskalácia pri nezhode (teraz)
 a doplnkovo pri neistom skóre (plánované).
 
+## Verzie experimentu (DOHODNUTÉ 2026-11-01)
+Jeden kód; verzia = značka v gite (`v1`, `v2`), výsledky v samostatných priečinkoch (`runs_v1/`, `runs_v2/`,
+`scripts/run_all.ps1 -RunsDir ...`). V2 kód iba rozširuje, V1 ostáva reprodukovateľná zo svojej značky.
+
+| | V1 | V2 (zero-day) |
+|---|---|---|
+| test | časový (tréning január 2022 → test apríl 2022) | časový + vynechaná rodina (leave-one-family-out, 7 rodín; rodina vynechaná aj z validácie; hyperparametre prevzaté z V1) |
+| kaskáda A (statický + dynamický študent, pri nezhode hybrid; emulácia sa robí pre každý súbor, šetrí sa výpočet modelov) | áno | áno |
+| kaskáda B (najprv statický študent, pri neistom skóre emulácia + hybrid; šetrí počet súborov v sandboxe) | nie (rozhodnutie autora) – pozn.: z uložených predikcií by bola takmer bez výpočtu | áno |
+| nízka prevalencia (metriky prepočítané z TPR/FPR na prevalenciu napr. 1 %, 0,1 %) | áno (iba prepočet) | áno |
+
+Formulácia tézy 4 sa prekonzultuje s vedúcou: „výpočtová náročnosť klasifikácie“ (kaskáda A) vs. „počet vzoriek
+vyžadujúcich dynamickú analýzu“ (kaskáda B). Čas emulácie sa nemeria (dataset neobsahuje PE súbory); 60 s
+z `speakeasy-config.json` možno použiť iba ako jasne označený predpoklad.
+
 ## Výskumné otázky
 1. **Najlepší hybridný model:** ktorý hybridný model (rebríček s rannou fúziou, dvojvetvová sieť, neskorá fúzia)
    dosahuje najlepšiu detekčnú kvalitu? Stane sa učiteľom študentov a veľkým modelom v kaskáde.
