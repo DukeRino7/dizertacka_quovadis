@@ -9,6 +9,24 @@ internet a pre neurónové siete grafická karta NVIDIA s aktuálnym ovládačom
 - alebo **ZIP konkrétnej verzie**: GitHub → *Tags* → napr. `v1` → *Source code (zip)* – bez prihlasovania v gite
   (vhodné na pracovnom počítači s iným GitHub účtom); verzia sa zapíše z `VERSION.txt` do výsledkov každého behu.
 
+## 0. Dohodnutý postup V1 (2026-11-01)
+Všetko počíta **pracovný notebook** (tréning, destilácia, kaskády aj merania spotreby → jeden počítač);
+**PC** slúži na kontrolu výsledkov, commit do gitu (záloha) a rozhodnutia. Po večeroch: večer spustiť skript,
+ráno prípadne zastaviť **Ctrl+C**, večer spustiť znova (hotové kroky/modely sa preskočia, stratí sa iba rozpracovaný model).
+
+| # | Kde | Čo |
+|---|---|---|
+| 0 | notebook | predbežný test statickej časti |
+| 1 | PC | kontrola testu, opravy → značka `v1` |
+| 2 | notebook | ZIP `v1` → `setup.ps1` → `run_static.ps1` |
+| 3 | notebook | Speakeasy skopírovať z PC do `data\quovadis-speakeasy` → `prepare_dynamic.ps1` → rozhodnutie podľa auditu |
+| 4 | notebook | `run_dynamic_hybrid.ps1` (2–3 večery) |
+| 5 | notebook | `run_distillation_cascade.ps1` |
+| 6 | PC | kontrola, záverečný report, commit → V1 hotová; potom V2 (zero-day) |
+
+Po každom kroku preniesť priečinok `runs\` (ZIP) na PC. **Kde sme:** `powershell -ExecutionPolicy Bypass -File scripts\status.ps1`.
+Pri meraniach spotreby: notebook v sieti (nie na batérii), režim vysokého výkonu, ostatné programy zavreté.
+
 ## 2. Príprava (raz)
 ```
 powershell -ExecutionPolicy Bypass -File scripts\setup.ps1
