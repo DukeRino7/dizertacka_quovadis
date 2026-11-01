@@ -17,6 +17,7 @@ Pravidlá:
 | `static/` | EMBER príznaky po častiach + štatistiky a grafy | `python -m src.data.build_static` | hotové |
 | `dynamic/audit/` | audit Speakeasy reportov | `python -m src.data.audit_dynamic` | čaká na dáta |
 | `dynamic/cache/` | normalizované reporty (všetky vstupné body vzorky spolu) | `python -m src.data.build_dynamic` | čaká na dáta |
+| `dynamic/sequence/` | ID tokenov API pre sekvenčné modely (slovník iba z tréningu) | `python -m src.data.build_dynamic_sequence` | čaká na dáta |
 | `dynamic/tabular/` | vektor pre rebríček (slovník n-gramov iba z tréningu) | `python -m src.data.build_dynamic_tabular` | čaká na dáta |
 
 Poradie: najprv `build_index`, potom `build_static` (a neskôr dynamická časť).

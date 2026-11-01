@@ -25,7 +25,7 @@ from src.common.config import load_config
 from src.common.paths import RUNS_DIR, rel
 from src.common.provenance import now_iso, write_json
 from src.data.providers import load_tabular
-from src.models.tabular import get_model_class
+from src.models.registry import get_model_class
 from . import plots as P
 from .compare import ORDER, latest_runs
 
@@ -184,6 +184,9 @@ def main(approach: str, models: list[str] | None):
     results = []
     for name, run in latest_runs(approach).items():
         if models and name not in models:
+            continue
+        if load_config(run / "config.yaml")["approach"] != approach:   # napr. sekvenčné modely – nemajú tabuľkové príznaky
+            print(f"{approach}/{name}: preskočené (iný typ vstupu)", flush=True)
             continue
         print(f"{approach}/{name}: analýza príznakov ...", flush=True)
         results.append(analyze_run(run, approach, data, feats, acfg))

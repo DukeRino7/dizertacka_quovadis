@@ -17,7 +17,8 @@ Spúšťať z koreňa projektu cez `.venv\Scripts\python.exe -m src.data.<modul>
 | `build_dynamic.py` | normalizovaná cache reportov → `processed/dynamic/cache` | pripravené, čaká na dáta |
 | `dynamic_features.py` | vektor z n-gramov API, udalostí a súhrnu (slovník iba z tréningu) | pripravené |
 | `build_dynamic_tabular.py` | dynamický dataset pre rebríček → `processed/dynamic/tabular` | pripravené, čaká na dáta |
-| `providers.py` | jednotné načítanie static / dynamic / hybrid (zarovnanie podľa SHA-256) | hotové |
+| `build_dynamic_sequence.py` | postupnosti ID tokenov API pre sekvenčné modely → `processed/dynamic/sequence` (slovník iba z tréningu) | pripravené, čaká na dáta |
+| `providers.py` | jednotné načítanie static / dynamic / hybrid / dynamic_seq / hybrid_seq (zarovnanie podľa SHA-256) | hotové |
 
 Konfigurácie: `configs/data/index.yaml`, `configs/data/static.yaml`, `configs/data/dynamic.yaml`.
 Dynamické dáta: `docs/04_dynamicke_data.md` (formát, postup, poradie spustenia).

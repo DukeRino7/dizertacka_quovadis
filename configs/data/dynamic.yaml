@@ -24,3 +24,9 @@ tabular:
   count_transform: none        # uložia sa surové počty; log1p a škálovanie robí model (ako pri statických dátach)
   include_events: true         # počty udalostí (súbory, register, sieť, procesy, ...)
   include_summary: true        # súhrnné príznaky: počet vstupných bodov, vlákien, volaní, chýb emulácie, ...
+
+# Postupnosti API volaní pre sekvenčné modely (vrstva B) – slovník IBA z tréningu. NÁVRH (potvrdiť po audite tréningu).
+sequence:
+  max_len: 1024                # prvých N volaní celej vzorky (vstupné body za sebou); dlhšie sa orežú, kratšie doplnia 0
+  min_freq: 5                  # API musí byť aspoň v 5 tréningových vzorkách, inak = neznáme (UNK)
+  max_vocab: 20000

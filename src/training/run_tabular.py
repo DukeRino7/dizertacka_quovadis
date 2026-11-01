@@ -28,7 +28,7 @@ from src.data.static_transforms import StaticPreprocessor
 from src.evaluation import plots
 from src.evaluation.metrics import evaluate, threshold_for_fpr
 from src.evaluation.timing import measure_inference
-from src.models.tabular import get_model_class
+from src.models.registry import get_model_class
 from .search_space import suggest
 
 KEY_METRICS = ["roc_auc", "pr_auc", "tpr_at_fpr_0.001", "tpr_at_fpr_0.01", "log_loss", "brier"]

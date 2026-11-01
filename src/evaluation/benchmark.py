@@ -26,7 +26,7 @@ from src.common.config import load_config
 from src.common.paths import RUNS_DIR, rel
 from src.common.provenance import environment, now_iso, write_json
 from src.data.providers import load_tabular
-from src.models.tabular import get_model_class
+from src.models.registry import get_model_class
 from .compare import latest_runs
 from .resources import ResourceMonitor, gpu_idle_power_w
 
@@ -111,11 +111,16 @@ def benchmark_run(run: Path, model_name: str, X: np.ndarray, cfg: dict) -> dict:
 def main(approach: str, models: list[str] | None):
     protocol = load_config("configs/protocol.yaml")
     cfg = protocol["benchmark"]
-    X = np.ascontiguousarray(load_tabular(approach, splits=("test",))["test"][0])
+    cache = {}
     for name, run in latest_runs(approach).items():
         if models and name not in models:
             continue
-        model_name = load_config(run / "config.yaml")["model"]
+        rcfg = load_config(run / "config.yaml")
+        model_name, data_approach = rcfg["model"], rcfg["approach"]   # napr. seq_cnn číta 'dynamic_seq'
+        if data_approach not in cache:
+            cache.clear()
+            cache[data_approach] = np.ascontiguousarray(load_tabular(data_approach, splits=("test",))["test"][0])
+        X = cache[data_approach]
         print(f"{approach}/{name}: meranie ...", flush=True)
         res = benchmark_run(run, model_name, X, cfg)
         res["environment"] = environment()

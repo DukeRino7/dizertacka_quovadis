@@ -1,10 +1,8 @@
-# src/models/dynamic/ – Dynamické modely
+# src/models/dynamic/ – špecifické dynamické modely (vrstva B)
 
-**Vstup:** behaviorálne reporty zo Speakeasy emulácie (všetky vstupné body a vlákna jednej vzorky spolu)
-**Úloha:** Baseline samostatnej dynamickej detekcie. Najlepší model môže slúžiť ako učiteľ pre `students_dynamic`.
+| Súbor | Model (`model:`) | Vstup | Stav |
+|---|---|---|---|
+| `sequence_cnn.py` | `seq_cnn` – embedding API + paralelné 1D konvolúcie + maximum cez postupnosť | `processed/dynamic/sequence` (ID tokenov, `approach: dynamic_seq`) | pripravené, overené na umelých dátach |
 
-- Jeden súbor = jeden model, napr. `lr.py`. Konfigurácia v `configs/dynamic/`, výsledky v `runs/dynamic/<model>/`.
-- Architektúry ani hyperparametre zatiaľ nie sú určené.
-
-## Modely
-_Zatiaľ žiadne._
+Dynamické modely spoločného rebríčka (n-gramy API) sú v `src/models/tabular/`, konfigurácie `configs/dynamic/`.
+Neurónové modely vrstvy B dedia spoločný tréningový cyklus z `src/models/torch_base.py`.

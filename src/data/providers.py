@@ -6,13 +6,16 @@ poradie riadkov je vo všetkých prístupoch rovnaké (overuje sa podľa SHA-256
 - static  : processed/static            (EMBER, 2381 príznakov)
 - dynamic : processed/dynamic/tabular   (n-gramy API, udalosti, súhrn reportu)
 - hybrid  : spojenie static | dynamic   (ranná fúzia – jeden vektor)
+- dynamic_seq : processed/dynamic/sequence (ID tokenov API, int32 [n, max_len]) – sekvenčné modely
+- hybrid_seq  : static | ID tokenov (float32) – dvojvetvová sieť, model si vstup rozdelí podľa n_static
 """
 import numpy as np
 import pandas as pd
 
 from src.common.paths import PROCESSED_DIR, STATIC_DIR
 
-DIRS = {"static": STATIC_DIR, "dynamic": PROCESSED_DIR / "dynamic" / "tabular"}
+DIRS = {"static": STATIC_DIR, "dynamic": PROCESSED_DIR / "dynamic" / "tabular",
+        "dynamic_seq": PROCESSED_DIR / "dynamic" / "sequence"}
 
 
 def _load_dir(base, split: str):
@@ -28,12 +31,12 @@ def load_tabular(approach: str, splits=("train", "validation", "test")) -> dict[
     for s in splits:
         if approach in DIRS:
             out[s] = _load_dir(DIRS[approach], s)
-        elif approach == "hybrid":
+        elif approach in ("hybrid", "hybrid_seq"):
             Xs, ys, ms = _load_dir(DIRS["static"], s)
-            Xd, yd, md = _load_dir(DIRS["dynamic"], s)
+            Xd, yd, md = _load_dir(DIRS["dynamic" if approach == "hybrid" else "dynamic_seq"], s)
             if not (ms["sha256"].to_numpy() == md["sha256"].to_numpy()).all() or not (ys == yd).all():
                 raise ValueError(f"{s}: statické a dynamické dáta nie sú zarovnané podľa SHA-256")
-            out[s] = (np.hstack([Xs, Xd]), ys, ms)
+            out[s] = (np.hstack([Xs, Xd.astype(np.float32)]), ys, ms)
         else:
             raise ValueError(approach)
     return out

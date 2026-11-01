@@ -15,9 +15,11 @@ static = EMBER, dynamic = vektor z API volaní (reprezentácia sa určí po kont
 | `mlp_small` | MLP, 1–2 skryté vrstvy | `src/models/tabular/mlp.py` | kandidát na ľahkého študenta |
 | `mlp_large` | MLP, 3–5 vrstiev, 512–2048 neurónov | `src/models/tabular/mlp.py` | kandidát na učiteľa |
 
-**Vrstva B – špecifické modely** (zatiaľ neimplementované): dynamický sekvenčný model nad postupnosťou API
-volaní; hybridná dvojvetvová sieť (kandidát na veľký model v kaskáde); **neskorá fúzia** skóre statického
-a dynamického modelu (kontrola, či sa eskalácia na veľký model oplatí).
+**Vrstva B – špecifické modely** (pripravené, čakajú na dáta; rovnaký protokol ako rebríček):
+- `seq_cnn` (`src/models/dynamic/sequence_cnn.py`): embedding API + 1D konvolúcie nad postupnosťou volaní (prvých 1024),
+- `two_branch` (`src/models/hybrid/two_branch.py`): statická MLP vetva + sekvenčná vetva, kandidát na veľký model v kaskáde,
+- **neskorá fúzia** (`src/models/hybrid/late_fusion.py`): priemer / stacking skóre statického a dynamického modelu
+  (kontrola, či sa eskalácia na veľký model oplatí).
 
 ## Spoločný protokol (platí pre každý model)
 | Oblasť | Pravidlo | Dôvod |

@@ -47,6 +47,9 @@ Hybrid (spoločný rebríček) = spojenie statického a dynamického vektora (ra
 .venv\Scripts\python.exe -m src.data.audit_dynamic            # 1. audit -> skontrolovať AUDIT.md a rozhodnúť
 .venv\Scripts\python.exe -m src.data.build_dynamic            # 2. cache
 .venv\Scripts\python.exe -m src.data.build_dynamic_tabular    # 3. vektor pre rebríček
+.venv\Scripts\python.exe -m src.data.build_dynamic_sequence   # 4. postupnosti pre sekvenčné modely
 .venv\Scripts\python.exe -m src.training.run_suite --approach dynamic
 .venv\Scripts\python.exe -m src.training.run_suite --approach hybrid
+.venv\Scripts\python.exe -m src.training.run_tabular --config configs/dynamic/seq_cnn.yaml
+.venv\Scripts\python.exe -m src.training.run_tabular --config configs/hybrid/two_branch.yaml
 ```
