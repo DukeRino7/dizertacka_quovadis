@@ -1,0 +1,17 @@
+# KONTROLNÝ EXPERIMENT (NÁVRH): rovnaký model ako configs/static/mlp_large.yaml, ale bez príznakov
+# digitálneho podpisu a času zostavenia (možné artefakty zberu dát). Hyperparametre sa preberajú
+# z posledného behu runs/static/mlp_large (bez nového ladenia), aby rozdiel spôsobili iba chýbajúce príznaky.
+name: mlp_large_no_sig_ts
+approach: static
+results_approach: static_ablations
+model: mlp
+description: mlp_large bez príznakov podpisu a času zostavenia
+protocol: configs/protocol.yaml
+params_from: static/mlp_large
+exclude_features:
+  - general_has_signature
+  - datadir_CERTIFICATE_TABLE_size
+  - datadir_CERTIFICATE_TABLE_virtual_address
+  - header_coff_timestamp
+search_space: {}
+fixed_params: {}

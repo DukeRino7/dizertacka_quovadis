@@ -21,6 +21,7 @@ foreach ($v in @("main", "nokd", "modal", "heavy", "baselines")) {
     $r += Step "cascade_$v" "Kaskáda: $v" @("-m", "src.cascade.evaluate", "--config", "configs/cascade/$v.yaml")
 }
 $r += Step "final_report" "Záverečné porovnanie (výskumné otázky)" @("-m", "src.evaluation.final_report")
+$r += Step "subsets"      "Výsledky podľa výsledku emulácie (malé reporty, unsupported_api)" @("-m", "src.evaluation.subset_analysis")
 Stop-Transcript | Out-Null
 Require $r "destilácia a kaskáda"
 Write-Host "`nHotovo: $RUNS\comparison\final\README.md" -ForegroundColor Green

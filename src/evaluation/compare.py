@@ -87,6 +87,27 @@ def plot_metric_bars(df: pd.DataFrame, metric: str, std: str, label: str, path: 
     P._save(fig, path)
 
 
+def prevalence_section(df: pd.DataFrame) -> str:
+    """Téza 2: výsledky pri nízkej prevalencii malvéru (prepočet z TPR/FPR na teste pri prahu z validácie)."""
+    from src.common.config import load_config
+    from .metrics import at_prevalence
+    prevs = load_config("configs/protocol.yaml").get("prevalence", [0.01, 0.001])
+    head = "| model | TPR | FPR | " + " | ".join(
+        f"precision @ {p * 100:g} % | falošné na 1 skutočný poplach @ {p * 100:g} %" for p in prevs) + " |"
+    lines = [head, "|" + "---|" * (3 + 2 * len(prevs))]
+    for _, r in df.iterrows():
+        cells = []
+        for p in prevs:
+            a = at_prevalence(r["recall_test"], r["fpr_test"], p)
+            cells += [f"{a['precision']:.3f}", f"{a['false_per_true_alarm']:.2f}"]
+        lines.append(f"| {r['model']} | {r['recall_test']:.4f} | {r['fpr_test']:.4f} | " + " | ".join(cells) + " |")
+    nl = chr(10)
+    return nl.join(lines) + nl * 2 + (
+        "Prepočet: TPR a FPR nezávisia od podielu malvéru, preto sa dajú preniesť na nízku prevalenciu "
+        "(v reálnej prevádzke je malvéru ~1 % alebo menej; v teste 54 %). „Falošné na 1 skutočný poplach“ "
+        "= koľko neškodných súborov je označených na každý zachytený malvér.")
+
+
 def benchmark_section(runs: dict[str, Path], approach: str, out: Path) -> str:
     """Tabuľka spotreby zdrojov z benchmark.json (ak bol benchmark spustený)."""
     rows = []
@@ -119,9 +140,19 @@ def benchmark_section(runs: dict[str, Path], approach: str, out: Path) -> str:
         lines.append(f"| {r['model']} | {f(r['cpu_ms_batch'])} | {f(r['sps'], 0)} | {f(r['util'], 1)} | {f(r['ram'], 0)} | "
                      f"{f(r['lat'])} | {f(r['lat95'])} | {f(r['cpu_ms_single'])} | {f(r['gpu_sps'], 0)} | "
                      f"{f(r['gpu_util'], 1)} | {f(r['gpu_mem'], 0)} | {f(r['gpu_j'], 2)} | {r['warn']} |")
+    hw = ""
+    for run in runs.values():   # počítač a počet jadier z benchmarku (každý beh si ich zapisuje)
+        b = run / "benchmark.json"
+        if b.exists():
+            r = json.loads(b.read_text(encoding="utf-8"))
+            env = r.get("environment", {})
+            hw = (f"{env.get('machine', '?')}, {env.get('cpu_physical', '?')} fyzických / "
+                  f"{env.get('cpu_logical', '?')} logických jadier, GPU {env.get('gpu') or '–'}")
+            break
     notes = [
+        f"- **Počítač merania:** {hw or 'neuvedený'}.",
         "- **CPU čas** = koľko času procesora (súčet cez jadrá) spotrebuje jedna vzorka – hlavná miera výpočtovej náročnosti.",
-        "- **vyťaženie CPU** = priemerný podiel všetkých 12 logických jadier počas dávkovej inferencie.",
+        "- **vyťaženie CPU** = priemerný podiel všetkých logických jadier počítača počas dávkovej inferencie.",
         "- **GPU energia** = energia karty nad úrovňou nečinnosti na 1000 vzoriek (iba modely na GPU).",
         "- ⚠ = počítač bol pred meraním zaťažený; čísla môžu byť skreslené.",
     ]
@@ -164,6 +195,9 @@ def main(approach: str, runs_root: Path = RUNS_DIR):
 
 ## Detekčná kvalita a orientačné časy
 {chr(10).join(lines)}
+
+## Nízka prevalencia malvéru (test, prah z validácie)
+{prevalence_section(df)}
 
 ## Spotreba zdrojov pri inferencii (benchmark, testovacia množina)
 {benchmark_section(runs, approach, out)}

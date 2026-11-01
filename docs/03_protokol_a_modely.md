@@ -25,12 +25,13 @@ static = EMBER, dynamic = vektor z API volaní (reprezentácia sa určí po kont
 | Oblasť | Pravidlo | Dôvod |
 |---|---|---|
 | Použitie dát | train = učenie; validácia = ladenie, early stopping, prahy; test = iba finálne vyhodnotenie | test nesmie ovplyvniť žiadne rozhodnutie |
-| Transformácia vstupu | LR a MLP: odstránenie konštantných príznakov, signed log1p, štandardizácia – fit iba na train; stromy pôvodné hodnoty | ťažké chvosty EMBER príznakov; stromy sú invariantné voči monotónnym transformáciám |
+| Transformácia vstupu | LR a MLP: odstránenie konštantných príznakov, signed log1p, štandardizácia – fit iba na train (štatistiky vo float64), aplikácia vo float32 na mieste; stromy pôvodné hodnoty | ťažké chvosty EMBER príznakov; stromy sú invariantné voči monotónnym transformáciám |
 | Nepomer tried | váhy vzoriek `n / (2 · n_trieda)` z tréningu | train 67 % malvéru, test 54 % |
 | Ladenie hyperparametrov | Optuna TPE, **30 pokusov pre každý model**, seed 42, cieľ ROC-AUC na validácii | rovnaký rozpočet = férové porovnanie |
 | Ochrana proti preučeniu | regularizácia v priestore hyperparametrov (C; hĺbka a min. listy stromov; L1/L2, bagging pri LightGBM; dropout, weight decay pri MLP); early stopping na validácii (LightGBM 100 kôl, MLP 8 epoch, obnova najlepšej epochy); sledovaný rozdiel ROC-AUC train − validácia | výber podľa validácie, nie podľa tréningu |
 | Variabilita | finálne modely s 3 seedmi (0, 1, 2); uvádza sa priemer ± smerodajná odchýlka | náhodnosť inicializácie a vzorkovania |
 | Prahy | pevný 0,5 a prah s FPR ≤ 1 % určený na validácii | typický pracovný bod detekcie malvéru |
+| Nízka prevalencia | precision a falošné poplachy na 1 skutočný pri prevalencii 1 % a 0,1 % – prepočet z TPR/FPR pri prahu z validácie (`metrics.at_prevalence`) | téza 2; v teste je 54 % malvéru |
 | Metriky | ROC-AUC, PR-AUC, TPR pri FPR 0,1 % a 1 %, log loss, Brier; pri prahoch accuracy, balanced accuracy, precision, recall, FPR, F1, MCC, matica zámen; detekcia podľa rodiny | ROC-AUC a TPR@FPR nezávisia od pomeru tried, ktorý sa medzi train a test mení |
 | Výpočtové nároky | latencia 1 vzorky (CPU, 1 vlákno; GPU pri MLP), priepustnosť (CPU 12 vlákien; GPU), čas tréningu, čas ladenia, počet parametrov/uzlov, veľkosť na disku; transformácia vstupu meraná zvlášť | ľahký vs. ťažký sa meria, nepredpokladá |
 

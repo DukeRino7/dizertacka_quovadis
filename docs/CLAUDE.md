@@ -9,6 +9,7 @@ Texty, z ktorých sa budú preberať informácie do práce. Číslované podľa 
 | `02_staticke_data.md` | spoločné rozdelenie a predspracovanie statických dát | hotové |
 | `03_protokol_a_modely.md` | dohodnutá sada modelov a spoločný trénovací protokol | protokol = NÁVRH |
 | `05_destilacia_a_kaskada.md` | dohodnutý postup destilácie a vyhodnotenia kaskády | dohodnuté, implementácia po baseline |
+| `06_predbezne_vysledky.md` | predbežné výsledky (overenie postupu pred V1), nie finálne | hotové |
 | `04_dynamicke_data.md` | formát Speakeasy reportov, postup spracovania, otvorené rozhodnutia | kód pripravený, čaká na dáta |
 
 Pravidlá:

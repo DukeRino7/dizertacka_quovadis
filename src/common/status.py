@@ -40,6 +40,7 @@ PLAN = [
         ("stud_bench_s", "Meranie spotreby – statickí študenti", []), ("stud_bench_d", "Meranie spotreby – dynamickí študenti", []),
         *[(f"cascade_{v}", f"Kaskáda {v}", []) for v in ("main", "nokd", "modal", "heavy", "baselines")],
         ("final_report", "Záverečné porovnanie (výskumné otázky)", []),
+        ("subsets", "Výsledky podľa výsledku emulácie", []),
     ]),
 ]
 

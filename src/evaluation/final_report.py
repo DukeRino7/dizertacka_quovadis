@@ -111,6 +111,12 @@ def main():
     for v in CASCADES:
         rows += _cascade_rows(v)
     df = pd.DataFrame(rows)
+    from src.common.config import load_config
+    from .metrics import at_prevalence
+    for prev in load_config("configs/protocol.yaml").get("prevalence", [0.01, 0.001]):   # téza 2: nízka prevalencia
+        lab = f"{prev * 100:g} %"
+        df[f"precision @ {lab}"] = [at_prevalence(t, f, prev)["precision"] for t, f in zip(df["TPR (prah z val.)"], df["FPR (prah z val.)"])]
+        df[f"falošné/1 skutočný @ {lab}"] = [at_prevalence(t, f, prev)["false_per_true_alarm"] for t, f in zip(df["TPR (prah z val.)"], df["FPR (prah z val.)"])]
     out = RUNS_DIR / "comparison" / "final"
     (out / "plots").mkdir(parents=True, exist_ok=True)
     df.to_csv(out / "summary.csv", index=False)

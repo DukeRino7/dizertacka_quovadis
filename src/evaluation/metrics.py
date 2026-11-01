@@ -49,6 +49,20 @@ def per_family(meta: pd.DataFrame, s: np.ndarray, thr: float) -> pd.DataFrame:
     return d.groupby("family")["pred"].agg(n="size", detected_rate="mean").reset_index()
 
 
+def at_prevalence(tpr: float, fpr: float, prevalence: float) -> dict:
+    """Prepočet na nízky podiel malvéru (prevalencia π) z TPR a FPR – bez nového tréningu.
+
+    TPR aj FPR nezávisia od pomeru tried, preto sa dajú preniesť na inú prevalenciu:
+    precision = TPR·π / (TPR·π + FPR·(1−π)); falošné poplachy na 1 skutočnú detekciu = FPR·(1−π) / (TPR·π);
+    na 10 000 súborov: poplachy spolu a z toho falošné.
+    """
+    tp, fp = tpr * prevalence, fpr * (1 - prevalence)
+    return {"prevalence": prevalence, "precision": tp / (tp + fp) if tp + fp > 0 else float("nan"),
+            "false_per_true_alarm": fp / tp if tp > 0 else float("inf"),
+            "alarms_per_10k": (tp + fp) * 1e4, "false_alarms_per_10k": fp * 1e4,
+            "missed_malware_per_10k": (1 - tpr) * prevalence * 1e4}
+
+
 def evaluate(y, s, thresholds: dict, tpr_at: list[float], meta: pd.DataFrame | None = None) -> dict:
     out = {"n": int(len(y)), "malware_share": float(np.mean(y)), **threshold_free(y, s, tpr_at)}
     for name, thr in thresholds.items():
