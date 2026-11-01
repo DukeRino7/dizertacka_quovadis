@@ -32,3 +32,13 @@ timing:
   latency_threads: 1            # latencia sa meria na 1 vlákne CPU (porovnateľné medzi modelmi)
   throughput_threads: 12        # priepustnosť na celom teste so všetkými vláknami
   gpu: true                     # pre modely v PyTorch aj meranie na GPU
+
+# --- jednotné meranie spotreby pri inferencii (src/evaluation/benchmark.py) ------
+# Oficiálne čísla výpočtových nárokov pre porovnanie prístupov. Spúšťať na nezaťaženom počítači.
+benchmark:
+  min_seconds: 5                # dávková inferencia sa opakuje aspoň 5 s (stabilné meranie)
+  batch_threads: 12             # dávka: všetky vlákna CPU
+  single_samples: 500           # latencia: 500 náhodných vzoriek po jednej, 1 vlákno
+  warmup: 20
+  gpu: true                     # modely v PyTorch aj na GPU
+  max_background_load_pct: 15   # vyššie zaťaženie pred meraním -> varovanie vo výsledku

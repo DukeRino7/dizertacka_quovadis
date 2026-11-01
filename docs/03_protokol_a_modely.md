@@ -38,6 +38,25 @@ optimistické. Nestranný odhad poskytuje iba test. Navyše test je z neskoršie
 **Hardvér meraní:** 6 jadier / 12 vlákien CPU, 17 GB RAM, NVIDIA GeForce RTX 2060 (6 GB).
 Merania počas iných záťaží (napr. sťahovania dát) môžu byť ovplyvnené – finálne merania času zopakovať na nezaťaženom systéme.
 
+## Meranie spotreby výpočtových zdrojov pri inferencii (benchmark)
+Oficiálne čísla pre vety typu „kaskáda spotrebuje menej výpočtového výkonu než hybridný model“.
+Meria sa **iba inferencia** (nasadenie modelu), nie tréning. Rovnaký postup pre všetky prístupy vrátane kaskády:
+celá cesta pôvodný vstup → transformácia → model → skóre na testovacej množine, model zo seedu 0.
+
+| Scenár | Čo sa meria |
+|---|---|
+| CPU dávka (12 vlákien, opakovane ≥ 5 s) | priepustnosť, **CPU čas na vzorku**, priemerné vyťaženie CPU, nárast RAM |
+| CPU jedna vzorka (1 vlákno, ≥ 5 s) | latencia (medián, p95), CPU čas na vzorku |
+| GPU dávka / jedna vzorka (iba MLP a neskôr sekvenčné modely) | priepustnosť, latencia, vyťaženie GPU, pamäť GPU, **energia GPU nad nečinnosťou na 1000 vzoriek** (hardvérové počítadlo karty) |
+
+- Hlavná miera náročnosti: **CPU čas na vzorku** (nezávisí od počtu vlákien) a pri GPU energia na 1000 vzoriek.
+- Spotrebu energie CPU na Windows nemožno spoľahlivo zmerať – neuvádza sa.
+- Ukladajú sa iba súhrnné hodnoty (`benchmark.json`, ~1–2 kB na model), nie časové rady.
+- Spúšťať na nezaťaženom počítači; zaťaženie pred meraním sa zapisuje a pri prekročení 15 % sa výsledok označí ⚠.
+
+Spustenie: `.venv\Scripts\python.exe -m src.evaluation.benchmark --approach static`,
+potom `python -m src.evaluation.compare --approach static` (tabuľka v `runs/comparison/static/README.md`).
+
 ## Výstupy
 - jeden beh: `runs/<prístup>/<model>/<dátum-čas>/README.md` (metriky, časy, grafy), `metrics.json`, `timing.json`,
   `predictions/`, `hpo_trials.csv`,

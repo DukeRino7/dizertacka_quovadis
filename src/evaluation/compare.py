@@ -66,18 +66,64 @@ def plot_quality_vs_latency(df: pd.DataFrame, metric: str, label: str, path: Pat
     P._save(fig, path)
 
 
-def plot_metric_bars(df: pd.DataFrame, metric: str, std: str, label: str, path: Path, title: str):
+def plot_metric_bars(df: pd.DataFrame, metric: str, std: str, label: str, path: Path, title: str,
+                     zero_based: bool = False):
     fig, ax = P._fig(7.5, 4.2)
     y = np.arange(len(df))[::-1]
     ax.barh(y, df[metric], xerr=df[std], height=0.6, color=P.SPLIT_COLOR["test"],
             error_kw={"ecolor": P.INK, "capsize": 3, "linewidth": 1})
     for yi, v in zip(y, df[metric]):
-        ax.text(v, yi, f"  {v:.4f}", va="center", color=P.INK, fontsize=9)
-    lo = max(0.0, df[metric].min() - (df[metric].max() - df[metric].min()) * 1.5 - 0.005)
-    ax.set_xlim(lo, min(1.0, df[metric].max() + (df[metric].max() - lo) * 0.25))
+        ax.text(v, yi, f"  {v:.4g}", va="center", color=P.INK, fontsize=9)
+    if zero_based:  # absolútne hodnoty (napr. čas) – os od nuly
+        ax.set_xlim(0, df[metric].max() * 1.25)
+    else:           # metriky kvality v [0, 1] – priblíženie na rozsah hodnôt
+        lo = max(0.0, df[metric].min() - (df[metric].max() - df[metric].min()) * 1.5 - 0.005)
+        ax.set_xlim(lo, min(1.0, df[metric].max() + (df[metric].max() - lo) * 0.25))
     ax.set_yticks(y, df["model"])
     P._style(ax, title, label, "", grid="x")
     P._save(fig, path)
+
+
+def benchmark_section(runs: dict[str, Path], approach: str, out: Path) -> str:
+    """Tabuľka spotreby zdrojov z benchmark.json (ak bol benchmark spustený)."""
+    rows = []
+    for name, run in runs.items():
+        b = run / "benchmark.json"
+        if not b.exists():
+            continue
+        r = json.loads(b.read_text(encoding="utf-8"))
+        cb, cs, gb = r["cpu_batch"], r["cpu_single"], r.get("gpu_batch", {})
+        rows.append({"model": name, "cpu_ms_batch": cb["cpu_ms_per_sample"], "sps": cb["samples_per_s"],
+                     "util": cb["cpu_util_pct"], "ram": cb["ram_increase_mb"],
+                     "lat": cs["latency_median_ms"], "lat95": cs["latency_p95_ms"], "cpu_ms_single": cs["cpu_ms_per_sample"],
+                     "gpu_sps": gb.get("samples_per_s", np.nan), "gpu_util": gb.get("gpu_util_pct", np.nan),
+                     "gpu_mem": gb.get("gpu_mem_peak_mb", np.nan), "gpu_j": gb.get("gpu_energy_above_idle_j_per_1000", np.nan),
+                     "warn": "⚠" if "warning" in r else ""})
+    if not rows:
+        return "_Benchmark zatiaľ nebol spustený (`python -m src.evaluation.benchmark --approach " + approach + "`)._"
+    df = pd.DataFrame(rows)
+    df["_o"] = df["model"].map({k: i for i, k in enumerate(ORDER)}).fillna(99)
+    df = df.sort_values("_o").reset_index(drop=True)
+    plot_metric_bars(df.assign(v=df["cpu_ms_batch"] * 1000, z=0.0).rename(columns={"v": "cpu_s_1000"}),
+                     "cpu_s_1000", "z", "CPU čas na 1000 vzoriek [ms] (dávka, všetky vlákna)",
+                     out / "plots" / "cpu_time_per_1000.png", f"{approach}: spotreba CPU pri inferencii", zero_based=True)
+
+    def f(v, d=3):
+        return "–" if pd.isna(v) else f"{v:,.{d}f}".replace(",", " ")
+    lines = ["| model | CPU čas ms/vz. (dávka) | vz./s (dávka) | vyťaženie CPU % | nárast RAM MB | latencia ms (1 vz.) | p95 ms | "
+             "CPU čas ms/vz. (1 vz.) | GPU vz./s | vyťaženie GPU % | GPU pamäť MB | GPU energia J/1000 vz. | |", "|" + "---|" * 13]
+    for _, r in df.iterrows():
+        lines.append(f"| {r['model']} | {f(r['cpu_ms_batch'])} | {f(r['sps'], 0)} | {f(r['util'], 1)} | {f(r['ram'], 0)} | "
+                     f"{f(r['lat'])} | {f(r['lat95'])} | {f(r['cpu_ms_single'])} | {f(r['gpu_sps'], 0)} | "
+                     f"{f(r['gpu_util'], 1)} | {f(r['gpu_mem'], 0)} | {f(r['gpu_j'], 2)} | {r['warn']} |")
+    notes = [
+        "- **CPU čas** = koľko času procesora (súčet cez jadrá) spotrebuje jedna vzorka – hlavná miera výpočtovej náročnosti.",
+        "- **vyťaženie CPU** = priemerný podiel všetkých 12 logických jadier počas dávkovej inferencie.",
+        "- **GPU energia** = energia karty nad úrovňou nečinnosti na 1000 vzoriek (iba modely na GPU).",
+        "- ⚠ = počítač bol pred meraním zaťažený; čísla môžu byť skreslené.",
+    ]
+    nl = chr(10)
+    return nl.join(lines) + nl * 2 + nl.join(notes) + nl * 2 + "![CPU čas](plots/cpu_time_per_1000.png)"
 
 
 def main(approach: str, runs_root: Path = RUNS_DIR):
@@ -110,9 +156,16 @@ def main(approach: str, runs_root: Path = RUNS_DIR):
 
 > Generované `src/evaluation/compare.py` ({now_iso()}); použitý je posledný beh každého modelu.
 > Metriky sú priemer cez seedy. \\* = pri prahu určenom na validácii (FPR ≤ 1 %).
-> CPU ms/vz. = medián latencie jednej vzorky na 1 vlákne vrátane transformácie vstupu.
+> CPU ms/vz. = medián latencie jednej vzorky na 1 vlákne vrátane transformácie vstupu (meranie hneď po tréningu,
+> orientačné). Oficiálne merania spotreby sú v časti „Spotreba zdrojov pri inferencii“.
 
+## Detekčná kvalita a orientačné časy
 {chr(10).join(lines)}
+
+## Spotreba zdrojov pri inferencii (benchmark, testovacia množina)
+{benchmark_section(runs, approach, out)}
+
+## Grafy
 
 ![kvalita vs latencia](plots/auc_vs_latency.png)
 ![TPR vs latencia](plots/tpr1_vs_latency.png)
