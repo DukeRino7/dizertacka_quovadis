@@ -10,6 +10,7 @@
 | `benchmark.py` | **oficiálne meranie spotreby pri inferencii** z uložených modelov → `benchmark.json` v behu (spúšťať na nezaťaženom PC) |
 | `feature_importance.py` | ktoré príznaky modely využívajú: permutácia skupín a sledovaných príznakov (všetky modely), SHAP/gain (LightGBM), koeficienty (LR); iba validácia → `importance/` v behu + `runs/comparison/<prístup>/IMPORTANCE.md` |
 | `compare_ablations.py` | kontrolné experimenty vs. pôvodný model → `runs/comparison/<priečinok ablácií>/` |
+| `final_report.py` | záverečné porovnanie k výskumným otázkam (vybrané modely, študenti, kaskády, fúzia, nároky) → `runs/comparison/final/` |
 | `compare.py` | porovnanie modelov prístupu → `runs/comparison/<prístup>/` (tabuľka, kvalita vs. latencia) |
 
 Plánované: vyhodnotenie kaskády (podiel eskalácií, spoločné chyby pri zhode študentov, prínos veľkého modelu pri nezhode)

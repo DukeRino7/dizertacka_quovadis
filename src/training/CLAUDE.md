@@ -3,9 +3,10 @@
 | Modul | Úloha |
 |---|---|
 | `run_tabular.py` | jeden experiment rebríčka: transformácia (fit na train) → ladenie Optuna na validácii → finálne modely s viacerými seedmi → metriky, časy, grafy, README |
-| `run_suite.py` | celá sada modelov jedného prístupu za sebou + porovnanie |
+| `run_suite.py` | sada modelov jedného prístupu za sebou + porovnanie; `--models`, `--skip-done` (pokračovanie po prerušení) |
 | `run_ablations.py` | všetky kontrolné experimenty z `configs/<priečinok>/` + porovnanie s pôvodnými modelmi |
 | `teacher_oof.py` | mäkké označenia učiteľa na tréningu krížovo (5 častí, hyperparametre z behu učiteľa) → `runs/teachers/<prístup>_<model>/` |
+| `select_best.py` | výber najlepšieho modelu skupiny podľa dohodnutého pravidla (`configs/selection.yaml`) → `runs/selection/<skupina>.json`; `auto:<skupina>` v konfiguráciách |
 | `search_space.py` | priestor hyperparametrov z YAML → návrhy Optuna |
 
 Spustenie: `.venv\Scripts\python.exe -m src.training.run_tabular --config configs/static/lr.yaml`

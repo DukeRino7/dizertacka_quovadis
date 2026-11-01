@@ -11,6 +11,8 @@ from src.common.paths import PROJECT_ROOT, RUNS_DIR
 
 
 def resolve_run(spec: str, runs_root: Path = RUNS_DIR) -> Path:
+    from src.training.select_best import resolve_auto  # 'auto:hybrid' -> vybraný model podľa pravidla
+    spec = resolve_auto(spec)
     p = Path(spec)
     if not p.is_absolute():
         cand = PROJECT_ROOT / spec

@@ -1,4 +1,4 @@
-"""Overenie skopírovaných statických dát voči kontrolným súčtom v gite (processed/static/manifest.json).
+r"""Overenie skopírovaných statických dát voči kontrolným súčtom v gite (processed/static/manifest.json).
 
     .venv\Scripts\python.exe -m src.data.verify_static
 """

@@ -1,0 +1,15 @@
+# Výber najlepšieho modelu skupiny – pravidlo DOHODNUTÉ v docs/00_vyskumne_otazky.md (nemeniť podľa výsledkov).
+# Kandidát = '<prístup>/<model>' (posledný dokončený beh v runs/). Chýbajúci kandidát sa preskočí (zapíše sa).
+rule:
+  split: validation
+  primary: tpr_at_fpr_0.01            # TPR pri FPR 1 %
+  secondary: roc_auc                  # pri zhode v rámci smerodajnej odchýlky cez seedy
+  tertiary: cpu_ms_batch              # potom nižší CPU čas na vzorku (benchmark), ak je k dispozícii
+groups:
+  hybrid:                             # učiteľ študentov a veľký model kaskády
+    [hybrid/lr, hybrid/rf, hybrid/lightgbm, hybrid/mlp_small, hybrid/mlp_large, hybrid/two_branch]
+  static:                             # učiteľ variantu A (rovnaká modalita) a najlepší samostatný statický model
+    [static/lr, static/rf, static/lightgbm, static/mlp_small, static/mlp_large]
+  dynamic:
+    [dynamic/lr, dynamic/rf, dynamic/lightgbm, dynamic/mlp_small, dynamic/mlp_large, dynamic/seq_cnn]
+# Neskorá fúzia nie je kandidát na učiteľa (nemá vlastné mäkké označenia na tréningu); porovnáva sa v kaskáde.

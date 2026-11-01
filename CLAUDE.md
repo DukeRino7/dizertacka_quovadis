@@ -42,6 +42,8 @@ Každý priečinok má vlastný `CLAUDE.md` s popisom účelu, pravidiel a aktu�
 - `src/common`, `src/data`, `src/models/<prístup>`, `src/training`, `src/evaluation`, `src/cascade` (finálna kaskáda).
 - `runs/<prístup>/<model>/` – výsledky a grafy, napr. `runs/static/lr/`; `runs/comparison/` – porovnanie prístupov.
 - `docs/` – súhrnné dokumenty pre dizertáciu (napr. `docs/01_audit_dat.md`).
+- `scripts/` – spúšťacie skripty celého postupu (návod `SETUP.md`); finálny beh `scripts/run_all.ps1` do `runs_final/`.
+- `resources/`, `runs/selection/`, `runs/teachers/` – pozri `CLAUDE.md` v príslušnom priečinku.
 
 Prístupy: `static`, `dynamic`, `hybrid`, `students_static`, `students_dynamic`, `cascade`.
 

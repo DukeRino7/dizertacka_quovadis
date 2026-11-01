@@ -48,7 +48,8 @@ def load_soft_targets(dcfg: dict, train_meta: pd.DataFrame, root: Path) -> tuple
     """Mäkké označenia učiteľa zarovnané podľa SHA-256 s tréningovými riadkami."""
     if not dcfg.get("teacher"):
         raise ValueError("distillation.teacher nie je vyplnený – učiteľ sa vyberá podľa docs/00_vyskumne_otazky.md")
-    base = root / "teachers" / dcfg["teacher"].replace("/", "_")
+    from .select_best import resolve_auto  # 'auto:hybrid' -> vybraný model podľa pravidla
+    base = root / "teachers" / resolve_auto(dcfg["teacher"]).replace("/", "_")
     runs = sorted(r for r in base.iterdir() if (r / "train_oof.parquet").exists()) if base.exists() else []
     if not runs:
         raise FileNotFoundError(f"chýbajú mäkké označenia učiteľa v {base} – spustiť src.training.teacher_oof")

@@ -1,4 +1,4 @@
-"""Porovnanie kontrolných experimentov (ablácií) s pôvodným modelom.
+r"""Porovnanie kontrolných experimentov (ablácií) s pôvodným modelom.
 
 Pre každý beh v runs/<priečinok ablácií>/<názov>/ nájde pôvodný beh (params_from_run v timing.json)
 a porovná metriky na validácii aj teste.
@@ -13,7 +13,7 @@ from src.common.provenance import now_iso
 from .compare import latest_runs
 
 METRICS = [("roc_auc", "ROC-AUC"), ("tpr_at_fpr_0.01", "TPR@FPR 1 %"), ("tpr_at_fpr_0.001", "TPR@FPR 0,1 %"),
-           ("at_val_fpr.f1", "F1*"), ("at_val_fpr.fpr", "FPR*")]
+           ("at_val_fpr.f1", "F1 (*)"), ("at_val_fpr.fpr", "FPR (*)")]
 
 
 def _summary(run: Path) -> dict:
@@ -46,7 +46,7 @@ def main(directory: str, runs_root: Path = RUNS_DIR):
     text = f"""# Kontrolné experimenty – {directory}
 
 > Generované `src/evaluation/compare_ablations.py` ({now_iso()}). Hyperparametre ablácie sú prevzaté z pôvodného
-> behu, rozdiel teda spôsobujú iba vynechané príznaky. Hodnoty sú priemer cez seedy; \* = prah z validácie (FPR ≤ 1 %).
+> behu, rozdiel teda spôsobujú iba vynechané príznaky. Hodnoty sú priemer cez seedy; (*) = prah z validácie (FPR ≤ 1 %).
 > Δ < 0 = bez príznakov horšie (pri FPR naopak: Δ > 0 = viac falošných poplachov).
 {chr(10).join(lines)}
 """

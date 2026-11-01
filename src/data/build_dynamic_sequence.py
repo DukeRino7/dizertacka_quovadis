@@ -1,4 +1,4 @@
-"""Postupnosti API volaní pre sekvenčné modely -> processed/dynamic/sequence/.
+r"""Postupnosti API volaní pre sekvenčné modely -> processed/dynamic/sequence/.
 
 Token 0 = doplnenie (PAD), 1 = neznáme API (UNK), ďalej API zo slovníka naučeného IBA na tréningu
 (min_freq dokumentovej frekvencie, najviac max_vocab). Vzorka = prvých max_len volaní celej postupnosti

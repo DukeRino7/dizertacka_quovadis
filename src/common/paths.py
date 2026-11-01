@@ -1,10 +1,14 @@
-"""Cesty projektu na jednom mieste."""
+"""Cesty projektu na jednom mieste.
+
+RUNS_DIR sa dá presmerovať premennou prostredia DIZERTACKA_RUNS_DIR (napr. finálny beh do samostatného priečinka).
+"""
+import os
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = PROJECT_ROOT / "data"
 PROCESSED_DIR = PROJECT_ROOT / "processed"
-RUNS_DIR = PROJECT_ROOT / "runs"
+RUNS_DIR = Path(os.environ.get("DIZERTACKA_RUNS_DIR") or PROJECT_ROOT / "runs").resolve()
 CONFIGS_DIR = PROJECT_ROOT / "configs"
 
 EMBER_DIR = DATA_DIR / "quovadis-ember"
