@@ -1,0 +1,14 @@
+# Predspracovanie statických EMBER príznakov.
+# Vstup: data/quovadis-ember + processed/index/. Výstup: processed/static/
+
+dtype: float32
+
+# Popisná analýza posunu train -> test (Kolmogorov-Smirnov po príznakoch).
+# Iba na opis dát; nevyužíva sa na žiadne rozhodnutie o spracovaní.
+drift:
+  enabled: true
+  max_rows_per_split: 20000    # náhodná podvzorka kvôli času výpočtu
+  top_k: 25
+
+# Prah pre označenie takmer konštantného príznaku (podiel najčastejšej hodnoty na tréningu).
+near_constant_threshold: 0.999

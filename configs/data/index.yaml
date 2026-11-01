@@ -1,0 +1,17 @@
+# Spoločný index vzoriek a rozdelenie train/validation/test (zdieľané všetkými modelmi).
+# Výstup: processed/index/
+
+seed: 42
+
+# Validácia sa vyčleňuje z pôvodného tréningu, pôvodný test sa zachováva.
+validation:
+  fraction: 0.10               # NÁVRH, nie schválená hodnota
+  stratify_by: family          # zachová podiel rodín malvéru aj benign
+  group_identical_features: true  # vzorky s identickým EMBER vektorom idú do rovnakej časti
+
+# SHA-256 prítomné v pôvodnom train aj test (zistené v audite: 446 keyloggerov).
+# drop_from_train = test ostane pôvodný (NÁVRH); drop_from_test = vyradiť z testu; keep = ponechať (únik!)
+cross_split_duplicates: drop_from_train
+
+# Zoznam súborov Speakeasy z cache Hugging Face (slúži na overenie existencie párov, kým sa dáta dotiahnu).
+speakeasy_listing: data/quovadis-speakeasy/.cache/huggingface/trees/fc2e98fac0b4d43a5557ccab70c877af6cce9f4d.json

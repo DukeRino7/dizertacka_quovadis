@@ -1,18 +1,25 @@
 # src/data/ – príprava dát
 
 Jediné miesto, ktoré číta surové dáta z `data/`. Ostatný kód pracuje s výstupmi v `processed/`.
+Spúšťať z koreňa projektu cez `.venv\Scripts\python.exe -m src.data.<modul>`.
 
-Plánované kroky (zatiaľ neimplementované):
-1. **Audit** – reprodukovateľné overenie štruktúry, počtov, párovania a problémov (výsledky v `docs/01_audit_dat.md`).
-2. **Spoločný index** – jeden riadok na vzorku (SHA-256): pôvodná časť, rodina, binárne označenie, cesty k zdrojom.
-3. **Rozdelenie** – zachovaný pôvodný test, validácia vyčlenená z tréningu, pevný seed; rovnaké pre všetky modely.
-4. **Cache EMBER** – matica zoradená podľa indexu.
-5. **Cache Speakeasy** – po dokončení sťahovania; jedna vzorka = jeden súbor so všetkými vstupnými bodmi a vláknami.
-6. **Načítanie** – funkcie, ktoré modelom vrátia dáta pre zvolenú časť rozdelenia.
+| Modul | Úloha | Stav |
+|---|---|---|
+| `ember_layout.py` | názvy a skupiny 2381 EMBER príznakov (rozloženie EMBER v2) | hotové |
+| `ember_source.py` | čítanie pôvodných EMBER súborov s kontrolou integrity | hotové |
+| `speakeasy_listing.py` | zoznam Speakeasy reportov podľa SHA-256 (zo zoznamu súborov HF) | hotové |
+| `build_index.py` | spoločný index a rozdelenie → `processed/index` | hotové |
+| `build_static.py` | statický dataset, štatistiky, grafy → `processed/static` | hotové |
+| `static_dataset.py` | načítanie `processed/static` pre modely (`load_split`) | hotové |
+| `static_transforms.py` | učené transformácie pre modely (`StaticPreprocessor`: konštantné stĺpce, signed log1p, štandardizácia) | hotové |
+| dynamická časť | cache Speakeasy reportov | čaká na stiahnutie dát |
+
+Konfigurácie: `configs/data/index.yaml`, `configs/data/static.yaml`.
 
 Overené úskalia (detaily v `docs/01_audit_dat.md`):
 - V EMBER `features.npy` sa riadok vzorky určuje **indexom z prvého stĺpca `hashes.txt`**, nie poradím riadku.
   Riadky zlyhaných extrakcií sú v matici nulové.
 - Speakeasy: SHA-256 je iba v názve súboru, v traine `sha.json`, v teste `sha.dat.json`;
   train `report_backdoor` a `report_clean` majú ďalšiu úroveň podpriečinkov.
-- 446 SHA-256 je v traine aj teste (keylogger). Riešenie zatiaľ nie je schválené.
+- 446 SHA-256 je v traine aj teste (keylogger). Aktuálne vyradené z tréningu (NÁVRH, `configs/data/index.yaml`).
+- Validácia: 10 % tréningu, stratifikovane podľa rodiny, identické vektory spolu (NÁVRH).

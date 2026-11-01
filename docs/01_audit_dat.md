@@ -78,6 +78,12 @@ README uvádza 93 533 súborov; použiteľných je menej kvôli týmto chybám.
    posunu; ovplyvní interpretáciu výsledkov podľa rodín.
 
 ## Otvorené rozhodnutia
-- spôsob riešenia prekryvu (bod 1),
-- veľkosť a spôsob vyčlenenia validácie (návrh: 10–15 % tréningu, stratifikovane podľa rodiny),
-- zaobchádzanie s malými/prázdnymi reportmi (až po kontrole obsahu).
+- spôsob riešenia prekryvu (bod 1) – zatiaľ implementovaný NÁVRH: vyradiť z tréningu (`configs/data/index.yaml`),
+- veľkosť a spôsob vyčlenenia validácie – zatiaľ implementovaný NÁVRH: 10 % tréningu, stratifikovane podľa rodiny,
+  identické vektory spolu (pozri `docs/02_staticke_data.md`),
+- zaobchádzanie s malými/prázdnymi reportmi (až po kontrole obsahu),
+- **čo presne zahŕňa „čas inferencie“ pri porovnaní kaskády a hybridného modelu.** Dataset neobsahuje PE
+  súbory, takže čas extrakcie EMBER príznakov ani čas emulácie Speakeasy (timeout 60 s na vzorku) sa nedá
+  zmerať. Kaskáda aj hybridný model potrebujú pre každú vzorku statický aj dynamický vstup, takže emulácia
+  by bola v oboch prípadoch rovnaká; úspora kaskády sa týka iba časti modelov. Treba to uviesť ako
+  vymedzenie experimentu.

@@ -1,0 +1,147 @@
+{
+  "created": "2026-11-01T13:40:06+01:00",
+  "script": "src/data/build_static.py",
+  "config_path": "configs/data/static.yaml",
+  "config": {
+    "dtype": "float32",
+    "drift": {
+      "enabled": true,
+      "max_rows_per_split": 20000,
+      "top_k": 25
+    },
+    "near_constant_threshold": 0.999
+  },
+  "seed": 42,
+  "git": {
+    "commit": "bfdba1c9a55e8a28e1d8f944a957aad4654a70fc",
+    "dirty": true
+  },
+  "environment": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "numpy": "2.4.6",
+      "pandas": "3.1.0",
+      "pyarrow": "26.0.0",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.17.1",
+      "matplotlib": "3.11.2",
+      "torch": "2.14.1+cu130",
+      "lightgbm": "4.7.0",
+      "xgboost": "3.2.0"
+    }
+  },
+  "inputs": {
+    "index_samples_sha256": "c8cb482fa0ba47cd987db0bd90d8f7498638996468fb3cadf830fbb809a207e0",
+    "index_manifest": "processed/index/manifest.json"
+  },
+  "checks": {
+    "train": {
+      "rows": 66831,
+      "nan": 0,
+      "inf": 0
+    },
+    "validation": {
+      "rows": 7426,
+      "nan": 0,
+      "inf": 0
+    },
+    "test": {
+      "rows": 17339,
+      "nan": 0,
+      "inf": 0
+    },
+    "verified_rows": 600,
+    "max_abs_diff": 0.0
+  },
+  "sizes_mb": {
+    "train": 636.498572,
+    "validation": 70.725352,
+    "test": 165.136764
+  },
+  "outputs": [
+    {
+      "path": "processed/static/X_train.npy",
+      "bytes": 636498572,
+      "sha256": "1d23f8474256bf12f91766f992288de99ac8de76de77a6c4a8bed86d2f4f0c48"
+    },
+    {
+      "path": "processed/static/y_train.npy",
+      "bytes": 66959,
+      "sha256": "c80860b87f9311a766f3a8c0696b84946daf76b076e06233b9c293bc245f2eae"
+    },
+    {
+      "path": "processed/static/meta_train.parquet",
+      "bytes": 4551342,
+      "sha256": "3e01c74998638b7fb8895aa9ea85576594a47175d5402c6fa2e93b8114c6cffb"
+    },
+    {
+      "path": "processed/static/X_validation.npy",
+      "bytes": 70725352,
+      "sha256": "920f8e915d21314292a9d10fdc3db5c11312fab95cc33d17b57f2f643e150c69"
+    },
+    {
+      "path": "processed/static/y_validation.npy",
+      "bytes": 7554,
+      "sha256": "39c17d801b30ad8db4b592368825fa1b760d5e3dd4a46501b8d0101386736873"
+    },
+    {
+      "path": "processed/static/meta_validation.parquet",
+      "bytes": 521699,
+      "sha256": "6d9702d3fa843803ace658ce5e359c9b314545ef77a79c7872c4ea3c7346f192"
+    },
+    {
+      "path": "processed/static/X_test.npy",
+      "bytes": 165136764,
+      "sha256": "8ead4d59771ca8746dab036bbca2e16e08a3b38764423642d080acebb2236d93"
+    },
+    {
+      "path": "processed/static/y_test.npy",
+      "bytes": 17467,
+      "sha256": "86a0be6f1daf0bc4e694b5665f65d6706dc22230172db6f4060e5ea6adad10bb"
+    },
+    {
+      "path": "processed/static/meta_test.parquet",
+      "bytes": 1209974,
+      "sha256": "c8be86932ab93c3b41d13da53f5c47105531f58c298c2211ba1ad8671d5355f8"
+    },
+    {
+      "path": "processed/static/feature_names.csv",
+      "bytes": 90136,
+      "sha256": "7916fe1e848fdc51e107f541d4b5196211ab906e8e747298f767e5295020ac3a"
+    },
+    {
+      "path": "processed/static/train_feature_stats.parquet",
+      "bytes": 131394,
+      "sha256": "e22f5de4437107be43b76ec68e296b9af8a85a4e566b62dc86c8350a6aec6f53"
+    },
+    {
+      "path": "processed/static/drift_ks.parquet",
+      "bytes": 58976,
+      "sha256": "e88d9229c3d60d047bfa2d06ff039678efe423e0c302803a05d3c361d5e2b0a1"
+    },
+    {
+      "path": "processed/static/plots/class_distribution.png",
+      "bytes": 46606,
+      "sha256": "526fe87e37e5b31b44bf4ed6e7541b8839c4f16b2d49ca656331b25703260b41"
+    },
+    {
+      "path": "processed/static/plots/drift_ks_by_group.png",
+      "bytes": 55824,
+      "sha256": "c40d40e7035ea78ef6a569c666cd3852a37b0334c012f54cfa15c5065839079f"
+    },
+    {
+      "path": "processed/static/plots/feature_sparsity_by_group.png",
+      "bytes": 51735,
+      "sha256": "c05557c4cc23abe060e2921734307a0ba733117042f7e4098612f3f0f0d7fd0f"
+    }
+  ],
+  "timings": {
+    "materialize_s": 16.1,
+    "verify_s": 0.5,
+    "train_stats_s": 10.8,
+    "drift_s": 5.5,
+    "checksums_s": 1.9,
+    "total_s": 36.3
+  }
+}

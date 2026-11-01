@@ -5,6 +5,7 @@ Texty, z ktorých sa budú preberať informácie do práce. Číslované podľa 
 | Súbor | Obsah | Stav |
 |---|---|---|
 | `01_audit_dat.md` | štruktúra datasetov, párovanie, označenia, zistené problémy | EMBER overený, Speakeasy čiastočne |
+| `02_staticke_data.md` | spoločné rozdelenie a predspracovanie statických dát | hotové |
 
 Pravidlá:
 - Uvádzať iba overené fakty s popisom, ako boli overené. Návrhy a otvorené rozhodnutia jasne označiť.

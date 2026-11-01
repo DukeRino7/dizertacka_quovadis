@@ -4,6 +4,7 @@ Jedna konfigurácia = jeden experiment. Štruktúra kopíruje `runs/` a `src/mod
 
 | Priečinok | Čo konfiguruje | Výsledky idú do |
 |---|---|---|
+| `data/` | index, rozdelenie a predspracovanie dát | `processed/` |
 | `static/` | statické baseline modely (EMBER) | `runs/static/<model>/` |
 | `dynamic/` | dynamické baseline modely (Speakeasy) | `runs/dynamic/<model>/` |
 | `hybrid/` | hybridné modely (oba vstupy) | `runs/hybrid/<model>/` |
