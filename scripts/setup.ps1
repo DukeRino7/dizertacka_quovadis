@@ -1,17 +1,17 @@
 ﻿# PRÍPRAVA PROSTREDIA A STATICKÝCH DÁT (Windows PowerShell)
 # Spustenie z koreňa projektu:  powershell -ExecutionPolicy Bypass -File scripts\setup.ps1
-# Predpoklad: nainštalovaný Python 3.11 a internet. Claude ani GitHub účet sa nepotrebujú.
+# Predpoklad: nainštalovaný Python 3.11 – 3.13 a internet. Claude ani GitHub účet sa nepotrebujú.
 $ErrorActionPreference = "Stop"
 Set-Location (Split-Path $PSScriptRoot -Parent)
 function Step($t) { Write-Host "`n=== $t ===" -ForegroundColor Cyan }
 
-Step "1/5 Python 3.11"
+Step "1/5 Python (3.11 – 3.13; všetky knižnice projektu majú pre tieto verzie hotové balíky)"
 $py = $null
-foreach ($c in @("py -3.11", "python")) {
-    try { $v = & cmd /c "$c --version" 2>$null; if ($v -match "3\.11") { $py = $c; break } } catch {}
+foreach ($c in @("py -3.11", "py -3.12", "py -3.13", "python")) {
+    try { $v = & cmd /c "$c --version" 2>$null; if ($v -match "3\.1[123]\.") { $py = $c; break } } catch {}
 }
-if (-not $py) { throw "Nenašiel sa Python 3.11. Nainštaluj ho z python.org (zaškrtni 'Add to PATH') a spusti znova." }
-Write-Host "Používam: $py ($v)"
+if (-not $py) { throw "Nenašiel sa Python 3.11 – 3.13. Nainštaluj ho z python.org (zaškrtni 'Add to PATH') a spusti znova." }
+Write-Host "Používam: $py ($v). Verzia sa zapisuje do environment.json každého behu."
 
 Step "2/5 Virtuálne prostredie .venv a knižnice (PyTorch ~2,5 GB, chvíľu potrvá)"
 if (-not (Test-Path ".venv\Scripts\python.exe")) { & cmd /c "$py -m venv .venv"; if ($LASTEXITCODE) { throw "venv zlyhal" } }

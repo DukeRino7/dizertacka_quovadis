@@ -1,6 +1,6 @@
 # Spustenie na inom počítači (napr. pracovný notebook)
 
-Claude ani prihlásenie do Claude **netreba** – všetko robia skripty. Potrebný je Python 3.11 a internet.
+Claude ani prihlásenie do Claude **netreba** – všetko robia skripty. Potrebný je Python 3.11 – 3.13 (stačí už nainštalovaný) a internet.
 
 ## 1. Získať projekt
 Repozitár je súkromný, preto jedna z možností:
