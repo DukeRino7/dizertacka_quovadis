@@ -24,7 +24,10 @@ def git_info() -> dict:
         except Exception:
             return None
     status = run("status", "--porcelain")
-    return {"commit": run("rev-parse", "HEAD"), "dirty": bool(status) if status is not None else None}
+    vfile = PROJECT_ROOT / "VERSION.txt"   # verzia kódu aj bez gitu (napr. projekt stiahnutý ako ZIP značky)
+    version = vfile.read_text(encoding="utf-8").strip() if vfile.exists() else None
+    return {"commit": run("rev-parse", "HEAD"), "dirty": bool(status) if status is not None else None,
+            "version": version, "source": "git" if status is not None else "zip/bez gitu"}
 
 
 def environment() -> dict:

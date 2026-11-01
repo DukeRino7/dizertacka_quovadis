@@ -6,7 +6,8 @@ internet a pre neurónové siete grafická karta NVIDIA s aktuálnym ovládačom
 ## 1. Získať projekt
 - **Odporúčané:** `git clone https://github.com/DukeRino7/dizertacka_quovadis.git` (prihlásenie na GitHub) – finálny beh
   si potom zapíše presnú verziu kódu (commit) do `RUN_INFO.txt`;
-- alebo GitHub *Code → Download ZIP* (verziu kódu treba potom zapísať ručne).
+- alebo **ZIP konkrétnej verzie**: GitHub → *Tags* → napr. `v1` → *Source code (zip)* – bez prihlasovania v gite
+  (vhodné na pracovnom počítači s iným GitHub účtom); verzia sa zapíše z `VERSION.txt` do výsledkov každého behu.
 
 ## 2. Príprava (raz)
 ```

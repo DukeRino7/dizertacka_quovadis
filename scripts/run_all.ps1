@@ -8,7 +8,9 @@ $root = Split-Path $PSScriptRoot -Parent
 $env:DIZERTACKA_RUNS_DIR = (Join-Path $root $RunsDir)
 New-Item -ItemType Directory -Force $env:DIZERTACKA_RUNS_DIR | Out-Null
 $commit = (& git -C $root rev-parse HEAD 2>$null)
-if (-not $commit) { $commit = "neznámy (projekt nie je git repozitár – zapísať verziu ručne)" }
+$ver = if (Test-Path (Join-Path $root "VERSION.txt")) { (Get-Content (Join-Path $root "VERSION.txt") -Encoding utf8 -TotalCount 1) } else { "?" }
+if (-not $commit) { $commit = "bez gitu (ZIP)" }
+$commit = "$commit | verzia: $ver"
 $info = Join-Path $env:DIZERTACKA_RUNS_DIR "RUN_INFO.txt"
 Add-Content $info "Finálny beh: spustenie $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') | počítač $env:COMPUTERNAME | commit $commit" -Encoding utf8
 Write-Host "Výsledky: $env:DIZERTACKA_RUNS_DIR (commit $commit)" -ForegroundColor Cyan
