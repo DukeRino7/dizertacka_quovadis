@@ -27,6 +27,9 @@ Jeden kód; verzia = značka v gite (`v1`, `v2`), výsledky v samostatných prie
 | kaskáda B (najprv statický študent, pri neistom skóre emulácia + hybrid; šetrí počet súborov v sandboxe) | nie (rozhodnutie autora) – pozn.: z uložených predikcií by bola takmer bez výpočtu | áno |
 | nízka prevalencia (metriky prepočítané z TPR/FPR na prevalenciu napr. 1 %, 0,1 %) | áno (iba prepočet) | áno |
 
+**Možnosť (nerozhodnuté):** HPC Perun (TUKE, Slurm, GPU uzly 8× H200) – vhodný najmä pre V2; vyžaduje
+projekt/pridelenie, Linux skripty pre Slurm; tréning tam, merania spotreby na bežnom PC. Zatiaľ sa nerieši.
+
 Formulácia tézy 4 sa prekonzultuje s vedúcou: „výpočtová náročnosť klasifikácie“ (kaskáda A) vs. „počet vzoriek
 vyžadujúcich dynamickú analýzu“ (kaskáda B). Čas emulácie sa nemeria (dataset neobsahuje PE súbory); 60 s
 z `speakeasy-config.json` možno použiť iba ako jasne označený predpoklad.
