@@ -3,8 +3,8 @@
 
 speakeasy_listing: data/quovadis-speakeasy/.cache/huggingface/trees/fc2e98fac0b4d43a5557ccab70c877af6cce9f4d.json
 
-# revízia datasetu dtrizna/quovadis-speakeasy na Hugging Face (null = aktuálna; zafixovať po stiahnutí)
-speakeasy_revision: null
+# revízia datasetu dtrizna/quovadis-speakeasy na Hugging Face použitá v projekte
+speakeasy_revision: fc2e98fac0b4d43a5557ccab70c877af6cce9f4d   # stiahnutá 2026-11-01
 
 audit:
   workers: 10
@@ -19,14 +19,23 @@ cache:
   max_arg_chars: 64            # argumenty sa ukladajú orezané (samostatný súbor, voliteľné použitie)
   keep_args: true
 
-# Pevný vektor pre spoločný rebríček modelov (vrstva A) – slovník sa učí IBA na tréningu. NÁVRH.
+# Pevný vektor pre spoločný rebríček modelov (vrstva A) – slovník sa učí IBA na tréningu.
+# ROZHODNUTÉ 2026-11-01 (docs/04): hlavný variant = IBA API volania. Udalosti a súhrnné počty (chyby emulácie,
+# počet volaní, ...) nesú stopu inej verzie/nastavenia emulátora v teste (audit: unsupported_api 0 % train vs 55 % test,
+# udalosti pri benign 59 % train vs 11 % test) -> iba v kontrolnom variante 'full'.
 tabular:
   ngram_range: [1, 2]          # jednotlivé API volania a dvojice po sebe idúcich volaní
   min_doc_freq: 5              # n-gram musí byť aspoň v 5 tréningových vzorkách
   max_features: 2000           # najčastejšie n-gramy podľa dokumentovej frekvencie na tréningu
   count_transform: none        # uložia sa surové počty; log1p a škálovanie robí model (ako pri statických dátach)
-  include_events: true         # počty udalostí (súbory, register, sieť, procesy, ...)
-  include_summary: true        # súhrnné príznaky: počet vstupných bodov, vlákien, volaní, chýb emulácie, ...
+  include_events: false        # počty udalostí – vynechané (artefakt emulátora), pozri variant full
+  include_summary: false       # súhrnné počty (vstupné body, vlákna, volania, chyby emulácie) – vynechané, pozri full
+
+# Kontrolné varianty reprezentácie (prepíšu kľúče z 'tabular'); výstup processed/dynamic/tabular_<variant>
+tabular_variants:
+  full:                        # všetko vrátane udalostí a súhrnu – iba kontrolný experiment (configs/dynamic_ablations)
+    include_events: true
+    include_summary: true
 
 # Postupnosti API volaní pre sekvenčné modely (vrstva B) – slovník IBA z tréningu. NÁVRH (potvrdiť po audite tréningu).
 sequence:

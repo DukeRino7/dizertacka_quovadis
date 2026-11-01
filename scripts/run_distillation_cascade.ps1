@@ -1,6 +1,6 @@
 ﻿# DESTILÁCIA A KASKÁDA: výber modelov podľa pravidla (docs\00), mäkké označenia učiteľov, študenti (destilácia,
 # kontrola bez destilácie, variant A), meranie spotreby študentov, 5 variantov kaskády, záverečné porovnanie.
-# Predpoklad: run_static.ps1 a run_dynamic_hybrid.ps1. Spustenie:
+# Predpoklad: run_static.ps1, run_dynamic.ps1 a run_hybrid.ps1. Spustenie:
 #   powershell -ExecutionPolicy Bypass -File scripts\run_distillation_cascade.ps1      (pokračuje po prerušení)
 . "$PSScriptRoot\_common.ps1"
 Start-Transcript -Path (Join-Path $RUNS "run_distillation_cascade_log.txt") -Append | Out-Null

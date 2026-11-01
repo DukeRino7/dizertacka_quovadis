@@ -1,8 +1,34 @@
 # 04 – Dynamické (Speakeasy) dáta
 
-Stav k 2026-11-01: **kód pripravený, ostrý beh čaká na stiahnutie tréningovej časti** (stiahnutý je celý test,
-z tréningu ~17 %). Kód bol overený iba na testovacích reportoch a iba ako kontrola správneho čítania formátu –
-žiadne rozhodnutie o reprezentácii nevychádza z testu.
+Stav k 2026-11-01 (večer): **dataset stiahnutý, audit hotový, dynamické dáta pripravené** (`processed/dynamic/`).
+Revízia datasetu: `fc2e98fac0b4d43a5557ccab70c877af6cce9f4d` (`configs/data/dynamic.yaml`).
+
+## Výsledky auditu tréningu (processed/dynamic/audit/AUDIT.md)
+- Stiahnutých 92 406 / 92 406 súborov (veľkosti zhodné so zoznamom HF); **každá z 91 596 vzoriek indexu má report**
+  s rovnakým SHA-256 a rodinou; všetky reporty sa načítali (žiadny poškodený).
+- **Test bol pravdepodobne emulovaný inou verziou/nastavením Speakeasy** (odhad z dát, autori to neuvádzajú):
+  ukončenie emulácie `unsupported_api` 0,0 % train / 0,0 % val / **54,6 % test**; iné názvy chýb
+  („Invalid memory read (UC_ERR_READ_UNMAPPED)“ v train vs. „invalid_read“ v teste); vzorky s udalosťami: benign
+  59 % train vs. 11 % test, malware 50 % vs. 32 % (v tréningu má udalosti častejšie benign, v teste malware).
+- Malé reporty (≤ 5 volaní): ransomware 42 % train vs. 1,9 % test, dropper 22,6 % vs. 0,4 %; krátke postupnosti
+  sú takmer výlučne pre jednu rodinu (riziko skratky).
+- Slovník API na tréningu: 2 722 rôznych API, 1 099 v aspoň 5 vzorkách.
+
+## Rozhodnutia (DOHODNUTÉ 2026-11-01, z princípu – nie podľa výsledkov)
+1. **Hlavná reprezentácia = iba API volania** (n-gramy / postupnosti); udalosti a súhrnné počty (chyby emulácie,
+   počty volaní, vlákien) sa vynechávajú – nesú stopu inej verzie emulátora. Výber podľa validácie by bol pasca
+   (validácia je z rovnakej verzie emulátora ako tréning, artefakt v nej nevidno).
+2. **Kontrolný experiment** `configs/dynamic_ablations/*_full` (reprezentácia vrátane udalostí a súhrnu,
+   `processed/dynamic/tabular_full`, hyperparametre z hlavného modelu) – kvantifikuje vplyv artefaktu (iba popisne).
+3. **Malé reporty sa ponechávajú** (skutočný výsledok emulácie; vyradenie by zmenilo spoločné rozdelenie);
+   vo výsledkoch sa vyhodnotia zvlášť.
+4. Vyhodnocuje sa validácia (bez posunu) aj test (časový posun + zmena nástroja) – kapitola obmedzení;
+   úplne sa artefaktu zbaviť nedá (pri `unsupported_api` je postupnosť v teste kratšia).
+
+## Pripravené dáta
+- cache: 91 596 vzoriek, ~19 mil. API volaní (dĺžky zhodné s auditom),
+- `tabular`: 2 000 n-gramov API (449 jednotlivých volaní, 1 551 dvojíc); `tabular_full`: + 15 typov udalostí + 9 súhrnných počtov,
+- `sequence`: slovník 1 101 API, max. 1 024 volaní (orezaných iba 0,13 % vzoriek).
 
 ## Overený formát reportu (kontrola na testovacej časti)
 - Súbor = JSON **zoznam vstupných bodov**; README datasetu opisuje iný tvar (`{"sha256", "entry_points"}`), ten v dátach nie je.
@@ -42,14 +68,6 @@ Hybrid (spoločný rebríček) = spojenie statického a dynamického vektora (ra
 - či zahrnúť súhrnné príznaky, ktoré môžu niesť artefakty emulácie (počet volaní, chyby, dosiahnutý limit) –
   návrh: ponechať a overiť kontrolným experimentom ako pri statických dátach.
 
-## Poradie spustenia po stiahnutí dát
-```
-.venv\Scripts\python.exe -m src.data.audit_dynamic            # 1. audit -> skontrolovať AUDIT.md a rozhodnúť
-.venv\Scripts\python.exe -m src.data.build_dynamic            # 2. cache
-.venv\Scripts\python.exe -m src.data.build_dynamic_tabular    # 3. vektor pre rebríček
-.venv\Scripts\python.exe -m src.data.build_dynamic_sequence   # 4. postupnosti pre sekvenčné modely
-.venv\Scripts\python.exe -m src.training.run_suite --approach dynamic
-.venv\Scripts\python.exe -m src.training.run_suite --approach hybrid
-.venv\Scripts\python.exe -m src.training.run_tabular --config configs/dynamic/seq_cnn.yaml
-.venv\Scripts\python.exe -m src.training.run_tabular --config configs/hybrid/two_branch.yaml
-```
+## Spustenie
+`scriptsun_dynamic.ps1` (overenie dát, audit, príprava, dynamické modely, kontrolné experimenty) a
+`scriptsun_hybrid.ps1` (hybridné modely). Všetky typy modelov boli na skutočných dátach overené v skúšobnom režime.

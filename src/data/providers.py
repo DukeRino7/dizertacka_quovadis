@@ -15,7 +15,8 @@ import pandas as pd
 from src.common.paths import PROCESSED_DIR, STATIC_DIR
 
 DIRS = {"static": STATIC_DIR, "dynamic": PROCESSED_DIR / "dynamic" / "tabular",
-        "dynamic_seq": PROCESSED_DIR / "dynamic" / "sequence"}
+        "dynamic_seq": PROCESSED_DIR / "dynamic" / "sequence",
+        "dynamic_full": PROCESSED_DIR / "dynamic" / "tabular_full"}   # kontrolný variant s udalosťami a súhrnom
 
 
 def _load_dir(base, split: str):

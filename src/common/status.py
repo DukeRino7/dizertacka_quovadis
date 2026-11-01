@@ -17,17 +17,19 @@ PLAN = [
         ("static_ablations", "Kontrolné experimenty (bez podpisu a času)", [f"static_ablations/{m}_no_sig_ts" for m in ("lr", "lightgbm", "mlp_large")]),
         ("static_compare", "Porovnanie statických modelov", []),
     ]),
-    ("prepare_dynamic.ps1", [
-        ("dyn_download", "Speakeasy dáta (stiahnutie / overenie)", []),
-        ("dyn_audit", "Audit dynamických dát  → ROZHODNUTIE (docs/04)", []),
-    ]),
-    ("run_dynamic_hybrid.ps1", [
-        ("dyn_cache", "Cache reportov", []), ("dyn_tabular", "Vektor z API volaní", []), ("dyn_sequence", "Postupnosti API", []),
+    ("run_dynamic.ps1", [
+        ("dyn_download", "Speakeasy dáta (overenie / doplnenie)", []), ("dyn_audit", "Audit dynamických dát", []),
+        ("dyn_cache", "Cache reportov", []), ("dyn_tabular", "Vektor z API volaní", []),
+        ("dyn_tabular_full", "Kontrolná reprezentácia (full)", []), ("dyn_sequence", "Postupnosti API", []),
         ("dyn_train", "Tréning dynamických modelov", [f"dynamic/{m}" for m in ("lr", "rf", "lightgbm", "mlp_small", "mlp_large", "seq_cnn")]),
+        ("dyn_ablations", "Kontrolné experimenty (artefakt emulátora)", [f"dynamic_ablations/{m}_full" for m in ("lr", "lightgbm", "mlp_large")]),
+        ("dyn_benchmark", "Meranie spotreby – dynamické", []), ("dyn_importance", "Analýza príznakov – dynamické", []),
+        ("dyn_compare", "Porovnanie dynamických", []),
+    ]),
+    ("run_hybrid.ps1", [
         ("hyb_train", "Tréning hybridných modelov", [f"hybrid/{m}" for m in ("lr", "rf", "lightgbm", "mlp_small", "mlp_large", "two_branch")]),
-        ("dyn_benchmark", "Meranie spotreby – dynamické", []), ("hyb_benchmark", "Meranie spotreby – hybridné", []),
-        ("dyn_importance", "Analýza príznakov – dynamické", []), ("hyb_importance", "Analýza príznakov – hybridné", []),
-        ("dyn_compare", "Porovnanie dynamických", []), ("hyb_compare", "Porovnanie hybridných", []),
+        ("hyb_benchmark", "Meranie spotreby – hybridné", []), ("hyb_importance", "Analýza príznakov – hybridné", []),
+        ("hyb_compare", "Porovnanie hybridných", []),
     ]),
     ("run_distillation_cascade.ps1", [
         ("select", "Výber modelov podľa pravidla (učiteľ)", []),

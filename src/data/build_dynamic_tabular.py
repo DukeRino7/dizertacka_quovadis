@@ -26,10 +26,12 @@ from .dynamic_features import ApiNgramVectorizer
 SPLIT_ORDER = ["train", "validation", "test"]
 
 
-def main(cache: Path, out: Path, cfg_path: str, splits=SPLIT_ORDER):
+def main(cache: Path, out: Path, cfg_path: str, splits=SPLIT_ORDER, variant: str | None = None):
     t0 = time.perf_counter()
     cfg = load_config(cfg_path)
-    tcfg = cfg["tabular"]
+    tcfg = {**cfg["tabular"], **(cfg.get("tabular_variants", {}).get(variant, {}) if variant else {})}
+    if variant and variant not in cfg.get("tabular_variants", {}):
+        raise ValueError(f"neznámy variant {variant!r}")
     seed = load_config("configs/data/index.yaml")["seed"]
     out.mkdir(parents=True, exist_ok=True)
     (out / "plots").mkdir(exist_ok=True)
@@ -148,7 +150,9 @@ Slovník: {len(vec.vocab_)} n-gramov API (min. {vec.min_doc_freq} tréningových
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--cache", default=str(PROCESSED_DIR / "dynamic" / "cache"))
-    ap.add_argument("--out", default=str(PROCESSED_DIR / "dynamic" / "tabular"))
+    ap.add_argument("--out", default=None, help="predvolene processed/dynamic/tabular[_<variant>]")
     ap.add_argument("--config", default="configs/data/dynamic.yaml")
+    ap.add_argument("--variant", default=None, help="kontrolný variant z tabular_variants (napr. full)")
     a = ap.parse_args()
-    main(Path(a.cache), Path(a.out), a.config)
+    out = Path(a.out) if a.out else PROCESSED_DIR / "dynamic" / ("tabular" + (f"_{a.variant}" if a.variant else ""))
+    main(Path(a.cache), out, a.config, variant=a.variant)

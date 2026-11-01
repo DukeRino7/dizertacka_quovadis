@@ -42,9 +42,13 @@ class LightGBM(TabularModel):
         info = self.model.dump_model(num_iteration=self.model.best_iteration)["tree_info"]
         return int(sum(2 * t["num_leaves"] - 1 for t in info))
 
+    # Zápis/čítanie cez Python: knižnica LightGBM na Windows nevie otvoriť cestu s diakritikou (napr. C:\Users\Dušan\...).
     def _save(self, path: Path):
-        self.model.save_model(str(path / "model.txt"), num_iteration=self.model.best_iteration)
+        text = self.model.model_to_string(num_iteration=self.model.best_iteration)
+        (path / "model.txt").write_text(text, encoding="utf-8")
 
     @classmethod
     def _load(cls, path, meta):
-        m = cls(meta["params"], meta["seed"]); m.model = lgb.Booster(model_file=str(path / "model.txt")); return m
+        m = cls(meta["params"], meta["seed"])
+        m.model = lgb.Booster(model_str=(path / "model.txt").read_text(encoding="utf-8"))
+        return m

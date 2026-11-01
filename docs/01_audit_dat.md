@@ -1,6 +1,7 @@
 # 01 – Audit dát
 
-Stav k 2026-11-01. EMBER overený na stiahnutých súboroch. Speakeasy overený zo zoznamu súborov repozitára
+Stav k 2026-11-01. EMBER overený na stiahnutých súboroch. **Speakeasy overený na stiahnutých reportoch
+(večer 2026-11-01) – detaily a nové zistenia v `docs/04_dynamicke_data.md`.** Pôvodný text nižšie: Speakeasy overený zo zoznamu súborov repozitára
 na Hugging Face (`data/quovadis-speakeasy/.cache/huggingface/trees/*.json`, obsahuje cesty a veľkosti všetkých
 súborov), obsah reportu zatiaľ iba na jednej testovacej vzorke. **Po dokončení sťahovania treba audit
 zopakovať reprodukovateľným skriptom v `src/data/` na skutočných súboroch.**

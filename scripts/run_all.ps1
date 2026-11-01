@@ -14,7 +14,7 @@ $commit = "$commit | verzia: $ver"
 $info = Join-Path $env:DIZERTACKA_RUNS_DIR "RUN_INFO.txt"
 Add-Content $info "Finálny beh: spustenie $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') | počítač $env:COMPUTERNAME | commit $commit" -Encoding utf8
 Write-Host "Výsledky: $env:DIZERTACKA_RUNS_DIR (commit $commit)" -ForegroundColor Cyan
-foreach ($s in @("run_static.ps1", "prepare_dynamic.ps1", "run_dynamic_hybrid.ps1", "run_distillation_cascade.ps1")) {
+foreach ($s in @("run_static.ps1", "run_dynamic.ps1", "run_hybrid.ps1", "run_distillation_cascade.ps1")) {
     & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot $s)
     if ($LASTEXITCODE) { throw "$s skončil s chybou – oprav a spusti run_all.ps1 znova (hotové kroky sa preskočia)." }
 }

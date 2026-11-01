@@ -19,8 +19,8 @@ ráno prípadne zastaviť **Ctrl+C**, večer spustiť znova (hotové kroky/model
 | 0 | notebook | predbežný test statickej časti |
 | 1 | PC | kontrola testu, opravy → značka `v1` |
 | 2 | notebook | ZIP `v1` → `setup.ps1` → `run_static.ps1` |
-| 3 | notebook | Speakeasy skopírovať z PC do `data\quovadis-speakeasy` → `prepare_dynamic.ps1` → rozhodnutie podľa auditu |
-| 4 | notebook | `run_dynamic_hybrid.ps1` (2–3 večery) |
+| 3 | notebook | Speakeasy skopírovať z PC do `data\quovadis-speakeasy` (aj s `.cache`) → `run_dynamic.ps1` (1–2 večery) |
+| 4 | notebook | `run_hybrid.ps1` (1–2 večery) |
 | 5 | notebook | `run_distillation_cascade.ps1` |
 | 6 | PC | kontrola, záverečný report, commit → V1 hotová; potom V2 (zero-day) |
 
@@ -37,8 +37,8 @@ powershell -ExecutionPolicy Bypass -File scripts\setup.ps1
 | Skript | Čo robí | Trvanie (odhad, notebook) |
 |---|---|---|
 | `scripts\run_static.ps1` | statické modely, spotreba, analýza príznakov, kontrolné experimenty, porovnanie | 4–7 h |
-| `scripts\prepare_dynamic.ps1` | stiahnutie Speakeasy + audit → **rozhodnutie** podľa `processed\dynamic\audit\AUDIT.md` | hodiny (sťahovanie) |
-| `scripts\run_dynamic_hybrid.ps1` | dynamické dáta, dynamické + hybridné modely, spotreba, porovnania | ~0,5–1 deň |
+| `scripts\run_dynamic.ps1` | Speakeasy (overenie), audit, dynamické dáta, dynamické modely, kontrolné experimenty | ~0,5 dňa |
+| `scripts\run_hybrid.ps1` | hybridné modely, spotreba, porovnanie | ~0,5 dňa |
 | `scripts\run_distillation_cascade.ps1` | výber modelov podľa pravidla, učitelia, študenti, kaskády, záverečný report | ~0,5 dňa |
 
 Každý skript po prerušení stačí spustiť znova – hotové kroky sa preskočia (značky v `runs\_state\`).
