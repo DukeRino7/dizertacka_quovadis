@@ -29,6 +29,11 @@ Projekt je na počítači používateľa v `D:\dizertacka`.
 Kód organizovať do `src/data`, `src/models`, `src/training`, `src/evaluation`; konfigurácie do `configs`, výsledky do `runs`.
 Neodhadovať neznáme vlastnosti dát ani nevymýšľať výsledky. Neurčené vedecké rozhodnutia prezentovať ako návrh, nie ako schválenú požiadavku.
 
+## Dohodnuté rozhodnutia
+- Výskumné otázky, pravidlá výberu modelov (TPR pri FPR 1 % na validácii) a vykazovania výsledkov: `docs/00_vyskumne_otazky.md`.
+- Protokol tréningu a sada modelov: `docs/03_protokol_a_modely.md`; destilácia a kaskáda: `docs/05_destilacia_a_kaskada.md`.
+- Pred každým výberom alebo vyhodnotením tieto dokumenty skontrolovať; pravidlá nemeniť podľa výsledkov.
+
 ## Štruktúra projektu
 Každý priečinok má vlastný `CLAUDE.md` s popisom účelu, pravidiel a aktuálneho stavu. Pri zmene ho aktualizovať.
 - `data/` – pôvodné dáta, iba na čítanie.

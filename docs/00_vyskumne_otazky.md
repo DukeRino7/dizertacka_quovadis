@@ -1,6 +1,6 @@
 # 00 – Výskumné otázky a postup výberu modelov
 
-Stav k 2026-11-01. Otázky sformuloval autor práce; pravidlá výberu sú **NÁVRH** (treba potvrdiť pred vyhodnotením).
+Stav k 2026-11-01. Otázky sformuloval autor práce; pravidlá výberu a vykazovania sú **dohodnuté**.
 
 ## Výskumné otázky
 1. **Najlepší hybridný model:** ktorý hybridný model (rebríček s rannou fúziou, dvojvetvová sieť, neskorá fúzia)
@@ -12,14 +12,34 @@ Stav k 2026-11-01. Otázky sformuloval autor práce; pravidlá výberu sú **NÁ
    na každej vzorke pri zachovaní kvality? (b) je pri podobných nárokoch spoľahlivejšia než samostatný statický
    alebo dynamický model?
 
-## Pravidlá výberu (NÁVRH – určiť VOPRED, aby výber nebol prispôsobený výsledkom)
+## Pravidlá výberu (DOHODNUTÉ 2026-11-01 – určené VOPRED, nemenia sa podľa výsledkov)
 - Výber sa robí **iba na validácii**; test sa vyhodnotí až pre vybrané modely.
-- **Najlepší model skupiny** = najvyššie ROC-AUC na validácii (priemer cez seedy). Ak je rozdiel medzi kandidátmi
-  menší ako ich smerodajná odchýlka, rozhodne vyššie TPR pri FPR 1 % na validácii; ak aj to je zhodné, lacnejší model
-  (nižší CPU čas na vzorku).
-- **Učiteľ a veľký model kaskády** = najlepší hybridný model podľa pravidla vyššie.
+- **Najlepší model skupiny** = najvyššie **TPR pri FPR 1 % na validácii** (priemer cez seedy) – podiel zachyteného
+  malvéru, keď smie byť najviac 1 % neškodných súborov chybne označených; je to pracovný bod, pri ktorom rozhodujú
+  modely v kaskáde. ROC-AUC je pri hodnotách ~0,999 nasýtené a zle rozlišuje najlepšie modely.
+- Ak je rozdiel menší ako smerodajná odchýlka cez seedy → rozhodne ROC-AUC na validácii → potom nižší CPU čas na vzorku.
+- Ladenie hyperparametrov naďalej optimalizuje ROC-AUC (stabilná celková metrika); výber medzi modelmi podľa pravidla vyššie.
+- **Učiteľ a veľký model kaskády** = najlepší hybridný model podľa tohto pravidla. Doplnková analýza: kaskáda aj s
+  najlepším ťažkým hybridom (dvojvetvová sieť), ak by vyhral lacný model.
 - **Študent** = malá sieť s aspoň 10× nižším CPU časom na vzorku než učiteľ (docs/05).
 - Variant s učiteľom z rovnakej modality (docs/05, variant A) je doplnkové porovnanie.
+
+## Interpretácia a vykazovanie výsledkov (DOHODNUTÉ)
+- Hlavné výsledky sa uvádzajú na **teste** (zber o 3 mesiace neskôr → časový posun); validácia je takmer dokonalá,
+  lebo pochádza z rovnakého obdobia ako tréning.
+- Uvádzať aj prísnejší pracovný bod **FPR 0,1 %** – tam sú rozdiely medzi modelmi zreteľné
+  (napr. LR: validácia 82,7 % → test 7,6 %; RF: 98,5 % → 92,0 %).
+- Tvrdenia práce sú **porovnávacie** (kaskáda vs. hybrid vs. samostatné prístupy za rovnakých podmienok); absolútne
+  čísla sú laboratórne a do prevádzky sa priamo neprenášajú → kapitola obmedzení (jeden dataset, 7 rodín, emulácia,
+  32-bitové PE, artefakty zberu – kontrolné experimenty bez nich).
+- Ak hybrid na teste neprinesie zlepšenie oproti statickému prístupu, je to platná odpoveď na otázku 3, nie zbytočná práca.
+- **Analýza komplementarity (plánované):** ktoré chyby statického modelu (rodiny, zbalené vzorky, časový posun)
+  opraví dynamický/hybridný model – argument, kde a prečo má hybrid zmysel.
+
+## Overenie na reálnych súboroch (plánované na záver)
+Súbory z počítača autora (prevažne legitímny softvér) → rovnaká extrakcia príznakov ako v datasete (EMBER s verziou
+LIEF podľa autorov datasetu, Speakeasy s `speakeasy-config.json` z datasetu) → vyhodnotenie modelmi; meria sa hlavne
+miera falošných poplachov. Malvér iba vo virtuálnom stroji. Pozor: dataset obsahuje iba 32-bitové PE.
 
 ## Poznámka k nárokom
 Kaskáda ušetrí výpočet iba vtedy, keď je hybrid výrazne drahší než dvojica študentov a podiel eskalácií je malý:
