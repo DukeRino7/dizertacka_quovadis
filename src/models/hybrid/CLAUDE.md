@@ -1,10 +1,8 @@
-# src/models/hybrid/ – Hybridné modely
+# src/models/hybrid/ – špecifické hybridné modely (vrstva B)
 
-**Vstup:** EMBER priznaky aj Speakeasy reporty tej istej vzorky
-**Úloha:** Baseline hybridnej detekcie na každej vzorke. Vybraný model rozhoduje v kaskáde pri nezhode študentov.
+| Súbor | Model | Stav |
+|---|---|---|
+| `late_fusion.py` | neskorá fúzia skóre statického a dynamického modelu (priemer; stacking učený na validácii krížovo) | hotové, používa `src/cascade/evaluate.py` |
+| (plánované) | dvojvetvová sieť: EMBER vetva + sekvenčná vetva nad API volaniami | pripravuje sa |
 
-- Jeden súbor = jeden model, napr. `lr.py`. Konfigurácia v `configs/hybrid/`, výsledky v `runs/hybrid/<model>/`.
-- Architektúry ani hyperparametre zatiaľ nie sú určené.
-
-## Modely
-_Zatiaľ žiadne._
+Hybridné modely spoločného rebríčka (ranná fúzia = spojený vektor) sú v `src/models/tabular/`, konfigurácie `configs/hybrid/`.

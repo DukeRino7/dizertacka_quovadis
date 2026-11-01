@@ -1,16 +1,15 @@
 # src/cascade/ – finálna kaskáda
 
-Finálne usporiadanie, ktoré sa porovnáva s ostatnými prístupmi:
+1. Statický a dynamický model (finálne: študenti z destilácie) ohodnotia vzorku pri svojich prahoch z validácie.
+2. Ak sa zhodnú na malware alebo benign, rozhodnutie je konečné.
+3. Ak sa nezhodnú, rozhodne veľký hybridný model.
 
-1. Ľahký statický študent (`models/students_static`) a ľahký dynamický študent (`models/students_dynamic`)
-   ohodnotia vzorku.
-2. Ak sa zhodnú na malware alebo benign, ich rozhodnutie je konečné.
-3. Ak sa nezhodnú, vzorka ide veľkému hybridnému modelu (`models/hybrid`), ktorý rozhodne.
+| Modul | Úloha |
+|---|---|
+| `components.py` | načítanie uložených predikcií, prahov a benchmarkov komponentov (`'<prístup>/<model>'` alebo cesta k behu) |
+| `evaluate.py` | vyhodnotenie z uložených predikcií: kvalita kaskády vs. hybrid na každej vzorke, samostatní študenti, neskorá fúzia (priemer, stacking); podiel eskalácií, chyby pri zhode, prínos hybridu na eskalovaných vzorkách; odhad nárokov z benchmarkov → `runs/cascade/<variant>/<beh>/` |
 
-Tento priečinok obsahuje iba logiku kaskády: načíta už natrénované modely, spája ich rozhodnutia a meria
-výpočtové nároky celého postupu. Modely sa tu netrénujú.
-
-Otvorené (zatiaľ neurčené):
-- ktorí študenti a ktorý hybridný model sa použijú,
-- ako sa určia prahy študentov (na validácii),
-- či sa kaskáda vyhodnocuje aj s vopred vypočítanými predikciami, alebo iba skutočným spustením modelov.
+Rozhodnuté: prahy študentov aj hybridu = prah pre FPR ≤ 1 % na validácii (`configs/protocol.yaml`).
+Neskorá fúzia je v `src/models/hybrid/late_fusion.py`.
+Plánované: meranie nárokov celej kaskády skutočným spustením modelov (nielen odhad zo súčtu komponentov).
+Podrobnosti: `docs/05_destilacia_a_kaskada.md`.

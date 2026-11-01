@@ -1,7 +1,10 @@
 # configs/cascade/
 
-Konfigurácie pre `cascade`, jeden súbor na model alebo variant (napr. `variant.yaml`).
-Kód: `src/cascade/`. Výsledky: `runs/cascade/<model>/`. Konvencie: `configs/CLAUDE.md`.
+Varianty kaskády. Kľúče: `name` (= priečinok v `runs/cascade/`), `components.static|dynamic|hybrid`
+(`'<prístup>/<model>'` = posledný dokončený beh v `runs/`, alebo cesta k behu).
 
-## Konfigurácie
-_Zatiaľ žiadne._
+| Súbor | Obsah | Stav |
+|---|---|---|
+| `example_baselines.yaml` | predbežná kaskáda z baseline modelov (kontrola postupu pred destiláciou) | čaká na dynamické a hybridné behy |
+
+Spustenie: `.venv\Scripts\python.exe -m src.cascade.evaluate --config configs/cascade/<variant>.yaml`.

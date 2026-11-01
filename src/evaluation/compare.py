@@ -70,15 +70,18 @@ def plot_metric_bars(df: pd.DataFrame, metric: str, std: str, label: str, path: 
                      zero_based: bool = False):
     fig, ax = P._fig(7.5, 4.2)
     y = np.arange(len(df))[::-1]
-    ax.barh(y, df[metric], xerr=df[std], height=0.6, color=P.SPLIT_COLOR["test"],
-            error_kw={"ecolor": P.INK, "capsize": 3, "linewidth": 1})
-    for yi, v in zip(y, df[metric]):
-        ax.text(v, yi, f"  {v:.4g}", va="center", color=P.INK, fontsize=9)
-    if zero_based:  # absolútne hodnoty (napr. čas) – os od nuly
+    if zero_based:  # absolútne hodnoty (napr. čas) – stĺpce s osou od nuly
+        ax.barh(y, df[metric], height=0.6, color=P.SPLIT_COLOR["test"])
         ax.set_xlim(0, df[metric].max() * 1.25)
-    else:           # metriky kvality v [0, 1] – priblíženie na rozsah hodnôt
+        offsets = np.zeros(len(df))
+    else:           # metriky kvality blízko 1 – body ± sm. odchýlka (orezaná os by stĺpce skreslila)
+        ax.errorbar(df[metric], y, xerr=df[std], fmt="o", markersize=8, color=P.SPLIT_COLOR["test"],
+                    ecolor=P.INK, elinewidth=1, capsize=3, markeredgecolor=P.SURFACE, zorder=3)
         lo = max(0.0, df[metric].min() - (df[metric].max() - df[metric].min()) * 1.5 - 0.005)
         ax.set_xlim(lo, min(1.0, df[metric].max() + (df[metric].max() - lo) * 0.25))
+        offsets = df[std].to_numpy()
+    for yi, v, o in zip(y, df[metric], offsets):
+        ax.text(v + o, yi, f"  {v:.4g}", va="center", color=P.INK, fontsize=9)
     ax.set_yticks(y, df["model"])
     P._style(ax, title, label, "", grid="x")
     P._save(fig, path)
