@@ -57,6 +57,21 @@ celá cesta pôvodný vstup → transformácia → model → skóre na testovace
 Spustenie: `.venv\Scripts\python.exe -m src.evaluation.benchmark --approach static`,
 potom `python -m src.evaluation.compare --approach static` (tabuľka v `runs/comparison/static/README.md`).
 
+## Analýza využívania príznakov a kontrolné experimenty (NÁVRH)
+Cieľ: overiť, či sa modely neopierajú o artefakty zberu dát namiesto skutočných vlastností malvéru.
+Pôvod podozrenia (`processed/static/STATISTICS.md`): najsilnejšie samostatné príznaky na tréningu sú počet URL
+v reťazcoch (ROC-AUC 0,88), veľkosť tabuľky certifikátov (0,83), digitálny podpis (0,82) a čas zostavenia (0,77);
+čas zostavenia má zároveň najväčší posun train → test. Žiadny príznak sám nedosahuje ROC-AUC 0,9.
+
+1. **Dôležitosť príznakov** (`src/evaluation/feature_importance.py`, iba validácia): pokles ROC-AUC po
+   premiešaní celej skupiny príznakov a sledovaných príznakov; SHAP (LightGBM), koeficienty (LR).
+2. **Kontrolný experiment** (`configs/static_ablations/`): lr, lightgbm a mlp_large bez 4 príznakov
+   (podpis, 2× tabuľka certifikátov, čas zostavenia) s hyperparametrami prevzatými z pôvodného modelu.
+   Ak kvalita výrazne klesne, model sa o tieto artefakty opiera – dôležité zistenie pre interpretáciu.
+
+Spustenie po dokončení statických modelov:
+`python -m src.evaluation.feature_importance --approach static` a `python -m src.training.run_ablations --dir static_ablations`.
+
 ## Výstupy
 - jeden beh: `runs/<prístup>/<model>/<dátum-čas>/README.md` (metriky, časy, grafy), `metrics.json`, `timing.json`,
   `predictions/`, `hpo_trials.csv`,

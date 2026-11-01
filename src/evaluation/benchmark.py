@@ -13,6 +13,7 @@ Spúšťať na NEZAŤAŽENOM počítači (bez tréningu a sťahovania); zaťaže
     .venv\\Scripts\\python.exe -m src.evaluation.benchmark --approach static
 """
 import argparse
+import json
 import time
 from pathlib import Path
 
@@ -34,8 +35,12 @@ def make_pipeline(run: Path, model_name: str):
     pre_path = run / "model" / "preprocessor.joblib"
     pre = joblib.load(pre_path) if pre_path.exists() else None
     model = get_model_class(model_name).load(run / "model" / "seed_0")
+    mask_path = run / "model" / "feature_mask.json"
+    cols = np.array(json.loads(mask_path.read_text())["kept_columns"]) if mask_path.exists() else None
 
     def predict(X):
+        if cols is not None:
+            X = X[:, cols]
         return model.predict_proba(pre.transform(X) if pre is not None else X)
     return model, predict
 

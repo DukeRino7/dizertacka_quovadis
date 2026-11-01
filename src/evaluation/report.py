@@ -47,14 +47,22 @@ def _build(run, cfg, protocol, metrics, t, S, seeds, gap, gpu, trans):
     n_par = f"{t['n_parameters']:,}".replace(",", " ")
     thr = f"{t['cpu_throughput']['samples_per_s']:,.0f}".replace(",", " ")
     lc = "![učenie](plots/learning_curve.png)" if (run / "plots" / "learning_curve.png").exists() else ""
+    if t.get("params_from_run"):
+        ladenie = f"bez ladenia – hyperparametre prevzaté z `{t['params_from_run']}`"
+    else:
+        ladenie = (f"{t['hpo_trials_completed']} dokončených pokusov (Optuna TPE), cieľ ROC-AUC na validácii, "
+                   f"{t['hpo_s'] / 60:.1f} min")
+    excl = ""
+    if cfg.get("exclude_features"):
+        excl = chr(10) + f"- **Vynechané príznaky:** {', '.join('`' + n + '`' for n in cfg['exclude_features'])}"
     return f"""# {cfg['approach']}/{cfg['name']} – beh `{run.name}`
 
 > Automaticky generované (`src/training/run_tabular.py`). Konfigurácia: `config.yaml`, protokol: `protocol.yaml`.
 
 - **Model:** `{cfg['model']}` – {cfg.get('description', '')}
-- **Ladenie:** {t['hpo_trials_completed']} dokončených pokusov (Optuna TPE), cieľ ROC-AUC na validácii, {t['hpo_s'] / 60:.1f} min
+- **Ladenie:** {ladenie}
 - **Finálne modely:** seedy {seeds}; hodnoty sú priemer ± smerodajná odchýlka cez seedy
-- **Najlepšie hyperparametre:** `{json.dumps(metrics['best_params'], ensure_ascii=False)}`
+- **Najlepšie hyperparametre:** `{json.dumps(metrics['best_params'], ensure_ascii=False)}`{excl}
 
 ## Detekčná kvalita (bez prahu)
 {_metric_table(S, ROWS)}
@@ -83,7 +91,7 @@ Rozdiel ROC-AUC train − validácia: **{gap:.4f}** (veľký rozdiel = preučeni
 | ![ROC](plots/roc.png) | ![PR](plots/pr.png) |
 | ![skóre](plots/score_hist_test.png) | ![rodiny](plots/per_family.png) |
 | ![matica zámen](plots/confusion_test_val_fpr.png) | ![matica zámen 0.5](plots/confusion_test_fixed.png) |
-| ![ladenie](plots/hpo_history.png) | {lc} |
+| {'![ladenie](plots/hpo_history.png)' if (run / 'plots' / 'hpo_history.png').exists() else ''} | {lc} |
 
 ## Súbory
 `metrics.json` (všetky metriky po seedoch vrátane rodín), `timing.json`, `hpo_trials.csv`,

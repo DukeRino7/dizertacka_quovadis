@@ -23,7 +23,7 @@ from src.common.paths import RUNS_DIR, rel
 from src.common.provenance import now_iso, write_json
 from src.common.run import create_run_dir, save_run_context
 from src.common.seed import set_seed
-from src.data.providers import load_tabular
+from src.data.providers import feature_names, load_tabular
 from src.data.static_transforms import StaticPreprocessor
 from src.evaluation import plots
 from src.evaluation.metrics import evaluate, threshold_for_fpr
@@ -33,6 +33,14 @@ from .search_space import suggest
 
 KEY_METRICS = ["roc_auc", "pr_auc", "tpr_at_fpr_0.001", "tpr_at_fpr_0.01", "log_loss", "brier"]
 THR_METRICS = ["accuracy", "balanced_accuracy", "precision", "recall_tpr", "fpr", "f1", "mcc"]
+
+
+def latest_run(approach_model: str, root: Path = RUNS_DIR) -> Path:
+    """'static/lightgbm' -> posledný dokončený beh v runs/static/lightgbm/."""
+    runs = sorted(r for r in (root / approach_model).iterdir() if (r / "metrics.json").exists())
+    if not runs:
+        raise FileNotFoundError(f"žiadny dokončený beh v runs/{approach_model}")
+    return runs[-1]
 
 
 def class_weights(y: np.ndarray, mode: str | None) -> np.ndarray:
@@ -104,7 +112,7 @@ def main(config_path: str, runs_root: Path | None, tag: str | None, smoke: bool)
         protocol["final"]["seeds"] = [0]
         protocol["timing"]["latency_samples"] = 50
         cfg.setdefault("fixed_params", {}).update(cfg.get("smoke_overrides", {}) or {})
-    run = create_run_dir(cfg["approach"], cfg["name"], tag, runs_root)
+    run = create_run_dir(cfg.get("results_approach", cfg["approach"]), cfg["name"], tag, runs_root)
     save_run_context(run, config_path, cfg, protocol)
     logf = open(run / "log.txt", "w", encoding="utf-8")
 
@@ -126,6 +134,18 @@ def main(config_path: str, runs_root: Path | None, tag: str | None, smoke: bool)
         raw = small
     timings["load_data_s"] = time.perf_counter() - t
 
+    # voliteľné vynechanie príznakov (kontrolné experimenty / ablácie)
+    if cfg.get("exclude_features"):
+        names = feature_names(cfg["approach"])
+        missing = sorted(set(cfg["exclude_features"]) - set(names))
+        if missing:
+            raise ValueError(f"neznáme príznaky v exclude_features: {missing}")
+        keep = np.array([n not in set(cfg["exclude_features"]) for n in names])
+        raw = {s: (X[:, keep], y, m) for s, (X, y, m) in raw.items()}
+        write_json({"kept_columns": np.flatnonzero(keep).tolist(), "excluded": cfg["exclude_features"]},
+                   run / "model" / "feature_mask.json")
+        log(f"Vynechané príznaky ({len(cfg['exclude_features'])}): {cfg['exclude_features']}")
+
     # učená transformácia vstupu – fit iba na tréningu
     pre = None
     data = raw
@@ -139,8 +159,15 @@ def main(config_path: str, runs_root: Path | None, tag: str | None, smoke: bool)
 
     w = class_weights(data["train"][1], protocol.get("class_weight"))
 
-    log(f"Ladenie: {protocol['hpo']['n_trials']} pokusov, cieľ {protocol['hpo']['objective']} na validácii")
-    best, trials, timings["hpo_s"] = run_hpo(model_cls, cfg, protocol, data, w, run, log)
+    if cfg.get("params_from"):
+        src_run = latest_run(cfg["params_from"], runs_root or RUNS_DIR)
+        best = json.loads((src_run / "metrics.json").read_text(encoding="utf-8"))["best_params"]
+        trials, timings["hpo_s"] = pd.DataFrame(columns=["number", "value", "state"]), 0.0
+        timings["params_from_run"] = rel(src_run)
+        log(f"Bez ladenia: hyperparametre prevzaté z {rel(src_run)}")
+    else:
+        log(f"Ladenie: {protocol['hpo']['n_trials']} pokusov, cieľ {protocol['hpo']['objective']} na validácii")
+        best, trials, timings["hpo_s"] = run_hpo(model_cls, cfg, protocol, data, w, run, log)
     timings["hpo_trials_completed"] = int((trials["state"] == "COMPLETE").sum())
     log(f"Najlepšie parametre: {best}")
     plots.hpo_history(trials, run / "plots" / "hpo_history.png", f"{cfg['name']}: priebeh ladenia")

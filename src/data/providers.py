@@ -17,3 +17,10 @@ def load_tabular(approach: str, splits=("train", "validation", "test")) -> dict[
     if approach in ("dynamic", "hybrid"):
         raise NotImplementedError(f"dáta pre {approach!r} ešte nie sú pripravené (čaká sa na Speakeasy)")
     raise ValueError(approach)
+
+
+def feature_names(approach: str) -> list[str]:
+    if approach == "static":
+        from .static_dataset import feature_names as fn
+        return fn()["name"].tolist()
+    raise NotImplementedError(approach)
