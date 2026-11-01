@@ -19,6 +19,7 @@ import optuna
 import pandas as pd
 
 from src.common.config import load_config
+from src.common.hardware import load_protocol
 from src.common.paths import RUNS_DIR, rel
 from src.common.provenance import now_iso, write_json
 from src.common.run import create_run_dir, save_run_context
@@ -90,7 +91,7 @@ def run_hpo(model_cls, cfg, protocol, data, w, run: Path, log, soft=None) -> tup
     def objective(trial):
         params = {**fixed, **suggest(trial, cfg["search_space"])}
         set_seed(hpo["trial_seed"])
-        m = model_cls(params, seed=hpo["trial_seed"], threads=protocol["timing"]["throughput_threads"])
+        m = model_cls(params, seed=hpo["trial_seed"], threads=protocol["training_threads"])
         m.soft_targets = soft
         t = time.perf_counter()
         info = m.fit(Xtr, ytr, w, Xva, yva)
@@ -122,7 +123,7 @@ def run_hpo(model_cls, cfg, protocol, data, w, run: Path, log, soft=None) -> tup
 
 def main(config_path: str, runs_root: Path | None, tag: str | None, smoke: bool) -> Path:
     cfg = load_config(config_path)
-    protocol = load_config(cfg.get("protocol", "configs/protocol.yaml"))
+    protocol = load_protocol(cfg.get("protocol", "configs/protocol.yaml"))
     if smoke:  # rýchla kontrola, že pipeline funguje (nie je to experiment)
         protocol["hpo"]["n_trials"] = 2
         protocol["final"]["seeds"] = [0]
@@ -202,7 +203,7 @@ def main(config_path: str, runs_root: Path | None, tag: str | None, smoke: bool)
     per_seed, timing_seed0, model0 = [], None, None
     for seed in protocol["final"]["seeds"]:
         set_seed(seed)
-        m = model_cls(best, seed=seed, threads=protocol["timing"]["throughput_threads"])
+        m = model_cls(best, seed=seed, threads=protocol["training_threads"])
         m.soft_targets = soft
         t = time.perf_counter()
         info = m.fit(Xtr, ytr, w, Xva, yva)

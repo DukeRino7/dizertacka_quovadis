@@ -15,6 +15,7 @@ Výstup v processed/static/:
     STATISTICS.md, README.md, manifest.json
 """
 import argparse
+import json
 import time
 
 import matplotlib
@@ -339,6 +340,8 @@ def main(config_path: str) -> None:
     (STATIC_DIR / "plots").mkdir(exist_ok=True)
     dtype = np.dtype(cfg["dtype"])
 
+    ref_path = STATIC_DIR / "manifest.json"   # manifest z gitu = referencia z pôvodného počítača
+    reference = {o["path"]: o["sha256"] for o in json.loads(ref_path.read_text(encoding="utf-8")).get("outputs", [])}         if ref_path.exists() else {}
     index = pd.read_parquet(INDEX_DIR / "samples.parquet")
     feats = feature_table()
     feats.to_csv(STATIC_DIR / "feature_names.csv", index=False)
@@ -415,6 +418,12 @@ def main(config_path: str) -> None:
     timings["checksums_s"] = round(time.perf_counter() - t, 1)
     timings["total_s"] = round(time.perf_counter() - t_all, 1)
     manifest["timings"] = timings
+    data_files = {o["path"]: o["sha256"] for o in manifest["outputs"]
+                  if any(k in o["path"] for k in ("/X_", "/y_", "/meta_"))}
+    if reference:
+        diff = [p for p, h in data_files.items() if reference.get(p) not in (None, h)]
+        manifest["reference_check"] = {"compared": len(data_files), "mismatch": diff}
+        print("Kontrola voči referencii z gitu:", "ZHODA – dáta sú identické" if not diff else f"NEZHODA v {diff}")
     write_json(manifest, STATIC_DIR / "manifest.json")
     print("Statický dataset hotový:", {s: checks[s]["rows"] for s in SPLIT_ORDER}, timings)
 

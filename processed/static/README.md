@@ -1,6 +1,6 @@
 # processed/static/ – predspracovaný statický dataset (EMBER)
 
-> Generované skriptom `src/data/build_static.py` (2026-11-01T13:40:06+01:00), konfigurácia `configs/data/static.yaml`.
+> Generované skriptom `src/data/build_static.py` (2026-11-01T16:26:34+01:00), konfigurácia `configs/data/static.yaml`.
 > Neupravovať ručne. Znovuvytvorenie: `.venv\Scripts\python.exe -m src.data.build_static`.
 > Štatistiky datasetu: [STATISTICS.md](STATISTICS.md).
 

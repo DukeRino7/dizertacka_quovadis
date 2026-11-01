@@ -23,6 +23,7 @@ import psutil
 from threadpoolctl import threadpool_limits
 
 from src.common.config import load_config
+from src.common.hardware import cpu_counts, load_protocol
 from src.common.paths import RUNS_DIR, rel
 from src.common.provenance import environment, now_iso, write_json
 from src.data.providers import load_tabular
@@ -82,7 +83,7 @@ def _single(predict, X, n: int, warmup: int, gpu: bool, idle_w, min_seconds: flo
 def benchmark_run(run: Path, model_name: str, X: np.ndarray, cfg: dict) -> dict:
     model, predict = make_pipeline(run, model_name)
     load_before = psutil.cpu_percent(interval=1.0)
-    out = {"created": now_iso(), "run": rel(run), "n_test": int(len(X)),
+    out = {"created": now_iso(), "run": rel(run), "n_test": int(len(X)), "cpu_physical_logical": cpu_counts(),
            "system_cpu_load_before_pct": load_before, "config": cfg}
 
     model.set_threads(cfg["batch_threads"])
@@ -109,7 +110,7 @@ def benchmark_run(run: Path, model_name: str, X: np.ndarray, cfg: dict) -> dict:
 
 
 def main(approach: str, models: list[str] | None):
-    protocol = load_config("configs/protocol.yaml")
+    protocol = load_protocol()
     cfg = protocol["benchmark"]
     cache = {}
     for name, run in latest_runs(approach).items():

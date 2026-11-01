@@ -1,6 +1,6 @@
 # Štatistiky statického datasetu (EMBER)
 
-> Automaticky generované skriptom `src/data/build_static.py` (2026-11-01T13:40:06+01:00).
+> Automaticky generované skriptom `src/data/build_static.py` (2026-11-01T16:26:34+01:00).
 > Všetky čísla pochádzajú priamo z dát v `processed/static`. Štatistiky príznakov (časť 3) sú počítané
 > **iba na tréningu**. Porovnania s validáciou a testom (časti 4–5) sú iba popisné a nevyužívajú sa
 > na žiadne rozhodnutie o spracovaní ani modeloch.

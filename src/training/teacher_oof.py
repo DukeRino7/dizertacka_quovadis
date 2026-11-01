@@ -22,6 +22,7 @@ from sklearn.model_selection import StratifiedGroupKFold
 
 from src.cascade.components import resolve_run
 from src.common.config import load_config
+from src.common.hardware import load_protocol
 from src.common.paths import INDEX_DIR, RUNS_DIR, rel
 from src.common.provenance import git_info, now_iso, write_json
 from src.common.seed import set_seed
@@ -35,7 +36,7 @@ def main(teacher: str, folds: int, seed: int, runs_root: Path = RUNS_DIR, limit:
     t0 = time.perf_counter()
     run = resolve_run(teacher, runs_root)
     cfg = load_config(run / "config.yaml")
-    protocol = load_config(run / "protocol.yaml")
+    protocol = load_protocol()  # vlákna podľa aktuálneho počítača; ostatné pravidlá sú rovnaké
     best = json.loads((run / "metrics.json").read_text(encoding="utf-8"))["best_params"]
     model_cls = get_model_class(cfg["model"])
 
@@ -60,7 +61,7 @@ def main(teacher: str, folds: int, seed: int, runs_root: Path = RUNS_DIR, limit:
         if model_cls.needs_scaling:  # rovnaké predspracovanie ako v run_tabular, fit iba na trénovacej časti foldu
             pre = StaticPreprocessor().fit(Xa)
             Xa, Xh, Xv = pre.transform(Xa), pre.transform(Xh), pre.transform(Xv)
-        m = model_cls(best, seed=seed, threads=protocol["timing"]["throughput_threads"])
+        m = model_cls(best, seed=seed, threads=protocol["training_threads"])
         t = time.perf_counter()
         m.fit(Xa, ytr[tr_idx], class_weights(ytr[tr_idx], protocol.get("class_weight")), Xv, yva)
         oof[ho_idx] = m.predict_proba(Xh)

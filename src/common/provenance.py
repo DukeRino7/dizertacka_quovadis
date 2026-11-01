@@ -34,7 +34,20 @@ def environment() -> dict:
             versions[p] = metadata.version(p)
         except metadata.PackageNotFoundError:
             pass
-    return {"python": sys.version.split()[0], "platform": platform.platform(), "packages": versions}
+    out = {"python": sys.version.split()[0], "platform": platform.platform(), "machine": platform.node(),
+           "processor": platform.processor(), "packages": versions}
+    try:
+        import psutil
+        out["cpu_physical"], out["cpu_logical"] = psutil.cpu_count(logical=False), psutil.cpu_count()
+        out["ram_gb"] = round(psutil.virtual_memory().total / 1e9, 1)
+    except ImportError:
+        pass
+    try:
+        import torch
+        out["gpu"] = torch.cuda.get_device_name(0) if torch.cuda.is_available() else None
+    except Exception:
+        out["gpu"] = None
+    return out
 
 
 def sha256_file(path: Path, chunk: int = 1 << 20) -> str:
