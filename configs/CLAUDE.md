@@ -1,5 +1,7 @@
 # configs/ – konfigurácie experimentov
 
+**`protocol.yaml` = spoločné pravidlá tréningu a vyhodnotenia pre všetky modely** (ladenie, seedy, váhy tried, prahy, meranie času).
+
 Jedna konfigurácia = jeden experiment. Štruktúra kopíruje `runs/` a `src/models/`:
 
 | Priečinok | Čo konfiguruje | Výsledky idú do |

@@ -1,0 +1,34 @@
+# SPOLOČNÝ TRÉNOVACÍ A VYHODNOCOVACÍ PROTOKOL
+# Platí rovnako pre všetky modely spoločného rebríčka (static, dynamic, hybrid).
+# Hodnoty sú NÁVRH; zmena tu sa prejaví vo všetkých experimentoch.
+
+# --- dáta -------------------------------------------------------------------
+# train = učenie, validation = ladenie hyperparametrov, early stopping, prahy; test = iba finálne vyhodnotenie
+class_weight: balanced          # váhy vzoriek n / (2 * n_trieda) z tréningu; vyrovná nepomer tried
+
+# --- ladenie hyperparametrov (Optuna, TPE) ----------------------------------
+hpo:
+  n_trials: 30                  # rovnaký počet pokusov pre každý model
+  timeout_s: 10800              # poistka 3 h na model; skutočný počet pokusov sa zapisuje
+  objective: roc_auc            # metrika na validácii, ktorá sa maximalizuje
+  sampler_seed: 42
+  trial_seed: 42                # seed modelu počas ladenia
+
+# --- finálne modely ---------------------------------------------------------
+final:
+  seeds: [0, 1, 2]              # najlepšie hyperparametre sa natrénujú s viacerými seedmi -> priemer ± sm. odchýlka
+  train_metrics_subsample: 10000  # podvzorka tréningu na meranie rozdielu train vs. validácia (preučenie)
+
+# --- prahy (určené iba na validácii) ---------------------------------------
+thresholds:
+  fixed: 0.5
+  target_fpr: 0.01              # prah s FPR <= 1 % na validácii (typický pracovný bod detekcie malvéru)
+tpr_at_fpr: [0.001, 0.01]       # TPR pri pevnom FPR (bez prahu)
+
+# --- meranie výpočtových nárokov -------------------------------------------
+timing:
+  latency_samples: 500          # počet vzoriek na meranie latencie jednej vzorky (batch = 1)
+  warmup: 20
+  latency_threads: 1            # latencia sa meria na 1 vlákne CPU (porovnateľné medzi modelmi)
+  throughput_threads: 12        # priepustnosť na celom teste so všetkými vláknami
+  gpu: true                     # pre modely v PyTorch aj meranie na GPU

@@ -1,7 +1,14 @@
 # configs/static/
 
-Konfigurácie pre `static`, jeden súbor na model alebo variant (napr. `lr.yaml`).
-Kód modelu: `src/models/static/`. Výsledky: `runs/static/<model>/`. Konvencie: `configs/CLAUDE.md`.
+Statické modely spoločného rebríčka. Spoločné pravidlá: `configs/protocol.yaml`.
 
-## Konfigurácie
-_Zatiaľ žiadne._
+| Súbor | Model | Výsledky |
+|---|---|---|
+| `lr.yaml` | logistická regresia | `runs/static/lr/` |
+| `rf.yaml` | Random Forest | `runs/static/rf/` |
+| `lightgbm.yaml` | LightGBM | `runs/static/lightgbm/` |
+| `mlp_small.yaml` | malé MLP | `runs/static/mlp_small/` |
+| `mlp_large.yaml` | veľké MLP | `runs/static/mlp_large/` |
+
+Kľúče: `name` (= priečinok v runs), `approach`, `model` (trieda v `src/models/tabular`), `search_space`
+(ladí sa), `fixed_params` (neladí sa), `smoke_overrides` (iba pre `--smoke`).

@@ -1,7 +1,5 @@
 # runs/static/
 
-Výsledky pre `static`. Každý model má vlastný podpriečinok (`runs/static/<model>/`) so svojím `CLAUDE.md` a behmi.
-Konvencie popisuje `runs/CLAUDE.md`.
-
-## Modely a behy
-_Zatiaľ žiadne._
+Výsledky statických modelov. Každý model má vlastný podpriečinok (`runs/static/<model>/`) s prehľadom behov
+v `CLAUDE.md` a jednotlivými behmi. Porovnanie modelov: `runs/comparison/static/README.md`.
+`suite_log.txt` = výpis posledného spustenia celej sady.

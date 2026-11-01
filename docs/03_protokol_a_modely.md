@@ -1,0 +1,47 @@
+# 03 – Trénovací protokol a modely
+
+Stav k 2026-11-01. Dohodnuté s autorom práce: dve vrstvy modelov a neskorá fúzia ako hybridný baseline.
+Parametre protokolu sú **NÁVRH** (`configs/protocol.yaml`) – zmena tam platí pre všetky modely.
+
+## Dohodnutá sada modelov
+**Vrstva A – spoločný rebríček** (rovnaké modely pre static, dynamic, hybrid; vstupom je vždy pevný vektor:
+static = EMBER, dynamic = vektor z API volaní (reprezentácia sa určí po kontrole dát), hybrid = spojenie oboch):
+
+| Názov | Model | Kód | Úloha |
+|---|---|---|---|
+| `lr` | logistická regresia (L2) | `src/models/tabular/logreg.py` | lineárny základ, najľahší |
+| `rf` | Random Forest | `src/models/tabular/random_forest.py` | klasické strojové učenie |
+| `lightgbm` | gradient boosting stromov | `src/models/tabular/lightgbm_model.py` | silný tabuľkový model |
+| `mlp_small` | MLP, 1–2 skryté vrstvy | `src/models/tabular/mlp.py` | kandidát na ľahkého študenta |
+| `mlp_large` | MLP, 3–5 vrstiev, 512–2048 neurónov | `src/models/tabular/mlp.py` | kandidát na učiteľa |
+
+**Vrstva B – špecifické modely** (zatiaľ neimplementované): dynamický sekvenčný model nad postupnosťou API
+volaní; hybridná dvojvetvová sieť (kandidát na veľký model v kaskáde); **neskorá fúzia** skóre statického
+a dynamického modelu (kontrola, či sa eskalácia na veľký model oplatí).
+
+## Spoločný protokol (platí pre každý model)
+| Oblasť | Pravidlo | Dôvod |
+|---|---|---|
+| Použitie dát | train = učenie; validácia = ladenie, early stopping, prahy; test = iba finálne vyhodnotenie | test nesmie ovplyvniť žiadne rozhodnutie |
+| Transformácia vstupu | LR a MLP: odstránenie konštantných príznakov, signed log1p, štandardizácia – fit iba na train; stromy pôvodné hodnoty | ťažké chvosty EMBER príznakov; stromy sú invariantné voči monotónnym transformáciám |
+| Nepomer tried | váhy vzoriek `n / (2 · n_trieda)` z tréningu | train 67 % malvéru, test 54 % |
+| Ladenie hyperparametrov | Optuna TPE, **30 pokusov pre každý model**, seed 42, cieľ ROC-AUC na validácii | rovnaký rozpočet = férové porovnanie |
+| Ochrana proti preučeniu | regularizácia v priestore hyperparametrov (C; hĺbka a min. listy stromov; L1/L2, bagging pri LightGBM; dropout, weight decay pri MLP); early stopping na validácii (LightGBM 100 kôl, MLP 8 epoch, obnova najlepšej epochy); sledovaný rozdiel ROC-AUC train − validácia | výber podľa validácie, nie podľa tréningu |
+| Variabilita | finálne modely s 3 seedmi (0, 1, 2); uvádza sa priemer ± smerodajná odchýlka | náhodnosť inicializácie a vzorkovania |
+| Prahy | pevný 0,5 a prah s FPR ≤ 1 % určený na validácii | typický pracovný bod detekcie malvéru |
+| Metriky | ROC-AUC, PR-AUC, TPR pri FPR 0,1 % a 1 %, log loss, Brier; pri prahoch accuracy, balanced accuracy, precision, recall, FPR, F1, MCC, matica zámen; detekcia podľa rodiny | ROC-AUC a TPR@FPR nezávisia od pomeru tried, ktorý sa medzi train a test mení |
+| Výpočtové nároky | latencia 1 vzorky (CPU, 1 vlákno; GPU pri MLP), priepustnosť (CPU 12 vlákien; GPU), čas tréningu, čas ladenia, počet parametrov/uzlov, veľkosť na disku; transformácia vstupu meraná zvlášť | ľahký vs. ťažký sa meria, nepredpokladá |
+
+**Pozn. k optimizmu validácie:** validácia sa používa na ladenie aj early stopping, preto jej výsledky sú mierne
+optimistické. Nestranný odhad poskytuje iba test. Navyše test je z neskoršieho obdobia (časový posun).
+
+**Hardvér meraní:** 6 jadier / 12 vlákien CPU, 17 GB RAM, NVIDIA GeForce RTX 2060 (6 GB).
+Merania počas iných záťaží (napr. sťahovania dát) môžu byť ovplyvnené – finálne merania času zopakovať na nezaťaženom systéme.
+
+## Výstupy
+- jeden beh: `runs/<prístup>/<model>/<dátum-čas>/README.md` (metriky, časy, grafy), `metrics.json`, `timing.json`,
+  `predictions/`, `hpo_trials.csv`,
+- prehľad behov modelu: `runs/<prístup>/<model>/CLAUDE.md`,
+- porovnanie modelov: `runs/comparison/<prístup>/README.md`.
+
+Spustenie celej sady: `.venv\Scripts\python.exe -m src.training.run_suite --approach static`.
