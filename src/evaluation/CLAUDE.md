@@ -12,7 +12,7 @@
 | `compare_ablations.py` | kontrolné experimenty vs. pôvodný model → `runs/comparison/<priečinok ablácií>/` |
 | `final_report.py` | záverečné porovnanie k výskumným otázkam (vybrané modely, študenti, kaskády, fúzia, nároky) → `runs/comparison/final/` |
 | `subset_analysis.py` | výsledky podľa výsledku emulácie (malé reporty, `unsupported_api`, ostatné) → `runs/comparison/subsets/` |
+| `complementarity.py` | komplementarita vybraných modelov: ktoré chyby statického modelu opraví hybrid/dynamický (test, prah z validácie) → `runs*/comparison/complementarity/` |
 | `compare.py` | porovnanie modelov prístupu → `runs/comparison/<prístup>/` (tabuľka, kvalita vs. latencia) |
 
-Plánované: vyhodnotenie kaskády (podiel eskalácií, spoločné chyby pri zhode študentov, prínos veľkého modelu pri nezhode)
-a porovnanie prístupov navzájom.
+Vyhodnotenie kaskády je v `src/cascade/evaluate.py`.

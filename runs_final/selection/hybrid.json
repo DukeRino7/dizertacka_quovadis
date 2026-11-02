@@ -1,0 +1,80 @@
+{
+  "created": "2026-11-02T20:49:29+01:00",
+  "group": "hybrid",
+  "chosen": "hybrid/lightgbm",
+  "chosen_run": "runs_final/hybrid/lightgbm/20261102-052826",
+  "rule": {
+    "split": "validation",
+    "primary": "tpr_at_fpr_0.01",
+    "secondary": "roc_auc",
+    "tertiary": "cpu_ms_batch"
+  },
+  "steps": [
+    "1) najvyššie TPR@FPR1%: hybrid/rf (0.99712); zhodní v rámci sm. odchýlky: ['hybrid/rf', 'hybrid/lightgbm']",
+    "2) najvyššie ROC-AUC: hybrid/rf (0.99981); zhodní: ['hybrid/rf', 'hybrid/lightgbm']",
+    "3) najnižší CPU čas na vzorku: hybrid/lightgbm (0.0858 ms)"
+  ],
+  "missing_candidates": [],
+  "candidates": [
+    {
+      "spec": "hybrid/lr",
+      "run": "runs_final/hybrid/lr/20261102-044357",
+      "primary": 0.9879614767255217,
+      "primary_std": 0.0,
+      "secondary": 0.9988757636229547,
+      "secondary_std": 0.0,
+      "cpu_ms_batch": 0.05001369744506604
+    },
+    {
+      "spec": "hybrid/rf",
+      "run": "runs_final/hybrid/rf/20261102-044751",
+      "primary": 0.9971241305510969,
+      "primary_std": 0.00011584074421946652,
+      "secondary": 0.9998073140629319,
+      "secondary_std": 3.11687423136099e-06,
+      "cpu_ms_batch": 0.1510323548070823
+    },
+    {
+      "spec": "hybrid/lightgbm",
+      "run": "runs_final/hybrid/lightgbm/20261102-052826",
+      "primary": 0.9967897271268059,
+      "primary_std": 0.0005308489789455347,
+      "secondary": 0.9997877729619303,
+      "secondary_std": 2.649588073397783e-05,
+      "cpu_ms_batch": 0.08577799685679682
+    },
+    {
+      "spec": "hybrid/mlp_small",
+      "run": "runs_final/hybrid/mlp_small/20261102-063854",
+      "primary": 0.9955189941144997,
+      "primary_std": 0.0006449739674286233,
+      "secondary": 0.9992763082650722,
+      "secondary_std": 0.00019428781257272036,
+      "cpu_ms_batch": 0.3453197992963839
+    },
+    {
+      "spec": "hybrid/mlp_large",
+      "run": "runs_final/hybrid/mlp_large/20261102-064138",
+      "primary": 0.9956527554842162,
+      "primary_std": 0.0004633629768777379,
+      "secondary": 0.9994845367036378,
+      "secondary_std": 1.817462228670978e-05,
+      "cpu_ms_batch": 0.47467955187727084
+    },
+    {
+      "spec": "hybrid/two_branch",
+      "run": "runs_final/hybrid/two_branch/20261102-170657",
+      "primary": 0.9960540395933654,
+      "primary_std": 0.0005049380975970289,
+      "secondary": 0.9994315004848712,
+      "secondary_std": 9.055134940813099e-05,
+      "cpu_ms_batch": 32.450328738681584
+    }
+  ],
+  "git": {
+    "commit": null,
+    "dirty": null,
+    "version": "v1",
+    "source": "zip/bez gitu"
+  }
+}

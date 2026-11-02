@@ -1,0 +1,333 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20261102204928
+Username: DCATLOCH\catlo
+RunAs User: DCATLOCH\catlo
+Configuration Name: 
+Machine: DCATLOCH (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File D:\dizertacka\dizertacka_quovadis-1\scripts\run_distillation_cascade.ps1
+Process ID: 28732
+PSVersion: 5.1.26100.9711
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9711
+BuildVersion: 10.0.26100.9711
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+=== 2026-11-02 20:49:28  Výber najlepších modelov podľa pravidla  [select] ===
+hybrid: vybran├╜ hybrid/lightgbm
+static: vybran├╜ static/lightgbm
+dynamic: vybran├╜ dynamic/lightgbm
+Vybraný učiteľ (hybrid): D:\dizertacka\dizertacka_quovadis-1\runs_final\selection\hybrid.md
+
+=== 2026-11-02 20:49:29  Mäkké označenia – hybridný učiteľ  [oof_hybrid] ===
+  fold 0: AUC na odlo┼╛enej ─ìasti 0.99976 (14 s)
+  fold 1: AUC na odlo┼╛enej ─ìasti 0.99982 (17 s)
+  fold 2: AUC na odlo┼╛enej ─ìasti 0.99981 (16 s)
+  fold 3: AUC na odlo┼╛enej ─ìasti 0.99983 (17 s)
+  fold 4: AUC na odlo┼╛enej ─ìasti 0.99981 (16 s)
+M├ñkk├⌐ ozna─ìenia: runs_final/teachers/hybrid_lightgbm/20261102-205102 (OOF AUC 0.99980)
+
+=== 2026-11-02 20:51:03  Mäkké označenia – statický učiteľ (variant A)  [oof_static] ===
+  fold 0: AUC na odlo┼╛enej ─ìasti 0.99977 (283 s)
+  fold 1: AUC na odlo┼╛enej ─ìasti 0.99981 (136 s)
+  fold 2: AUC na odlo┼╛enej ─ìasti 0.99983 (255 s)
+  fold 3: AUC na odlo┼╛enej ─ìasti 0.99984 (292 s)
+  fold 4: AUC na odlo┼╛enej ─ìasti 0.99984 (238 s)
+M├ñkk├⌐ ozna─ìenia: runs_final/teachers/static_lightgbm/20261102-211118 (OOF AUC 0.99980)
+
+=== 2026-11-02 21:11:18  Mäkké označenia – dynamický učiteľ (variant A)  [oof_dynamic] ===
+  fold 0: AUC na odlo┼╛enej ─ìasti 0.99640 (28 s)
+  fold 1: AUC na odlo┼╛enej ─ìasti 0.99588 (14 s)
+  fold 2: AUC na odlo┼╛enej ─ìasti 0.99732 (31 s)
+  fold 3: AUC na odlo┼╛enej ─ìasti 0.99746 (28 s)
+  fold 4: AUC na odlo┼╛enej ─ìasti 0.99645 (21 s)
+M├ñkk├⌐ ozna─ìenia: runs_final/teachers/dynamic_lightgbm/20261102-211330 (OOF AUC 0.99668)
+
+=== 2026-11-02 21:13:30  Študenti – statickí  [stud_static] ===
+[2026-11-02T21:13:33+01:00] static/mlp_kd -> runs_final/students_static/mlp_kd/20261102-211333
+Predspracovanie: 2319 z 2381 pr├¡znakov, signed log1p + ┼ítandardiz├ícia
+Destil├ícia: m├ñkk├⌐ ozna─ìenia u─ìite─╛a z runs_final/teachers/hybrid_lightgbm/20261102-205102
+Ladenie: 30 pokusov, cie─╛ roc_auc na valid├ícii
+  pokus   0: AUC val = 0.99901  (12 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.17959754525911098, 'lr': 0.0004296748115469076, 'weight_decay': 2.9375384576328313e-06, 'batch_size': 512, 'kd_alpha': 0.6664580622368363, 'kd_temperature': 1.1440914600706171}
+  pokus   1: AUC val = 0.99876  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.05454749016213018, 'lr': 0.0004576418837415782, 'weight_decay': 8.179499475211674e-06, 'batch_size': 256, 'kd_alpha': 0.5894823157779036, 'kd_temperature': 1.9764570245642927}
+  pokus   2: AUC val = 0.99902  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.23555278841790406, 'lr': 0.00047511094677356254, 'weight_decay': 3.489018845491386e-05, 'batch_size': 1024, 'kd_alpha': 0.23641929894983324, 'kd_temperature': 1.4553611508969566}
+  pokus   3: AUC val = 0.99847  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.0913841307520112, 'lr': 0.0003756586286118117, 'weight_decay': 0.00011290133559092664, 'batch_size': 1024, 'kd_alpha': 0.12751081689217472, 'kd_temperature': 7.365242814551475}
+  pokus   4: AUC val = 0.99905  (10 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.15602040635334324, 'lr': 0.00105640764164036, 'weight_decay': 3.5856126103453987e-06, 'batch_size': 256, 'kd_alpha': 0.815861880342119, 'kd_temperature': 5.185299851677596}
+  pokus   5: AUC val = 0.99846  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.01356818667316142, 'lr': 0.0006345291606505673, 'weight_decay': 1.4656553886225336e-05, 'batch_size': 512, 'kd_alpha': 0.32474760774990463, 'kd_temperature': 4.798872582107739}
+  pokus   6: AUC val = 0.99898  (4 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.2960660809801552, 'lr': 0.001775685400639093, 'weight_decay': 3.9459088110999995e-06, 'batch_size': 512, 'kd_alpha': 0.6832057344327899, 'kd_temperature': 6.39889242680162}
+  pokus   7: AUC val = 0.99893  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.25893102776267807, 'lr': 0.0012601416950106597, 'weight_decay': 9.833181933644894e-06, 'batch_size': 1024, 'kd_alpha': 0.6836849426704512, 'kd_temperature': 5.462902299486492}
+  pokus   8: AUC val = 0.99884  (5 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.21397343616689848, 'lr': 0.001729443201034399, 'weight_decay': 4.8287152161792064e-05, 'batch_size': 256, 'kd_alpha': 0.44203281468683975, 'kd_temperature': 1.1779338872086664}
+  pokus   9: AUC val = 0.99911  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.094306794322898, 'lr': 0.000967591280153736, 'weight_decay': 0.0005280796376895364, 'batch_size': 1024, 'kd_alpha': 0.283038532393298, 'kd_temperature': 1.538859368801551}
+  pokus  10: AUC val = 0.99902  (1 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.15394494854616803, 'lr': 0.0019279911512433542, 'weight_decay': 7.852305242890993e-06, 'batch_size': 1024, 'kd_alpha': 0.2347437978998949, 'kd_temperature': 2.5319692118238812}
+  pokus  11: AUC val = 0.99911  (15 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.182642003572498, 'lr': 0.0012395573246138751, 'weight_decay': 6.672020378892267e-05, 'batch_size': 256, 'kd_alpha': 0.5975162903900801, 'kd_temperature': 6.188605424767937}
+  pokus  12: AUC val = 0.99895  (1 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.11350438457581916, 'lr': 0.0016922971757086151, 'weight_decay': 0.0008451295045811091, 'batch_size': 1024, 'kd_alpha': 0.6032653365175291, 'kd_temperature': 2.4856563522959467}
+  pokus  13: AUC val = 0.99910  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.045354715041877415, 'lr': 0.0013876540533676572, 'weight_decay': 0.0004612674392147121, 'batch_size': 1024, 'kd_alpha': 0.17036439907839823, 'kd_temperature': 1.6731330679570173}
+  pokus  14: AUC val = 0.99905  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.16277541046840116, 'lr': 0.0008564041927665016, 'weight_decay': 0.00016884954434872665, 'batch_size': 256, 'kd_alpha': 0.37685463802642427, 'kd_temperature': 3.359545838519638}
+  pokus  15: AUC val = 0.99894  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.007731009671105293, 'lr': 0.0005256373224268079, 'weight_decay': 0.0002405879992672478, 'batch_size': 1024, 'kd_alpha': 0.23762621737452366, 'kd_temperature': 1.9560162270486123}
+  pokus  16: AUC val = 0.99896  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.0573092299534434, 'lr': 0.0010215605167410455, 'weight_decay': 0.0005035309351115249, 'batch_size': 1024, 'kd_alpha': 0.3459375404335745, 'kd_temperature': 3.7820954487103524}
+  pokus  17: AUC val = 0.99905  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.19018010409370345, 'lr': 0.0009895504455925694, 'weight_decay': 2.879491219643717e-05, 'batch_size': 256, 'kd_alpha': 0.7894692426013818, 'kd_temperature': 6.599457852111982}
+  pokus  18: AUC val = 0.99889  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.07593623479841735, 'lr': 0.0017301336545178815, 'weight_decay': 0.00031999901557720306, 'batch_size': 1024, 'kd_alpha': 0.1920592246082663, 'kd_temperature': 3.884617644770277}
+  pokus  19: AUC val = 0.99917  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.0997633477545663, 'lr': 0.0015427581570995174, 'weight_decay': 0.00017559733451057006, 'batch_size': 256, 'kd_alpha': 0.604033962068706, 'kd_temperature': 6.472658522077935}
+  pokus  20: AUC val = 0.99898  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.06649848061060012, 'lr': 0.0009133587817264932, 'weight_decay': 0.00016638787952563436, 'batch_size': 256, 'kd_alpha': 0.5497910255065909, 'kd_temperature': 6.208064693594404}
+  pokus  21: AUC val = 0.99898  (5 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.15932913512513075, 'lr': 0.0019343529946995574, 'weight_decay': 0.0003914673869450911, 'batch_size': 256, 'kd_alpha': 0.5146724777225492, 'kd_temperature': 6.7449416774488995}
+  pokus  22: AUC val = 0.99901  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.2156458153139551, 'lr': 0.0016108996322323176, 'weight_decay': 3.2710893539089884e-05, 'batch_size': 256, 'kd_alpha': 0.543841196925951, 'kd_temperature': 6.5427639667801385}
+  pokus  23: AUC val = 0.99902  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.059314425476678596, 'lr': 0.0026857049352859404, 'weight_decay': 0.00023029919340330753, 'batch_size': 256, 'kd_alpha': 0.5087336651115876, 'kd_temperature': 6.0233522976865}
+  pokus  24: AUC val = 0.99916  (14 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1764867796797852, 'lr': 0.0016051301265538177, 'weight_decay': 7.011606235482568e-05, 'batch_size': 256, 'kd_alpha': 0.36966452340300754, 'kd_temperature': 7.64449437935321}
+  pokus  25: AUC val = 0.99902  (10 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.12880158250039725, 'lr': 0.0010562393063382604, 'weight_decay': 0.0001147343478290943, 'batch_size': 256, 'kd_alpha': 0.5112016666768648, 'kd_temperature': 7.798713136030146}
+  pokus  26: AUC val = 0.99894  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1487056478422203, 'lr': 0.0013788814519440694, 'weight_decay': 1.502520319205387e-05, 'batch_size': 256, 'kd_alpha': 0.4349637298165849, 'kd_temperature': 6.824454785842358}
+  pokus  27: AUC val = 0.99902  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1259214510859161, 'lr': 0.0013414810774354858, 'weight_decay': 0.0002816932866504205, 'batch_size': 256, 'kd_alpha': 0.6745682194518432, 'kd_temperature': 5.343325039097735}
+  pokus  28: AUC val = 0.99902  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.14549791224986502, 'lr': 0.0027920487538203795, 'weight_decay': 4.0010696900817766e-05, 'batch_size': 256, 'kd_alpha': 0.5917986244908175, 'kd_temperature': 6.451228947933291}
+  pokus  29: AUC val = 0.99897  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1626905681721995, 'lr': 0.0011544945181196393, 'weight_decay': 0.00024600254228993165, 'batch_size': 256, 'kd_alpha': 0.2363571826334432, 'kd_temperature': 6.654780065453668}
+Najlep┼íie parametre: {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.0997633477545663, 'lr': 0.0015427581570995174, 'weight_decay': 0.00017559733451057006, 'batch_size': 256, 'kd_alpha': 0.604033962068706, 'kd_temperature': 6.472658522077935}
+Seed 0: fit 7.2 s | AUC train 0.99976 | val 0.99897 | test 0.99785
+Seed 1: fit 6.7 s | AUC train 0.99977 | val 0.99901 | test 0.99797
+Seed 2: fit 11.5 s | AUC train 0.99983 | val 0.99921 | test 0.99756
+Meranie inferencie ...
+Hotovo: runs_final/students_static/mlp_kd/20261102-211333
+[2026-11-02T21:17:11+01:00] static/mlp_nokd -> runs_final/students_static/mlp_nokd/20261102-211710
+Predspracovanie: 2319 z 2381 pr├¡znakov, signed log1p + ┼ítandardiz├ícia
+Ladenie: 30 pokusov, cie─╛ roc_auc na valid├ícii
+  pokus   0: AUC val = 0.99902  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.17959754525911098, 'lr': 0.0004296748115469076, 'weight_decay': 2.9375384576328313e-06, 'batch_size': 512}
+  pokus   1: AUC val = 0.99907  (1 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.2497327922401265, 'lr': 0.0004891706203866443, 'weight_decay': 3.5113563139704077e-06, 'batch_size': 1024}
+  pokus   2: AUC val = 0.99908  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.04184815819561255, 'lr': 0.0005878491617603749, 'weight_decay': 1.2562773503807034e-05, 'batch_size': 512}
+  pokus   3: AUC val = 0.99909  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1822634555704315, 'lr': 0.00044426835359925567, 'weight_decay': 1.5673095467235414e-06, 'batch_size': 512}
+  pokus   4: AUC val = 0.99904  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.13204574812188039, 'lr': 0.0003973374402029808, 'weight_decay': 3.058656666978529e-05, 'batch_size': 512}
+  pokus   5: AUC val = 0.99877  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.16401308380298388, 'lr': 0.00045917233096500544, 'weight_decay': 0.0008105016126411582, 'batch_size': 512}
+  pokus   6: AUC val = 0.99895  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.058794858725743554, 'lr': 0.00033292663683309287, 'weight_decay': 9.462175356461487e-06, 'batch_size': 1024}
+  pokus   7: AUC val = 0.99883  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.04227726749242879, 'lr': 0.001902471832648582, 'weight_decay': 1.6736010167825795e-06, 'batch_size': 256}
+  pokus   8: AUC val = 0.99875  (1 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.21870215041229618, 'lr': 0.0017717057775181906, 'weight_decay': 1.6677615430197902e-06, 'batch_size': 1024}
+  pokus   9: AUC val = 0.99879  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.09329469651469866, 'lr': 0.0006343144087990306, 'weight_decay': 0.0001544608907504709, 'batch_size': 512}
+  pokus  10: AUC val = 0.99903  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.23199061529746523, 'lr': 0.002156430408794668, 'weight_decay': 2.0887804157145047e-05, 'batch_size': 512}
+  pokus  11: AUC val = 0.99906  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.05837848604865569, 'lr': 0.0007457109479412918, 'weight_decay': 2.3120204379012313e-05, 'batch_size': 512}
+  pokus  12: AUC val = 0.99893  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.03498152033051666, 'lr': 0.0007398859389647247, 'weight_decay': 1.325008595927675e-06, 'batch_size': 512}
+  pokus  13: AUC val = 0.99906  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.29026093031286526, 'lr': 0.00039559692210260257, 'weight_decay': 3.469641969801485e-05, 'batch_size': 512}
+  pokus  14: AUC val = 0.99905  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.036256861565659604, 'lr': 0.0003783053427168538, 'weight_decay': 2.521347119942129e-06, 'batch_size': 512}
+  pokus  15: AUC val = 0.99912  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.15802229923526337, 'lr': 0.0006723653723366008, 'weight_decay': 1.623687331856257e-05, 'batch_size': 512}
+  pokus  16: AUC val = 0.99906  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.24966495638218694, 'lr': 0.0008167051005323028, 'weight_decay': 1.993742093174048e-05, 'batch_size': 512}
+  pokus  17: AUC val = 0.99907  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.17972737234895328, 'lr': 0.0009525265471126072, 'weight_decay': 3.2649694169878044e-06, 'batch_size': 512}
+  pokus  18: AUC val = 0.99896  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.22892109796530916, 'lr': 0.0003296312846982992, 'weight_decay': 1.3054992020629874e-06, 'batch_size': 512}
+  pokus  19: AUC val = 0.99906  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.11228854407948749, 'lr': 0.00036995044866865477, 'weight_decay': 1.143381506036409e-06, 'batch_size': 512}
+  pokus  20: AUC val = 0.99905  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.12967916227939996, 'lr': 0.0011333989187034459, 'weight_decay': 3.1566010205652955e-05, 'batch_size': 512}
+  pokus  21: AUC val = 0.99910  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.1866077278874423, 'lr': 0.0008409847178494518, 'weight_decay': 1.3385361880738301e-05, 'batch_size': 512}
+  pokus  22: AUC val = 0.99912  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.2010373189008935, 'lr': 0.0006378579184666744, 'weight_decay': 0.00013506938558175286, 'batch_size': 512}
+  pokus  23: AUC val = 0.99910  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.17825138555449885, 'lr': 0.0006566434488774279, 'weight_decay': 1.5388742259539717e-05, 'batch_size': 512}
+  pokus  24: AUC val = 0.99907  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.20844854604785587, 'lr': 0.0009609760333598951, 'weight_decay': 7.700501203315018e-05, 'batch_size': 512}
+  pokus  25: AUC val = 0.99897  (1 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.2217223179522381, 'lr': 0.0005351163912842908, 'weight_decay': 7.74650966466664e-05, 'batch_size': 1024}
+  pokus  26: AUC val = 0.99906  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.17281332612281347, 'lr': 0.00043698924382817796, 'weight_decay': 1.1595884178508304e-05, 'batch_size': 512}
+  pokus  27: AUC val = 0.99898  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1634013218950104, 'lr': 0.0003655439221219433, 'weight_decay': 7.884827573129914e-05, 'batch_size': 512}
+  pokus  28: AUC val = 0.99913  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.137657909519708, 'lr': 0.0007042503153050794, 'weight_decay': 1.207246112223234e-05, 'batch_size': 512}
+  pokus  29: AUC val = 0.99909  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.13805658417488031, 'lr': 0.0006353446467777947, 'weight_decay': 1.0378222291152775e-05, 'batch_size': 512}
+Najlep┼íie parametre: {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.137657909519708, 'lr': 0.0007042503153050794, 'weight_decay': 1.207246112223234e-05, 'batch_size': 512}
+Seed 0: fit 2.2 s | AUC train 0.99979 | val 0.99902 | test 0.99741
+Seed 1: fit 2.3 s | AUC train 0.99985 | val 0.99919 | test 0.99715
+Seed 2: fit 1.8 s | AUC train 0.99963 | val 0.99882 | test 0.99731
+Meranie inferencie ...
+Hotovo: runs_final/students_static/mlp_nokd/20261102-211710
+[2026-11-02T21:18:32+01:00] static/mlp_kd_modal -> runs_final/students_static/mlp_kd_modal/20261102-211832
+Predspracovanie: 2319 z 2381 pr├¡znakov, signed log1p + ┼ítandardiz├ícia
+Destil├ícia: m├ñkk├⌐ ozna─ìenia u─ìite─╛a z runs_final/teachers/static_lightgbm/20261102-211118
+Ladenie: 30 pokusov, cie─╛ roc_auc na valid├ícii
+  pokus   0: AUC val = 0.99901  (4 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.17959754525911098, 'lr': 0.0004296748115469076, 'weight_decay': 2.9375384576328313e-06, 'batch_size': 512, 'kd_alpha': 0.6664580622368363, 'kd_temperature': 1.1440914600706171}
+  pokus   1: AUC val = 0.99870  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.05454749016213018, 'lr': 0.0004576418837415782, 'weight_decay': 8.179499475211674e-06, 'batch_size': 256, 'kd_alpha': 0.5894823157779036, 'kd_temperature': 1.9764570245642927}
+  pokus   2: AUC val = 0.99901  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.23555278841790406, 'lr': 0.00047511094677356254, 'weight_decay': 3.489018845491386e-05, 'batch_size': 1024, 'kd_alpha': 0.23641929894983324, 'kd_temperature': 1.4553611508969566}
+  pokus   3: AUC val = 0.99834  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.0913841307520112, 'lr': 0.0003756586286118117, 'weight_decay': 0.00011290133559092664, 'batch_size': 1024, 'kd_alpha': 0.12751081689217472, 'kd_temperature': 7.365242814551475}
+  pokus   4: AUC val = 0.99915  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.15602040635334324, 'lr': 0.00105640764164036, 'weight_decay': 3.5856126103453987e-06, 'batch_size': 256, 'kd_alpha': 0.815861880342119, 'kd_temperature': 5.185299851677596}
+  pokus   5: AUC val = 0.99836  (4 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.01356818667316142, 'lr': 0.0006345291606505673, 'weight_decay': 1.4656553886225336e-05, 'batch_size': 512, 'kd_alpha': 0.32474760774990463, 'kd_temperature': 4.798872582107739}
+  pokus   6: AUC val = 0.99900  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.2960660809801552, 'lr': 0.001775685400639093, 'weight_decay': 3.9459088110999995e-06, 'batch_size': 512, 'kd_alpha': 0.6832057344327899, 'kd_temperature': 6.39889242680162}
+  pokus   7: AUC val = 0.99888  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.25893102776267807, 'lr': 0.0012601416950106597, 'weight_decay': 9.833181933644894e-06, 'batch_size': 1024, 'kd_alpha': 0.6836849426704512, 'kd_temperature': 5.462902299486492}
+  pokus   8: AUC val = 0.99895  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.21397343616689848, 'lr': 0.001729443201034399, 'weight_decay': 4.8287152161792064e-05, 'batch_size': 256, 'kd_alpha': 0.44203281468683975, 'kd_temperature': 1.1779338872086664}
+  pokus   9: AUC val = 0.99895  (1 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.094306794322898, 'lr': 0.000967591280153736, 'weight_decay': 0.0005280796376895364, 'batch_size': 1024, 'kd_alpha': 0.283038532393298, 'kd_temperature': 1.538859368801551}
+  pokus  10: AUC val = 0.99879  (5 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.22467066915891723, 'lr': 0.0006801604149773606, 'weight_decay': 1.7779882390510955e-06, 'batch_size': 256, 'kd_alpha': 0.824979247955889, 'kd_temperature': 4.684623530500077}
+  pokus  11: AUC val = 0.99902  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.2782401358443847, 'lr': 0.0008107245924731084, 'weight_decay': 0.00022707107489631416, 'batch_size': 1024, 'kd_alpha': 0.6200245210727878, 'kd_temperature': 3.0444596130213504}
+  pokus  12: AUC val = 0.99900  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.03368220075341605, 'lr': 0.0010702845850043493, 'weight_decay': 9.283292429644448e-06, 'batch_size': 256, 'kd_alpha': 0.7972558639986137, 'kd_temperature': 6.720664035649704}
+  pokus  13: AUC val = 0.99895  (5 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.11821529174536372, 'lr': 0.0013122016832935236, 'weight_decay': 3.5588075296249886e-05, 'batch_size': 256, 'kd_alpha': 0.8749635763069835, 'kd_temperature': 3.737830591209489}
+  pokus  14: AUC val = 0.99896  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.2569387823696129, 'lr': 0.001313555456913709, 'weight_decay': 0.0005544313694826203, 'batch_size': 1024, 'kd_alpha': 0.4105564325112083, 'kd_temperature': 1.5317020995133288}
+  pokus  15: AUC val = 0.99901  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.2639978689085748, 'lr': 0.0008718946792424825, 'weight_decay': 5.418182148776633e-05, 'batch_size': 1024, 'kd_alpha': 0.7131320844516301, 'kd_temperature': 2.2755683288421906}
+  pokus  16: AUC val = 0.99892  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.23956977856920877, 'lr': 0.001129861190415856, 'weight_decay': 7.740836433073733e-05, 'batch_size': 1024, 'kd_alpha': 0.31462820995780333, 'kd_temperature': 3.7472321277290197}
+  pokus  17: AUC val = 0.99896  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.11760258645152577, 'lr': 0.0010518510584945732, 'weight_decay': 0.0006487549484057934, 'batch_size': 1024, 'kd_alpha': 0.7685661607195629, 'kd_temperature': 4.66342027453753}
+  pokus  18: AUC val = 0.99909  (10 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1617454008181115, 'lr': 0.001114143914130491, 'weight_decay': 1.7810280546798571e-06, 'batch_size': 256, 'kd_alpha': 0.6483200334366697, 'kd_temperature': 4.022644497852699}
+  pokus  19: AUC val = 0.99905  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.21071143776112208, 'lr': 0.0015891960598812605, 'weight_decay': 2.7732810194550744e-06, 'batch_size': 256, 'kd_alpha': 0.6934040993800511, 'kd_temperature': 5.1031192723129575}
+  pokus  20: AUC val = 0.99889  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.11455830615389706, 'lr': 0.0006935821484985611, 'weight_decay': 5.225105029586326e-06, 'batch_size': 256, 'kd_alpha': 0.5856270957988513, 'kd_temperature': 4.271220470981312}
+  pokus  21: AUC val = 0.99904  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.17904547679490382, 'lr': 0.0010722563873917723, 'weight_decay': 2.410213127771808e-06, 'batch_size': 256, 'kd_alpha': 0.6838721615233052, 'kd_temperature': 6.851438049684958}
+  pokus  22: AUC val = 0.99903  (10 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.21711465546358413, 'lr': 0.0017313415509965014, 'weight_decay': 1.7008190893136138e-05, 'batch_size': 256, 'kd_alpha': 0.6567598932696004, 'kd_temperature': 4.303937348178628}
+  pokus  23: AUC val = 0.99905  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.16248226925016668, 'lr': 0.0027089460529720615, 'weight_decay': 6.374982222340644e-06, 'batch_size': 256, 'kd_alpha': 0.5886870491310904, 'kd_temperature': 4.843416359575339}
+  pokus  24: AUC val = 0.99898  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.16549188848315924, 'lr': 0.0013153485221784906, 'weight_decay': 5.249416136887273e-06, 'batch_size': 256, 'kd_alpha': 0.8852034029106643, 'kd_temperature': 6.079143088399199}
+  pokus  25: AUC val = 0.99907  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.23789446591420246, 'lr': 0.002110579581337141, 'weight_decay': 2.0783622313425733e-06, 'batch_size': 1024, 'kd_alpha': 0.8130337487220832, 'kd_temperature': 4.223126992083517}
+  pokus  26: AUC val = 0.99895  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.20903717053332813, 'lr': 0.001161124760205357, 'weight_decay': 6.151491576082592e-06, 'batch_size': 1024, 'kd_alpha': 0.7544961383346928, 'kd_temperature': 4.024738857593695}
+  pokus  27: AUC val = 0.99904  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.15680167752655183, 'lr': 0.0012064307960026697, 'weight_decay': 1.2426906949013164e-06, 'batch_size': 256, 'kd_alpha': 0.6367724904228537, 'kd_temperature': 3.3428107841590906}
+  pokus  28: AUC val = 0.99902  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.27467931500670106, 'lr': 0.0017811193615146254, 'weight_decay': 1.8430314641788101e-06, 'batch_size': 1024, 'kd_alpha': 0.831612648942749, 'kd_temperature': 4.471313494025219}
+  pokus  29: AUC val = 0.99901  (5 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.15143776786103177, 'lr': 0.0008796864932101577, 'weight_decay': 1.4363356952542451e-05, 'batch_size': 256, 'kd_alpha': 0.8490197586785967, 'kd_temperature': 6.406393160122602}
+Najlep┼íie parametre: {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.15602040635334324, 'lr': 0.00105640764164036, 'weight_decay': 3.5856126103453987e-06, 'batch_size': 256, 'kd_alpha': 0.815861880342119, 'kd_temperature': 5.185299851677596}
+Seed 0: fit 6.7 s | AUC train 0.99980 | val 0.99906 | test 0.99820
+Seed 1: fit 5.5 s | AUC train 0.99974 | val 0.99897 | test 0.99804
+Seed 2: fit 4.7 s | AUC train 0.99960 | val 0.99893 | test 0.99802
+Meranie inferencie ...
+Hotovo: runs_final/students_static/mlp_kd_modal/20261102-211832
+Porovnanie: runs_final/comparison/students_static
+
+=== 2026-11-02 21:21:30  Študenti – dynamickí  [stud_dynamic] ===
+[2026-11-02T21:21:32+01:00] dynamic/mlp_kd -> runs_final/students_dynamic/mlp_kd/20261102-212132
+Predspracovanie: 2000 z 2000 pr├¡znakov, signed log1p + ┼ítandardiz├ícia
+Destil├ícia: m├ñkk├⌐ ozna─ìenia u─ìite─╛a z runs_final/teachers/hybrid_lightgbm/20261102-205102
+Ladenie: 30 pokusov, cie─╛ roc_auc na valid├ícii
+  pokus   0: AUC val = 0.99589  (10 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.17959754525911098, 'lr': 0.0004296748115469076, 'weight_decay': 2.9375384576328313e-06, 'batch_size': 512, 'kd_alpha': 0.6664580622368363, 'kd_temperature': 1.1440914600706171}
+  pokus   1: AUC val = 0.99560  (20 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.05454749016213018, 'lr': 0.0004576418837415782, 'weight_decay': 8.179499475211674e-06, 'batch_size': 256, 'kd_alpha': 0.5894823157779036, 'kd_temperature': 1.9764570245642927}
+  pokus   2: AUC val = 0.99572  (5 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.23555278841790406, 'lr': 0.00047511094677356254, 'weight_decay': 3.489018845491386e-05, 'batch_size': 1024, 'kd_alpha': 0.23641929894983324, 'kd_temperature': 1.4553611508969566}
+  pokus   3: AUC val = 0.99479  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.0913841307520112, 'lr': 0.0003756586286118117, 'weight_decay': 0.00011290133559092664, 'batch_size': 1024, 'kd_alpha': 0.12751081689217472, 'kd_temperature': 7.365242814551475}
+  pokus   4: AUC val = 0.99566  (17 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.15602040635334324, 'lr': 0.00105640764164036, 'weight_decay': 3.5856126103453987e-06, 'batch_size': 256, 'kd_alpha': 0.815861880342119, 'kd_temperature': 5.185299851677596}
+  pokus   5: AUC val = 0.99506  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.01356818667316142, 'lr': 0.0006345291606505673, 'weight_decay': 1.4656553886225336e-05, 'batch_size': 512, 'kd_alpha': 0.32474760774990463, 'kd_temperature': 4.798872582107739}
+  pokus   6: AUC val = 0.99523  (10 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.2960660809801552, 'lr': 0.001775685400639093, 'weight_decay': 3.9459088110999995e-06, 'batch_size': 512, 'kd_alpha': 0.6832057344327899, 'kd_temperature': 6.39889242680162}
+  pokus   7: AUC val = 0.99517  (5 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.25893102776267807, 'lr': 0.0012601416950106597, 'weight_decay': 9.833181933644894e-06, 'batch_size': 1024, 'kd_alpha': 0.6836849426704512, 'kd_temperature': 5.462902299486492}
+  pokus   8: AUC val = 0.99585  (18 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.21397343616689848, 'lr': 0.001729443201034399, 'weight_decay': 4.8287152161792064e-05, 'batch_size': 256, 'kd_alpha': 0.44203281468683975, 'kd_temperature': 1.1779338872086664}
+  pokus   9: AUC val = 0.99572  (4 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.094306794322898, 'lr': 0.000967591280153736, 'weight_decay': 0.0005280796376895364, 'batch_size': 1024, 'kd_alpha': 0.283038532393298, 'kd_temperature': 1.538859368801551}
+  pokus  10: AUC val = 0.99557  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.23143099211177623, 'lr': 0.0005752935383017665, 'weight_decay': 1.7676605415075391e-06, 'batch_size': 512, 'kd_alpha': 0.8188963375379444, 'kd_temperature': 4.075476071438169}
+  pokus  11: AUC val = 0.99545  (15 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.2524892187854342, 'lr': 0.0022497841932245296, 'weight_decay': 1.4204019603157681e-05, 'batch_size': 256, 'kd_alpha': 0.5269257625285121, 'kd_temperature': 2.5898272556403388}
+  pokus  12: AUC val = 0.99536  (17 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.2909191594730837, 'lr': 0.001172456050017247, 'weight_decay': 0.00032906542543279107, 'batch_size': 256, 'kd_alpha': 0.353830771637949, 'kd_temperature': 2.014526774788772}
+  pokus  13: AUC val = 0.99600  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1491024065542881, 'lr': 0.0010724317780382569, 'weight_decay': 1.8029611102391475e-05, 'batch_size': 512, 'kd_alpha': 0.848441812471863, 'kd_temperature': 1.6003839637964947}
+  pokus  14: AUC val = 0.99608  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.17566918390544128, 'lr': 0.0013841500874186676, 'weight_decay': 2.089573528220034e-06, 'batch_size': 512, 'kd_alpha': 0.7000033491554944, 'kd_temperature': 1.694184730319991}
+  pokus  15: AUC val = 0.99605  (10 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.22725946982582354, 'lr': 0.0013657709051727322, 'weight_decay': 5.690133842085358e-06, 'batch_size': 512, 'kd_alpha': 0.7615788474555204, 'kd_temperature': 1.6824523006908472}
+  pokus  16: AUC val = 0.99605  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1513420876423111, 'lr': 0.00230550812452051, 'weight_decay': 1.4381135666928646e-05, 'batch_size': 512, 'kd_alpha': 0.6813756906368069, 'kd_temperature': 2.0211646397895624}
+  pokus  17: AUC val = 0.99568  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.13819614972504995, 'lr': 0.0014307152584852685, 'weight_decay': 3.997598333364571e-06, 'batch_size': 512, 'kd_alpha': 0.5654021753450447, 'kd_temperature': 2.615541696315967}
+  pokus  18: AUC val = 0.99600  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.249756459480661, 'lr': 0.0015662742143770186, 'weight_decay': 7.113770000585228e-06, 'batch_size': 512, 'kd_alpha': 0.8545573374767312, 'kd_temperature': 2.162249557907553}
+  pokus  19: AUC val = 0.99563  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.24925871204883238, 'lr': 0.0020866842062240223, 'weight_decay': 2.479472245233452e-06, 'batch_size': 512, 'kd_alpha': 0.7113742911513077, 'kd_temperature': 2.9700711751994806}
+  pokus  20: AUC val = 0.99567  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.16912958987617474, 'lr': 0.0008251147827944617, 'weight_decay': 1.0720755032722415e-05, 'batch_size': 512, 'kd_alpha': 0.6661886720736119, 'kd_temperature': 2.6124102773018274}
+  pokus  21: AUC val = 0.99623  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.14978534481914754, 'lr': 0.0015794492400712224, 'weight_decay': 1.2553588001973222e-06, 'batch_size': 512, 'kd_alpha': 0.7118939371172979, 'kd_temperature': 1.298431487079528}
+  pokus  22: AUC val = 0.99618  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.16643253183179935, 'lr': 0.0010263198506327697, 'weight_decay': 3.865173496952292e-06, 'batch_size': 512, 'kd_alpha': 0.645379810771098, 'kd_temperature': 1.3036371423245072}
+  pokus  23: AUC val = 0.99611  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.16264605729024972, 'lr': 0.002170394099147624, 'weight_decay': 1.6943245328187663e-06, 'batch_size': 512, 'kd_alpha': 0.7617189373990053, 'kd_temperature': 1.009147617745107}
+  pokus  24: AUC val = 0.99607  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1931043885391247, 'lr': 0.001395540029243514, 'weight_decay': 6.554854092768633e-06, 'batch_size': 512, 'kd_alpha': 0.5350885409506678, 'kd_temperature': 1.0254263443950886}
+  pokus  25: AUC val = 0.99619  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.19315404853658963, 'lr': 0.0029357067245786785, 'weight_decay': 1.2420186397185398e-06, 'batch_size': 512, 'kd_alpha': 0.8435725126170928, 'kd_temperature': 1.6436077310171346}
+  pokus  26: AUC val = 0.99599  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.13480746132566185, 'lr': 0.0009018521435199329, 'weight_decay': 3.7532210100412714e-06, 'batch_size': 512, 'kd_alpha': 0.578158939243545, 'kd_temperature': 1.3320625603560505}
+  pokus  27: AUC val = 0.99610  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.15084339877954714, 'lr': 0.00164918744965792, 'weight_decay': 1.1110604421001988e-06, 'batch_size': 512, 'kd_alpha': 0.5562124559696002, 'kd_temperature': 1.196815558684608}
+  pokus  28: AUC val = 0.99600  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.19956943650330994, 'lr': 0.0013879098483761836, 'weight_decay': 1.3522806773264838e-06, 'batch_size': 512, 'kd_alpha': 0.8971372595725564, 'kd_temperature': 2.366067014404813}
+  pokus  29: AUC val = 0.99590  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.12976649581949928, 'lr': 0.002593674249165005, 'weight_decay': 2.564187138005117e-06, 'batch_size': 512, 'kd_alpha': 0.6929533887610464, 'kd_temperature': 2.6676904602211553}
+Najlep┼íie parametre: {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.14978534481914754, 'lr': 0.0015794492400712224, 'weight_decay': 1.2553588001973222e-06, 'batch_size': 512, 'kd_alpha': 0.7118939371172979, 'kd_temperature': 1.298431487079528}
+Seed 0: fit 9.4 s | AUC train 0.99693 | val 0.99592 | test 0.91008
+Seed 1: fit 7.7 s | AUC train 0.99707 | val 0.99592 | test 0.88060
+Seed 2: fit 7.3 s | AUC train 0.99702 | val 0.99615 | test 0.90102
+Meranie inferencie ...
+Hotovo: runs_final/students_dynamic/mlp_kd/20261102-212132
+[2026-11-02T21:26:47+01:00] dynamic/mlp_nokd -> runs_final/students_dynamic/mlp_nokd/20261102-212647
+Predspracovanie: 2000 z 2000 pr├¡znakov, signed log1p + ┼ítandardiz├ícia
+Ladenie: 30 pokusov, cie─╛ roc_auc na valid├ícii
+  pokus   0: AUC val = 0.99588  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.17959754525911098, 'lr': 0.0004296748115469076, 'weight_decay': 2.9375384576328313e-06, 'batch_size': 512}
+  pokus   1: AUC val = 0.99571  (2 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.2497327922401265, 'lr': 0.0004891706203866443, 'weight_decay': 3.5113563139704077e-06, 'batch_size': 1024}
+  pokus   2: AUC val = 0.99578  (5 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.04184815819561255, 'lr': 0.0005878491617603749, 'weight_decay': 1.2562773503807034e-05, 'batch_size': 512}
+  pokus   3: AUC val = 0.99597  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1822634555704315, 'lr': 0.00044426835359925567, 'weight_decay': 1.5673095467235414e-06, 'batch_size': 512}
+  pokus   4: AUC val = 0.99589  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.13204574812188039, 'lr': 0.0003973374402029808, 'weight_decay': 3.058656666978529e-05, 'batch_size': 512}
+  pokus   5: AUC val = 0.99569  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.16401308380298388, 'lr': 0.00045917233096500544, 'weight_decay': 0.0008105016126411582, 'batch_size': 512}
+  pokus   6: AUC val = 0.99577  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.058794858725743554, 'lr': 0.00033292663683309287, 'weight_decay': 9.462175356461487e-06, 'batch_size': 1024}
+  pokus   7: AUC val = 0.99595  (11 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.04227726749242879, 'lr': 0.001902471832648582, 'weight_decay': 1.6736010167825795e-06, 'batch_size': 256}
+  pokus   8: AUC val = 0.99585  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.21870215041229618, 'lr': 0.0017717057775181906, 'weight_decay': 1.6677615430197902e-06, 'batch_size': 1024}
+  pokus   9: AUC val = 0.99578  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.09329469651469866, 'lr': 0.0006343144087990306, 'weight_decay': 0.0001544608907504709, 'batch_size': 512}
+  pokus  10: AUC val = 0.99610  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.23199061529746523, 'lr': 0.002156430408794668, 'weight_decay': 2.0887804157145047e-05, 'batch_size': 512}
+  pokus  11: AUC val = 0.99595  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.22266252461948843, 'lr': 0.0025254240526022633, 'weight_decay': 2.2415089116787823e-05, 'batch_size': 512}
+  pokus  12: AUC val = 0.99585  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.28034250124280874, 'lr': 0.0009532734330797822, 'weight_decay': 1.8884473689725717e-05, 'batch_size': 512}
+  pokus  13: AUC val = 0.99592  (4 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.10751452568185735, 'lr': 0.001898910111923266, 'weight_decay': 8.75148615488236e-06, 'batch_size': 512}
+  pokus  14: AUC val = 0.99599  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.12240172062915923, 'lr': 0.000948712122172159, 'weight_decay': 3.51402886109188e-06, 'batch_size': 512}
+  pokus  15: AUC val = 0.99614  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.19040141539360955, 'lr': 0.0008734325291507948, 'weight_decay': 4.398554875649311e-05, 'batch_size': 512}
+  pokus  16: AUC val = 0.99600  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.21066323869253775, 'lr': 0.0013688463857713783, 'weight_decay': 0.00016129954163684692, 'batch_size': 512}
+  pokus  17: AUC val = 0.99579  (5 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.2979790315451598, 'lr': 0.00086182925776909, 'weight_decay': 0.00012179374073237416, 'batch_size': 512}
+  pokus  18: AUC val = 0.99577  (5 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.21070756826430873, 'lr': 0.00036819576684031085, 'weight_decay': 5.3746373817233444e-05, 'batch_size': 512}
+  pokus  19: AUC val = 0.99602  (4 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.16718806361222344, 'lr': 0.0015153233771268934, 'weight_decay': 5.851850819493214e-06, 'batch_size': 1024}
+  pokus  20: AUC val = 0.99587  (5 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1414667392566504, 'lr': 0.000771601963071285, 'weight_decay': 2.664353473943416e-05, 'batch_size': 512}
+  pokus  21: AUC val = 0.99589  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.15185652918390524, 'lr': 0.0012934325694424413, 'weight_decay': 1.451914415748502e-06, 'batch_size': 1024}
+  pokus  22: AUC val = 0.99593  (3 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1347582501211454, 'lr': 0.0027781414540012524, 'weight_decay': 2.2398336712150347e-05, 'batch_size': 1024}
+  pokus  23: AUC val = 0.99617  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.27854460554056926, 'lr': 0.002048574130711367, 'weight_decay': 5.911733622585913e-06, 'batch_size': 512}
+  pokus  24: AUC val = 0.99600  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.2593756075469131, 'lr': 0.0021549842339697134, 'weight_decay': 6.473364164155611e-06, 'batch_size': 512}
+  pokus  25: AUC val = 0.99598  (4 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.18015244920512513, 'lr': 0.002552178619672805, 'weight_decay': 8.712849269774936e-05, 'batch_size': 512}
+  pokus  26: AUC val = 0.99582  (5 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.19212835754298727, 'lr': 0.001681050772226656, 'weight_decay': 6.319915276046349e-06, 'batch_size': 512}
+  pokus  27: AUC val = 0.99611  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.24101294851290525, 'lr': 0.0024766871125583246, 'weight_decay': 7.249824190591354e-05, 'batch_size': 512}
+  pokus  28: AUC val = 0.99599  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.2557674219140796, 'lr': 0.0023323176163152462, 'weight_decay': 0.00035013009539393834, 'batch_size': 512}
+  pokus  29: AUC val = 0.99598  (6 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.21194860105961066, 'lr': 0.0009124625125103899, 'weight_decay': 8.075445695285611e-06, 'batch_size': 512}
+Najlep┼íie parametre: {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.27854460554056926, 'lr': 0.002048574130711367, 'weight_decay': 5.911733622585913e-06, 'batch_size': 512}
+Seed 0: fit 5.7 s | AUC train 0.99708 | val 0.99592 | test 0.91241
+Seed 1: fit 7.0 s | AUC train 0.99701 | val 0.99602 | test 0.89901
+Seed 2: fit 5.0 s | AUC train 0.99681 | val 0.99596 | test 0.92217
+Meranie inferencie ...
+Hotovo: runs_final/students_dynamic/mlp_nokd/20261102-212647
+[2026-11-02T21:29:54+01:00] dynamic/mlp_kd_modal -> runs_final/students_dynamic/mlp_kd_modal/20261102-212954
+Predspracovanie: 2000 z 2000 pr├¡znakov, signed log1p + ┼ítandardiz├ícia
+Destil├ícia: m├ñkk├⌐ ozna─ìenia u─ìite─╛a z runs_final/teachers/dynamic_lightgbm/20261102-211330
+Ladenie: 30 pokusov, cie─╛ roc_auc na valid├ícii
+  pokus   0: AUC val = 0.99608  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.17959754525911098, 'lr': 0.0004296748115469076, 'weight_decay': 2.9375384576328313e-06, 'batch_size': 512, 'kd_alpha': 0.6664580622368363, 'kd_temperature': 1.1440914600706171}
+  pokus   1: AUC val = 0.99557  (10 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.05454749016213018, 'lr': 0.0004576418837415782, 'weight_decay': 8.179499475211674e-06, 'batch_size': 256, 'kd_alpha': 0.5894823157779036, 'kd_temperature': 1.9764570245642927}
+  pokus   2: AUC val = 0.99578  (4 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.23555278841790406, 'lr': 0.00047511094677356254, 'weight_decay': 3.489018845491386e-05, 'batch_size': 1024, 'kd_alpha': 0.23641929894983324, 'kd_temperature': 1.4553611508969566}
+  pokus   3: AUC val = 0.99525  (5 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.0913841307520112, 'lr': 0.0003756586286118117, 'weight_decay': 0.00011290133559092664, 'batch_size': 1024, 'kd_alpha': 0.12751081689217472, 'kd_temperature': 7.365242814551475}
+  pokus   4: AUC val = 0.99583  (16 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.15602040635334324, 'lr': 0.00105640764164036, 'weight_decay': 3.5856126103453987e-06, 'batch_size': 256, 'kd_alpha': 0.815861880342119, 'kd_temperature': 5.185299851677596}
+  pokus   5: AUC val = 0.99556  (11 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.01356818667316142, 'lr': 0.0006345291606505673, 'weight_decay': 1.4656553886225336e-05, 'batch_size': 512, 'kd_alpha': 0.32474760774990463, 'kd_temperature': 4.798872582107739}
+  pokus   6: AUC val = 0.99561  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.2960660809801552, 'lr': 0.001775685400639093, 'weight_decay': 3.9459088110999995e-06, 'batch_size': 512, 'kd_alpha': 0.6832057344327899, 'kd_temperature': 6.39889242680162}
+  pokus   7: AUC val = 0.99564  (4 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.25893102776267807, 'lr': 0.0012601416950106597, 'weight_decay': 9.833181933644894e-06, 'batch_size': 1024, 'kd_alpha': 0.6836849426704512, 'kd_temperature': 5.462902299486492}
+  pokus   8: AUC val = 0.99563  (15 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.21397343616689848, 'lr': 0.001729443201034399, 'weight_decay': 4.8287152161792064e-05, 'batch_size': 256, 'kd_alpha': 0.44203281468683975, 'kd_temperature': 1.1779338872086664}
+  pokus   9: AUC val = 0.99585  (4 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.094306794322898, 'lr': 0.000967591280153736, 'weight_decay': 0.0005280796376895364, 'batch_size': 1024, 'kd_alpha': 0.283038532393298, 'kd_temperature': 1.538859368801551}
+  pokus  10: AUC val = 0.99582  (10 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.23143099211177623, 'lr': 0.0005752935383017665, 'weight_decay': 1.7676605415075391e-06, 'batch_size': 512, 'kd_alpha': 0.8188963375379444, 'kd_temperature': 4.075476071438169}
+  pokus  11: AUC val = 0.99610  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.14040860994340293, 'lr': 0.00037778352941027736, 'weight_decay': 1.149514965975221e-06, 'batch_size': 512, 'kd_alpha': 0.8818461482523741, 'kd_temperature': 1.583698009756735}
+  pokus  12: AUC val = 0.99605  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.10168176475473764, 'lr': 0.0004641519263787494, 'weight_decay': 1.3696681111357074e-06, 'batch_size': 512, 'kd_alpha': 0.7319321024902835, 'kd_temperature': 1.1307024901380733}
+  pokus  13: AUC val = 0.99596  (10 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1491024065542881, 'lr': 0.0006382746295213019, 'weight_decay': 8.079894226152077e-06, 'batch_size': 512, 'kd_alpha': 0.8480283529040737, 'kd_temperature': 1.6003839637964947}
+  pokus  14: AUC val = 0.99605  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.18984624494583946, 'lr': 0.0007198794205349787, 'weight_decay': 1.8669850673026612e-05, 'batch_size': 512, 'kd_alpha': 0.5841158484569495, 'kd_temperature': 1.2450432988777973}
+  pokus  15: AUC val = 0.99589  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 16, 'dropout': 0.18436779194533892, 'lr': 0.00034900926793191727, 'weight_decay': 1.6655400017527191e-06, 'batch_size': 512, 'kd_alpha': 0.8954034388503378, 'kd_temperature': 2.3249732057505104}
+  pokus  16: AUC val = 0.99594  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.06446701244573735, 'lr': 0.0003254978222846746, 'weight_decay': 1.4675341597338087e-05, 'batch_size': 512, 'kd_alpha': 0.8108678690741234, 'kd_temperature': 3.5895504905149562}
+  pokus  17: AUC val = 0.99565  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.17655837490634102, 'lr': 0.00032824047845159506, 'weight_decay': 3.5226925264258865e-05, 'batch_size': 512, 'kd_alpha': 0.4487098524857991, 'kd_temperature': 3.2358891316104996}
+  pokus  18: AUC val = 0.99588  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.16945077864531216, 'lr': 0.0007505731134885254, 'weight_decay': 1.6493561667840093e-06, 'batch_size': 512, 'kd_alpha': 0.6343986126620477, 'kd_temperature': 2.26429843324754}
+  pokus  19: AUC val = 0.99589  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.07633756887194298, 'lr': 0.0006081765953117942, 'weight_decay': 7.702493564785674e-06, 'batch_size': 512, 'kd_alpha': 0.7755529917678692, 'kd_temperature': 3.3634787158481245}
+  pokus  20: AUC val = 0.99598  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.09668002633471026, 'lr': 0.00036633675021710457, 'weight_decay': 4.241781947786337e-06, 'batch_size': 512, 'kd_alpha': 0.718091275478777, 'kd_temperature': 2.562728637794534}
+  pokus  21: AUC val = 0.99607  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1137929480442458, 'lr': 0.0005867217213631132, 'weight_decay': 1.4969977818623589e-06, 'batch_size': 512, 'kd_alpha': 0.6190435000759343, 'kd_temperature': 1.0655247692365237}
+  pokus  22: AUC val = 0.99607  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1701113781502547, 'lr': 0.000395731528502172, 'weight_decay': 4.731518943214342e-06, 'batch_size': 512, 'kd_alpha': 0.586458671223867, 'kd_temperature': 1.22077930086924}
+  pokus  23: AUC val = 0.99598  (8 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.15368595476867963, 'lr': 0.0006445700134117422, 'weight_decay': 1.6570280907157162e-06, 'batch_size': 512, 'kd_alpha': 0.8145051613966796, 'kd_temperature': 1.0110327455361707}
+  pokus  24: AUC val = 0.99604  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 64, 'dropout': 0.07948161784408322, 'lr': 0.0003322993535929157, 'weight_decay': 1.5146576931372873e-06, 'batch_size': 512, 'kd_alpha': 0.8578181417245806, 'kd_temperature': 2.137910769431632}
+  pokus  25: AUC val = 0.99607  (10 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.12286628166461222, 'lr': 0.0003308665641175547, 'weight_decay': 1.0287896917428445e-06, 'batch_size': 512, 'kd_alpha': 0.5646253361284568, 'kd_temperature': 1.1692080406551515}
+  pokus  26: AUC val = 0.99604  (11 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.16953498694833388, 'lr': 0.00038538417011645305, 'weight_decay': 4.71953141636158e-06, 'batch_size': 512, 'kd_alpha': 0.780436516030469, 'kd_temperature': 1.3692653687103071}
+  pokus  27: AUC val = 0.99602  (10 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.19645002433777875, 'lr': 0.00030466097184510705, 'weight_decay': 1.5030619637317791e-06, 'batch_size': 512, 'kd_alpha': 0.7918765583674734, 'kd_temperature': 1.0753149055449933}
+  pokus  28: AUC val = 0.99600  (9 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.1336593837587873, 'lr': 0.00034839091119786067, 'weight_decay': 1.3141199084141107e-06, 'batch_size': 512, 'kd_alpha': 0.8694594237912565, 'kd_temperature': 2.134811397026435}
+  pokus  29: AUC val = 0.99586  (7 s)  {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.11642241178858928, 'lr': 0.00035781125468474024, 'weight_decay': 7.111378399037713e-06, 'batch_size': 512, 'kd_alpha': 0.4198688233915904, 'kd_temperature': 1.7884744414073839}
+Najlep┼íie parametre: {'hidden_layers': 1, 'max_epochs': 100, 'patience': 8, 'hidden_width': 32, 'dropout': 0.14040860994340293, 'lr': 0.00037778352941027736, 'weight_decay': 1.149514965975221e-06, 'batch_size': 512, 'kd_alpha': 0.8818461482523741, 'kd_temperature': 1.583698009756735}
+Seed 0: fit 5.9 s | AUC train 0.99677 | val 0.99579 | test 0.88923
+Seed 1: fit 7.6 s | AUC train 0.99710 | val 0.99590 | test 0.89824
+Seed 2: fit 7.4 s | AUC train 0.99705 | val 0.99596 | test 0.88789
+Meranie inferencie ...
+Hotovo: runs_final/students_dynamic/mlp_kd_modal/20261102-212954
+Porovnanie: runs_final/comparison/students_dynamic
+
+=== 2026-11-02 21:34:47  Meranie spotreby – statickí študenti  [stud_bench_s] ===
+students_static/mlp_kd: meranie ...
+  CPU d├ívka: 28,545 vz/s, 0.304 ms CPU/vz, vy┼Ña┼╛enie 36 % | 1 vzorka: 0.096 ms | syst├⌐m bol pred meran├¡m za┼Ña┼╛en├╜ na 16 % ΓÇô v├╜sledky m├┤┼╛u by┼Ñ skreslen├⌐
+students_static/mlp_kd_modal: meranie ...
+  CPU d├ívka: 30,078 vz/s, 0.306 ms CPU/vz, vy┼Ña┼╛enie 38 % | 1 vzorka: 0.095 ms | syst├⌐m bol pred meran├¡m za┼Ña┼╛en├╜ na 22 % ΓÇô v├╜sledky m├┤┼╛u by┼Ñ skreslen├⌐
+students_static/mlp_nokd: meranie ...
+  CPU d├ívka: 27,459 vz/s, 0.304 ms CPU/vz, vy┼Ña┼╛enie 35 % | 1 vzorka: 0.094 ms | syst├⌐m bol pred meran├¡m za┼Ña┼╛en├╜ na 21 % ΓÇô v├╜sledky m├┤┼╛u by┼Ñ skreslen├⌐
+
+=== 2026-11-02 21:36:02  Meranie spotreby – dynamickí študenti  [stud_bench_d] ===
+students_dynamic/mlp_kd: meranie ...
+  CPU d├ívka: 34,035 vz/s, 0.296 ms CPU/vz, vy┼Ña┼╛enie 42 % | 1 vzorka: 0.091 ms
+students_dynamic/mlp_kd_modal: meranie ...
+  CPU d├ívka: 35,403 vz/s, 0.296 ms CPU/vz, vy┼Ña┼╛enie 44 % | 1 vzorka: 0.089 ms | syst├⌐m bol pred meran├¡m za┼Ña┼╛en├╜ na 24 % ΓÇô v├╜sledky m├┤┼╛u by┼Ñ skreslen├⌐
+students_dynamic/mlp_nokd: meranie ...
+  CPU d├ívka: 36,126 vz/s, 0.296 ms CPU/vz, vy┼Ña┼╛enie 45 % | 1 vzorka: 0.089 ms | syst├⌐m bol pred meran├¡m za┼Ña┼╛en├╜ na 22 % ΓÇô v├╜sledky m├┤┼╛u by┼Ñ skreslen├⌐
+
+=== 2026-11-02 21:37:16  Kaskáda: main  [cascade_main] ===
+Kask├ída vyhodnoten├í: runs_final/cascade/main/20261102-213718
+
+=== 2026-11-02 21:37:18  Kaskáda: nokd  [cascade_nokd] ===
+Kask├ída vyhodnoten├í: runs_final/cascade/nokd/20261102-213720
+
+=== 2026-11-02 21:37:20  Kaskáda: modal  [cascade_modal] ===
+Kask├ída vyhodnoten├í: runs_final/cascade/modal/20261102-213722
+
+=== 2026-11-02 21:37:22  Kaskáda: heavy  [cascade_heavy] ===
+Kask├ída vyhodnoten├í: runs_final/cascade/heavy/20261102-213724
+
+=== 2026-11-02 21:37:24  Kaskáda: baselines  [cascade_baselines] ===
+Kask├ída vyhodnoten├í: runs_final/cascade/baselines/20261102-213726
+
+=== 2026-11-02 21:37:26  Záverečné porovnanie (výskumné otázky)  [final_report] ===
+Z├ívere─ìn├⌐ porovnanie: runs_final/comparison/final
+
+=== 2026-11-02 21:37:28  Výsledky podľa výsledku emulácie (malé reporty, unsupported_api)  [subsets] ===
+Podskupiny: runs_final/comparison/subsets
+**********************
+Windows PowerShell transcript end
+End time: 20261102213730
+**********************
