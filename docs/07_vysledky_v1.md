@@ -147,10 +147,10 @@ majú kaskády, ale za cenu nižšieho TPR (0,953 – 0,964 oproti 0,984).
 - Podrobnosti kaskády (eskalácie, rodiny) sú v README iba pre seed 0. Metriky kvality sú priemerom cez seedy.
 
 ## 9. Návrhy na ďalší postup (NÁVRH, nerozhodnuté)
-1. **Kaskáda B** (docs/00: najprv statický študent alebo model, pri neistom skóre emulácia a hybrid) sa podľa
-   výsledkov javí ako vhodnejšia formulácia tézy 4. Dynamická analýza by sa robila iba pre časť súborov a šetril
-   by sa najdrahší krok (emulácia). Z uložených predikcií sa dá vyhodnotiť takmer bez výpočtu. Prah neistoty
-   treba určiť na validácii.
+1. **Kaskáda B** (vo V2 už plánovaná podľa docs/00: najprv statický študent, pri neistom skóre emulácia a hybrid).
+   Výsledky V1 ju podporujú ako vhodnejšiu formuláciu tézy 4: emulácia by sa robila iba pre časť súborov, čím sa
+   ušetrí najdrahší krok. Z uložených predikcií V1 by sa dala vyhodnotiť takmer bez výpočtu, vo V1 sa však podľa
+   rozhodnutia autora nerobí. Prah neistoty treba určiť na validácii.
 2. S vedúcou prekonzultovať pravidlo 10× pre študenta (učiteľ je lacný LightGBM) a to, či vo V2 ponechať pravidlo
    výberu (pri remíze rozhoduje CPU čas), alebo uviesť ako doplnok RF/two_branch ako učiteľa.
 3. Vo V2 (vynechané rodiny) sledovať najmä keylogger a coinminer: tu kaskáda najviac eskaluje a robí najviac
