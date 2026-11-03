@@ -12,6 +12,7 @@ Texty, z ktorých sa budú preberať informácie do práce. Číslované podľa 
 | `06_predbezne_vysledky.md` | predbežné výsledky (overenie postupu pred V1), nie finálne | hotové |
 | `04_dynamicke_data.md` | formát Speakeasy reportov, postup spracovania, otvorené rozhodnutia | hotové (rozhodnutie: iba API volania) |
 | `07_vysledky_v1.md` | **finálne výsledky V1** (`runs_final/`): odpovede na otázky a tézy, kaskáda, komplementarita, nároky, návrhy pre V2 | hotové 2026-11-03 |
+| `08_zhrnutie_v1_pre_veducu.md` | stručné zhrnutie V1 pre vedúcu: dáta, modely, súhrnná tabuľka, najlepší podľa parametrov, tézy, otázky na konzultáciu | hotové 2026-11-03 |
 
 Pravidlá:
 - Uvádzať iba overené fakty s popisom, ako boli overené. Návrhy a otvorené rozhodnutia jasne označiť.
