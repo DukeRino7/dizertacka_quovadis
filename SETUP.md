@@ -66,7 +66,12 @@ Spúšťa sa **v priečinku projektu z V1** na pracovnom notebooku (tam sú `dat
    (iba technická kontrola, nie výsledky; potom priečinok `runs_v2_smoke\` možno zmazať).
 3. Celý beh (2–3 večery, pokračuje po prerušení – stačí spustiť znova):
    `powershell -ExecutionPolicy Bypass -File scripts\run_v2.ps1`
-4. Na súkromný notebook preniesť priečinok `runs_v2\` (USB). Súhrn: `runs_v2\comparison\v2\README.md`.
+4. Na súkromný notebook preniesť `runs_v2\` **bez uložených modelov** (modely majú ~7 GB a na vyhodnotenie netreba):
+   `robocopy runs_v2 E:\runs_v2 /E /XD model` (E: = USB). Súhrn: `runs_v2\comparison\v2\README.md`.
+
+**Alternatíva – samostatný priečinok:** ZIP `v2` rozbaliť do nového priečinka (napr. `dizertacka_quovadis-2`) a skopírovať
+doň z priečinka V1 `data\`, `processed\` a `.venv\` (`runs_final\` bez modelov je už v ZIP-e a na V2 stačí).
+Ak by skopírované `.venv\` nefungovalo, spustiť v novom priečinku `scripts\setup.ps1`. Pozor na voľné miesto na disku.
 
 Čo beh robí: (1) `runs_v2\full` – učiteľ dvojvetvová sieť, noví študenti (ladenie 30 pokusov) a ich meranie spotreby,
 kaskády B na modeloch V1; (2) `runs_v2\lofo\<rodina>` – pre každú zo 7 rodín slovníky API bez rodiny, celý rebríček
