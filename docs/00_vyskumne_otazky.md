@@ -11,6 +11,10 @@ Stav k 2026-11-01. Otázky sformuloval autor práce; pravidlá výberu a vykazov
 4. Viacstupňová architektúra detekcie, v ktorej rýchle statické a destilované modely slúžia ako prvotný filter
    a komplexný dynamický/hybridný model je aplikovaný iba na neisté prípady, zníži celkovú výpočtovú náročnosť systému.
 
+**Spresnenie po konzultácii s vedúcou (2026-11-03):** „hybridným prístupom“ v tézach 1 a 2 sa rozumie **kaskáda**
+(nie samostatný hybridný model); téza 4 opisuje kaskádu B. Tézy sa môžu mierne prispôsobiť a nemusia sa potvrdiť –
+nepotvrdenú treba vysvetliť. Kritériá a postup V2: `docs/09_plan_v2.md`.
+
 **Mapovanie téz na experimenty (NÁVRH, na dohodnutie):** zero-day = časový test (už teraz) + vynechanie rodiny
 z tréningu (leave-one-family-out, plánované); nízka prevalencia = metriky prepočítané na nízky podiel malvéru
 (plánované); stabilita = rozptyl cez seedy, rodiny a čas; „neisté prípady“ = eskalácia pri nezhode (teraz)

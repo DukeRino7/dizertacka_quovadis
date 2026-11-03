@@ -87,8 +87,9 @@ Prepočet na nízku prevalenciu vychádza z TPR a FPR (v teste je 54 % malvéru,
    poplachov statického modelu má dynamický model pravdu. Pri chýbajúcom malvéri pomáha málo.
 4. **Kaskáda znižuje falošné poplachy o ~45 %** (FPR 0,0026 vs. 0,0047) za cenu nižšieho TPR (0,958 vs. 0,984).
    Na teste eskaluje 25 % vzoriek, na validácii 6 %. Nárast spôsobuje zlyhávanie dynamického študenta.
-5. **Destilácia nepriniesla zlepšenie.** Študenti s destiláciou a bez nej sú rovnakí. Pravdepodobný dôvod:
-   učiteľ dáva takmer binárne odpovede (97,6 % pravdepodobností je < 0,01 alebo > 0,99).
+5. **Destilácia nepriniesla zlepšenie.** Študenti s destiláciou a bez nej sú rovnakí. Možný dôvod (hypotéza):
+   učiteľ dáva takmer binárne odpovede (97,6 % pravdepodobností je < 0,01 alebo > 0,99); ani zmäkčenie teplotou
+   a ladenie váhy učiteľa nepriniesli zlepšenie.
 6. **Vybraný hybrid je veľmi lacný** (0,09 ms). Študenti (0,30 ms) sú preto 3,5× drahší než učiteľ a kaskáda
    je 7× drahšia než samotný hybrid. Pri drahom hybride (dvojvetvová sieť) je kaskáda 3,7× lacnejšia.
 

@@ -67,10 +67,13 @@ Neskorá fúzia (stacking) je horšia než ranná fúzia (F1 0,9705 vs. 0,9901).
   Dynamický študent s KD a bez KD: F1 0,6790 vs. 0,6938, ROC-AUC 0,897 vs. 0,911. Rozdiely sú malé a v oboch smeroch,
   pri TPR@FPR 0,1 % a FPR je KD statického študenta lepší (0,548 vs. 0,368; FPR 0,0059 vs. 0,0076).
 - Variant A (učiteľ z rovnakej modality) nie je systematicky lepší ani horší.
-- **Možné vysvetlenie (overené číslom, príčinnosť je hypotéza):** mäkké označenia hybridného učiteľa sú takmer
-  binárne. 97,6 % tréningových vzoriek má p < 0,01 alebo > 0,99 (`runs_final/teachers/hybrid_lightgbm/*/README.md`),
-  takže nesú málo informácie navyše oproti skutočným označeniam. Dynamický študent sa navyše učí napodobniť
-  učiteľa, ktorého rozhodnutia stoja na statických príznakoch, a tie dynamický vstup nemá.
+- **Možné vysvetlenie (hypotéza):** mäkké označenia hybridného učiteľa sú takmer binárne – 97,6 % tréningových
+  vzoriek má p < 0,01 alebo > 0,99 (`runs_final/teachers/hybrid_lightgbm/*/README.md`). Študent ich síce zmäkčuje
+  teplotou v log-odds (T ladené v [1; 8]), no ladenie zvolilo vysokú váhu skutočných označení
+  (α = 0,60 – 0,88; statický `mlp_kd` α = 0,60, T = 6,5; dynamický `mlp_kd` α = 0,71, T = 1,3). Učiteľ teda
+  pravdepodobne nesie málo informácie navyše oproti skutočným označeniam. Dynamický študent sa navyše učí
+  napodobniť učiteľa, ktorého rozhodnutia stoja na statických príznakoch, a tie dynamický vstup nemá.
+  (Oprava 2026-11-03: pôvodná verzia neuvádzala zmäkčenie teplotou.)
 - **Pravidlo „študent aspoň 10× lacnejší ako učiteľ“ (docs/05, NÁVRH) nie je splnené**, a to ani približne.
   Študenti (MLP, 74 tis. parametrov) stoja 0,30 ms/vz., učiteľ (hybridný LightGBM) 0,086 ms/vz. Študent je teda
   **3,5× drahší než učiteľ**. Pravidlo kód nekontroluje. Tento prípad `docs/00` predvídal („ak by najlepší hybrid
