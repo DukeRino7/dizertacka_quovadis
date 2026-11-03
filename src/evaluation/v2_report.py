@@ -63,6 +63,11 @@ def cpu(run: Path | None) -> float | None:
     return json.loads(b.read_text(encoding="utf-8"))["cpu_batch"]["cpu_ms_per_sample"] if b and b.exists() else None
 
 
+def emulation(spec: str) -> float:
+    """Podiel súborov, ktoré model potrebuje emulovať: statické modely 0, dynamické a hybridné 1."""
+    return 0.0 if spec.startswith(("static/", "students_static/")) else 1.0
+
+
 # ----------------------------------------------------------------------------- metriky jedného behu
 
 def model_row(run: Path, fam: str | None) -> dict:
@@ -107,8 +112,7 @@ def collect_temporal(root: Path, v1: Path) -> pd.DataFrame:
     for spec, lab in MODELS.items():
         run = find([full, v1], spec)
         if run:
-            rows.append({"prístup": lab, "kľúč": spec, **model_row(run, None), "emulation": 1.0 if not spec.startswith(("static", "students_static")) else 0.0,
-                         "cpu_ms": cpu(run)})
+            rows.append({"prístup": lab, "kľúč": spec, **model_row(run, None), "emulation": emulation(spec), "cpu_ms": cpu(run)})
     for name, lab in CASC_A.items():
         run = find([full, v1], f"cascade/{name}")
         if run:
@@ -128,7 +132,8 @@ def collect_zero_day(root: Path) -> pd.DataFrame:
         for spec in list(MODELS) + [s for s in LADDER if s not in MODELS]:
             run = latest(fdir / spec)
             if run:
-                rows.append({"rodina": fam, "kľúč": spec, "prístup": MODELS.get(spec, spec), **model_row(run, fam)})
+                rows.append({"rodina": fam, "kľúč": spec, "prístup": MODELS.get(spec, spec), **model_row(run, fam),
+                             "emulation": emulation(spec)})
         for kind, table in (("A", CASC_A), ("B", CASC_B)):
             for name, lab in table.items():
                 run = latest(fdir / "cascade" / name)
