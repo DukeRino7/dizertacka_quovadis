@@ -26,7 +26,8 @@ from .dynamic_features import ApiNgramVectorizer
 SPLIT_ORDER = ["train", "validation", "test"]
 
 
-def main(cache: Path, out: Path, cfg_path: str, splits=SPLIT_ORDER, variant: str | None = None):
+def main(cache: Path, out: Path, cfg_path: str, splits=SPLIT_ORDER, variant: str | None = None,
+         exclude_family: str | None = None):
     t0 = time.perf_counter()
     cfg = load_config(cfg_path)
     tcfg = {**cfg["tabular"], **(cfg.get("tabular_variants", {}).get(variant, {}) if variant else {})}
@@ -47,7 +48,9 @@ def main(cache: Path, out: Path, cfg_path: str, splits=SPLIT_ORDER, variant: str
                              f"spustiť build_dynamic na kompletných dátach")
 
     t = time.perf_counter()
-    vec = ApiNgramVectorizer(**tcfg).fit(data["train"])
+    # zero-day (docs/09): slovník bez vynechanej rodiny – rodina nesmie ovplyvniť reprezentáciu
+    fit_df = data["train"] if not exclude_family else data["train"][data["train"]["family"] != exclude_family]
+    vec = ApiNgramVectorizer(**tcfg).fit(fit_df)
     fit_s = time.perf_counter() - t
     joblib.dump(vec, out / "vectorizer.joblib")
     feats = vec.feature_table()
@@ -65,6 +68,15 @@ def main(cache: Path, out: Path, cfg_path: str, splits=SPLIT_ORDER, variant: str
         X[s] = Xs
     transform_s = time.perf_counter() - t
 
+    if exclude_family:  # zero-day: iba dáta a manifest (štatistiky a posun sú v hlavnom datasete)
+        write_json({"created": now_iso(), "script": "src/data/build_dynamic_tabular.py", "config": tcfg,
+                    "exclude_family": exclude_family, "n_vectorizer_fit_rows": int(len(fit_df)),
+                    "n_features": int(len(feats)), "timings": {"vectorizer_fit_s": fit_s, "transform_s": transform_s,
+                                                               "total_s": time.perf_counter() - t0}, "git": git_info()},
+                   out / "manifest.json")
+        print(f"Dynamický tabuľkový dataset bez rodiny {exclude_family}: {rel(out)}, {len(feats)} príznakov "
+              f"({time.perf_counter() - t0:.0f} s)")
+        return
     stats = column_stats(X["train"]).merge(feats, on="column")
     stats.to_parquet(out / "train_feature_stats.parquet", index=False)
     drift = None
@@ -153,6 +165,10 @@ if __name__ == "__main__":
     ap.add_argument("--out", default=None, help="predvolene processed/dynamic/tabular[_<variant>]")
     ap.add_argument("--config", default="configs/data/dynamic.yaml")
     ap.add_argument("--variant", default=None, help="kontrolný variant z tabular_variants (napr. full)")
+    ap.add_argument("--exclude-family", default=None, help="zero-day: slovník bez tejto rodiny -> processed/dynamic/lofo/<rodina>/tabular")
     a = ap.parse_args()
-    out = Path(a.out) if a.out else PROCESSED_DIR / "dynamic" / ("tabular" + (f"_{a.variant}" if a.variant else ""))
-    main(Path(a.cache), out, a.config, variant=a.variant)
+    if a.exclude_family:
+        out = Path(a.out) if a.out else PROCESSED_DIR / "dynamic" / "lofo" / a.exclude_family / "tabular"
+    else:
+        out = Path(a.out) if a.out else PROCESSED_DIR / "dynamic" / ("tabular" + (f"_{a.variant}" if a.variant else ""))
+    main(Path(a.cache), out, a.config, variant=a.variant, exclude_family=a.exclude_family)

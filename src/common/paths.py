@@ -11,6 +11,14 @@ PROCESSED_DIR = PROJECT_ROOT / "processed"
 RUNS_DIR = Path(os.environ.get("DIZERTACKA_RUNS_DIR") or PROJECT_ROOT / "runs").resolve()
 CONFIGS_DIR = PROJECT_ROOT / "configs"
 
+# Zero-day (docs/09): vynechaná rodina pre celý proces (nastavuje scripts/run_v2.ps1 pre každý beh).
+# Ovplyvňuje src/data/providers.load_tabular: rodina sa odstráni z tréningu aj validácie, dynamické dáta sa berú
+# zo slovníka bez nej a jej vzorky z tréningu a validácie tvoria časť 'holdout'.
+HOLDOUT_FAMILY = os.environ.get("DIZERTACKA_HOLDOUT_FAMILY") or None
+# Koreňe výsledkov, z ktorých sa preberajú hyperparametre (oddelené ';', poradie = priorita), napr. runs_v2/full;runs_final.
+PARAMS_ROOTS = [Path(r) if Path(r).is_absolute() else PROJECT_ROOT / r
+                for r in (os.environ.get("DIZERTACKA_PARAMS_ROOTS") or "").split(";") if r]
+
 EMBER_DIR = DATA_DIR / "quovadis-ember"
 SPEAKEASY_DIR = DATA_DIR / "quovadis-speakeasy"
 INDEX_DIR = PROCESSED_DIR / "index"

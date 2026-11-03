@@ -1,0 +1,12 @@
+# KASKÁDA B-twobranch: študenti destilovaní z dvojvetvovej siete (komplexný učiteľ, docs/09 bod 5).
+name: b_twobranch
+type: B
+second_stage: dynamic
+components:
+  static: students_static/mlp_kd_twobranch
+  dynamic: students_dynamic/mlp_kd_twobranch
+  hybrid: auto:hybrid
+uncertainty: {fpr_hi: 0.001, fnr_lo: 0.01}   # isto malvér: FPR ≤ 0,1 % na validácii; isto neškodný: pod lo ≤ 1 % malvéru
+budgets: [0.1, 0.2, 0.3, 0.4]                 # doplnková krivka: podiel emulovaných súborov (určené na validácii)
+assumed_emulation_s: 60                       # PREDPOKLAD (limit zo speakeasy-config.json), nie meranie
+protocol: configs/protocol.yaml

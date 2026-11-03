@@ -1,0 +1,12 @@
+# KASKÁDA B-heavy: ako b_main, pri nezhode komplexný hybrid (dvojvetvová sieť).
+name: b_heavy
+type: B
+second_stage: dynamic
+components:
+  static: students_static/mlp_kd
+  dynamic: students_dynamic/mlp_kd
+  hybrid: hybrid/two_branch
+uncertainty: {fpr_hi: 0.001, fnr_lo: 0.01}   # isto malvér: FPR ≤ 0,1 % na validácii; isto neškodný: pod lo ≤ 1 % malvéru
+budgets: [0.1, 0.2, 0.3, 0.4]                 # doplnková krivka: podiel emulovaných súborov (určené na validácii)
+assumed_emulation_s: 60                       # PREDPOKLAD (limit zo speakeasy-config.json), nie meranie
+protocol: configs/protocol.yaml

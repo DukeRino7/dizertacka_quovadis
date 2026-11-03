@@ -20,6 +20,7 @@ import pandas as pd
 
 from src.common.config import load_config
 from src.common.hardware import load_protocol
+from src.common import paths
 from src.common.paths import RUNS_DIR, rel
 from src.common.provenance import now_iso, write_json
 from src.common.run import create_run_dir, save_run_context
@@ -132,6 +133,9 @@ def main(config_path: str, runs_root: Path | None, tag: str | None, smoke: bool)
         cfg.setdefault("fixed_params", {}).update(cfg.get("smoke_overrides", {}) or {})
     run = create_run_dir(cfg.get("results_approach", cfg["approach"]), cfg["name"], tag, runs_root)
     save_run_context(run, config_path, cfg, protocol)
+    if paths.HOLDOUT_FAMILY:  # zero-day beh (docs/09)
+        write_json({"holdout_family": paths.HOLDOUT_FAMILY, "params_roots": [rel(r) for r in paths.PARAMS_ROOTS]},
+                   run / "zero_day.json")
     logf = open(run / "log.txt", "w", encoding="utf-8")
 
     def log(msg):
@@ -184,8 +188,17 @@ def main(config_path: str, runs_root: Path | None, tag: str | None, smoke: bool)
         timings["teacher_oof"] = rel(src_oof)
         log(f"Destilácia: mäkké označenia učiteľa z {rel(src_oof)}")
 
-    if cfg.get("params_from"):
-        src_run = latest_run(cfg["params_from"], runs_root or RUNS_DIR)
+    spec = cfg.get("params_from")
+    params_root = runs_root or RUNS_DIR
+    if not spec and paths.PARAMS_ROOTS:  # V2: hyperparametre z predchádzajúcich behov, bez ladenia (docs/09)
+        spec = f"{cfg.get('results_approach', cfg['approach'])}/{cfg['name']}"
+        found = [r for r in paths.PARAMS_ROOTS if (r / spec).exists() and any((x / "metrics.json").exists() for x in (r / spec).iterdir())]
+        if not found:
+            raise FileNotFoundError(f"{spec}: hyperparametre nie sú v žiadnom z {[rel(r) for r in paths.PARAMS_ROOTS]} "
+                                    f"(pri nastavenom DIZERTACKA_PARAMS_ROOTS sa neladí)")
+        params_root = found[0]
+    if spec:
+        src_run = latest_run(spec, params_root)
         best = json.loads((src_run / "metrics.json").read_text(encoding="utf-8"))["best_params"]
         trials, timings["hpo_s"] = pd.DataFrame(columns=["number", "value", "state"]), 0.0
         timings["params_from_run"] = rel(src_run)
@@ -199,6 +212,7 @@ def main(config_path: str, runs_root: Path | None, tag: str | None, smoke: bool)
 
     # finálne modely
     Xtr, ytr, mtr = data["train"]; Xva, yva, mva = data["validation"]; Xte, yte, mte = data["test"]
+    hold = data.get("holdout")   # zero-day: januárové vzorky vynechanej rodiny (iba malvér)
     rng = np.random.default_rng(protocol["hpo"]["sampler_seed"])
     sub = np.sort(rng.choice(len(ytr), min(protocol["final"]["train_metrics_subsample"], len(ytr)), replace=False))
     per_seed, timing_seed0, model0 = [], None, None
@@ -220,11 +234,18 @@ def main(config_path: str, runs_root: Path | None, tag: str | None, smoke: bool)
         mdir = run / "model" / f"seed_{seed}"
         m.save(mdir)
         res["model_disk_bytes"] = dir_size(mdir) + ((run / "model" / "preprocessor.joblib").stat().st_size if pre else 0)
-        for split, meta in [("validation", mva), ("test", mte)]:
+        pred_splits = [("validation", mva), ("test", mte)]
+        if hold is not None:
+            scores["holdout"] = m.predict_proba(hold[0])
+            res["holdout"] = {"n": int(len(hold[1])), **{f"tpr_at_{k}": float((scores["holdout"] >= v).mean())
+                                                        for k, v in thr.items()}}
+            pred_splits.append(("holdout", hold[2]))
+        for split, meta in pred_splits:
             meta[["sha256", "family", "label"]].assign(score=scores[split]).to_parquet(
                 run / "predictions" / f"{split}_seed{seed}.parquet", index=False)
         log(f"Seed {seed}: fit {fit_s:.1f} s | AUC train {res['train']['roc_auc']:.5f} | "
-            f"val {res['validation']['roc_auc']:.5f} | test {res['test']['roc_auc']:.5f}")
+            f"val {res['validation']['roc_auc']:.5f} | test {res['test']['roc_auc']:.5f}"
+            + (f" | TPR vynechanej rodiny (jan.) {res['holdout']['tpr_at_val_fpr']:.4f}" if hold is not None else ""))
         if model0 is None:
             model0, scores0, info0, res0 = m, scores, info, res
         per_seed.append(res)

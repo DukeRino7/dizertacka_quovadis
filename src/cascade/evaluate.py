@@ -79,6 +79,13 @@ def evaluate_seed(comps: dict, seed: int, target_fpr: float) -> dict:
                            .reset_index().to_dict("records")),
         }
         out[split] = res
+    # zero-day: januárové vzorky vynechanej rodiny (iba malvér) -> TPR
+    if all(c.has_split("holdout", seed) for c in comps.values()):
+        H = _merge(comps, "holdout", seed)
+        dec = {r: (H[f"s_{r}"].to_numpy() >= thr[r]).astype(int) for r in comps}
+        final = np.where(dec["static"] == dec["dynamic"], dec["static"], dec["hybrid"])
+        out["holdout"] = {"n": len(H), "tpr": {"cascade": float(final.mean()), **{f"{r}_only": float(dec[r].mean()) for r in comps}},
+                          "escalation_rate": float((dec["static"] != dec["dynamic"]).mean())}
     return out
 
 

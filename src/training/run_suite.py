@@ -24,14 +24,14 @@ def is_done(config_path: str) -> bool:
     return d.exists() and any((r / "metrics.json").exists() for r in d.iterdir() if r.is_dir())
 
 
-def run_configs(configs: list[str], skip_done: bool) -> list[str]:
+def run_configs(configs: list[str], skip_done: bool, smoke: bool = False) -> list[str]:
     failed = []
     for c in configs:
         if skip_done and is_done(c):
             print(f"--- {c}: už dokončené, preskakujem", flush=True)
             continue
         try:
-            run_one(c, None, None, False)
+            run_one(c, None, None, smoke)
         except Exception:
             print(f"!!! {c} zlyhal:\n{traceback.format_exc()}", flush=True)
             failed.append(c)
@@ -44,8 +44,9 @@ if __name__ == "__main__":
     ap.add_argument("--models", nargs="*", default=LADDER)
     ap.add_argument("--skip-done", action="store_true")
     ap.add_argument("--no-compare", action="store_true")
+    ap.add_argument("--smoke", action="store_true", help="iba technická kontrola (malá podvzorka)")
     a = ap.parse_args()
-    failed = run_configs([f"configs/{a.approach}/{m}.yaml" for m in a.models], a.skip_done)
+    failed = run_configs([f"configs/{a.approach}/{m}.yaml" for m in a.models], a.skip_done, a.smoke)
     if not a.no_compare:
         compare(a.approach)
     if failed:

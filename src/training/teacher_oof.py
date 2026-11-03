@@ -46,8 +46,6 @@ def main(teacher: str, folds: int, seed: int, runs_root: Path = RUNS_DIR, limit:
     if mask.exists():
         cols = np.array(json.loads(mask.read_text())["kept_columns"])
         Xtr, Xva = Xtr[:, cols], Xva[:, cols]
-    if limit:  # iba technická kontrola
-        Xtr, ytr, mtr = Xtr[:limit], ytr[:limit], mtr.iloc[:limit].reset_index(drop=True)
     groups = mtr[["sha256"]].merge(pd.read_parquet(INDEX_DIR / "samples.parquet", columns=["sha256", "feature_group"]),
                                    on="sha256", how="left")["feature_group"].to_numpy()
 
@@ -57,6 +55,8 @@ def main(teacher: str, folds: int, seed: int, runs_root: Path = RUNS_DIR, limit:
     sgkf = StratifiedGroupKFold(n_splits=folds, shuffle=True, random_state=seed)
     for k, (tr_idx, ho_idx) in enumerate(sgkf.split(np.zeros(len(ytr)), mtr["family"], groups)):
         set_seed(seed)
+        if limit:  # iba technická kontrola: učiteľ sa učí na podvzorke, predpovedá sa však celá odložená časť
+            tr_idx = np.sort(np.random.default_rng(seed).choice(tr_idx, min(limit, len(tr_idx)), replace=False))
         Xa, Xh, Xv = Xtr[tr_idx], Xtr[ho_idx], Xva
         if model_cls.needs_scaling:  # rovnaké predspracovanie ako v run_tabular, fit iba na trénovacej časti foldu
             pre = StaticPreprocessor().fit(Xa)
@@ -100,6 +100,6 @@ if __name__ == "__main__":
     ap.add_argument("--folds", type=int, default=5)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--runs-root", default=None)
-    ap.add_argument("--limit", type=int, default=None, help="iba technická kontrola na prvých N vzorkách")
+    ap.add_argument("--limit", type=int, default=None, help="iba technická kontrola: učiteľ v každej časti trénovaný na najviac N vzorkách")
     a = ap.parse_args()
     main(a.teacher, a.folds, a.seed, Path(a.runs_root) if a.runs_root else RUNS_DIR, a.limit)

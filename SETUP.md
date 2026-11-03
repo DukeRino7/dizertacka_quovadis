@@ -56,3 +56,19 @@ Pri finálnom behu by mal byť Speakeasy dataset už stiahnutý alebo skopírova
 Zabaliť priečinok s výsledkami (`runs\` alebo `runs_final\`) a preniesť na PC, alebo `git push`.
 Uložené modely (`model\` v behoch) nie sú v gite, ale sú v týchto priečinkoch.
 **Merania spotreby porovnávať iba z jedného počítača** (`environment.json` v každom behu = názov počítača a hardvér).
+
+## 6. Verzia V2 (zero-day + kaskáda B, docs/09)
+Spúšťa sa **v priečinku projektu z V1** na pracovnom notebooku (tam sú `data\`, `processed\`, `.venv\`, `runs_final\`):
+1. GitHub → *Tags* → `v2` → *Source code (zip)* a obsah ZIP-u **rozbaliť cez existujúci priečinok V1**
+   (prepíše sa iba kód, dokumenty a konfigurácie; dáta, `processed\` a výsledky V1 ostanú).
+2. Kontrola (~1 h, odporúčané):
+   `powershell -ExecutionPolicy Bypass -File scripts\run_v2.ps1 -Smoke -Families rat` → výsledky v `runs_v2_smoke\`
+   (iba technická kontrola, nie výsledky; potom priečinok `runs_v2_smoke\` možno zmazať).
+3. Celý beh (2–3 večery, pokračuje po prerušení – stačí spustiť znova):
+   `powershell -ExecutionPolicy Bypass -File scripts\run_v2.ps1`
+4. Na súkromný notebook preniesť priečinok `runs_v2\` (USB). Súhrn: `runs_v2\comparison\v2\README.md`.
+
+Čo beh robí: (1) `runs_v2\full` – učiteľ dvojvetvová sieť, noví študenti (ladenie 30 pokusov) a ich meranie spotreby,
+kaskády B na modeloch V1; (2) `runs_v2\lofo\<rodina>` – pre každú zo 7 rodín slovníky API bez rodiny, celý rebríček
+modelov s hyperparametrami z V1, učitelia, študenti, kaskády A aj B; (3) súhrn a vyhodnotenie téz.
+Dočasné dáta zero-day behov: `processed\dynamic\lofo\` (~7,5 GB, dajú sa po behu zmazať).

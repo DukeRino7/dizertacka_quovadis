@@ -11,4 +11,11 @@ Varianty kaskády. Kľúče: `name` (= priečinok v `runs/cascade/`), `component
 | `heavy.yaml` | `mlp_kd` | `hybrid/two_branch` | kaskáda s najťažším hybridom (doplnková analýza) |
 | `baselines.yaml` | `auto:static`, `auto:dynamic` | `auto:hybrid` | referencia bez študentov |
 
+| `twobranch.yaml` | `mlp_kd_twobranch` (učiteľ dvojvetvová sieť, V2) | `auto:hybrid` | destilácia z komplexného učiteľa |
+
+**Kaskády B (V2, docs/09)** – `type: B`, spúšťa `src.cascade.evaluate_b`; spoločné: pásmo neistoty `uncertainty`
+(FPR ≤ 0,1 % / 1 % malvéru pod `lo`), rozpočty emulácie 10–40 %, predpoklad 60 s emulácie:
+`b_main` (hlavný, téza 4), `b_direct` (neisté rovno na hybrid), `b_heavy` (dvojvetvová sieť), `b_baselines`
+(LightGBM namiesto študentov), `b_nokd`, `b_twobranch`.
+
 Spustenie: `.venv\Scripts\python.exe -m src.cascade.evaluate --config configs/cascade/<variant>.yaml`.

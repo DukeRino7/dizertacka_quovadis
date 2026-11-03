@@ -42,7 +42,7 @@ def encode(seqs, vocab: dict, max_len: int) -> tuple[np.ndarray, np.ndarray]:
     return X, lengths
 
 
-def main(cache: Path, out: Path, cfg_path: str):
+def main(cache: Path, out: Path, cfg_path: str, exclude_family: str | None = None):
     t0 = time.perf_counter()
     scfg = load_config(cfg_path)["sequence"]
     out.mkdir(parents=True, exist_ok=True)
@@ -52,7 +52,8 @@ def main(cache: Path, out: Path, cfg_path: str):
         ref = index.loc[index["split"] == s, "sha256"].to_numpy()
         if len(d) != len(ref) or not (d["sha256"].to_numpy() == ref).all():
             raise ValueError(f"{s}: cache nezodpovedá indexu – spustiť build_dynamic na kompletných dátach")
-    vocab = build_vocab(data["train"]["api_seq"], scfg["min_freq"], scfg["max_vocab"])
+    tr = data["train"] if not exclude_family else data["train"][data["train"]["family"] != exclude_family]
+    vocab = build_vocab(tr["api_seq"], scfg["min_freq"], scfg["max_vocab"])   # zero-day: bez vynechanej rodiny
     (out / "vocab.json").write_text(json.dumps({"PAD": PAD, "UNK": UNK, "tokens": vocab}, ensure_ascii=False), encoding="utf-8")
     stats, outputs = [], []
     for s, d in data.items():
@@ -66,6 +67,7 @@ def main(cache: Path, out: Path, cfg_path: str):
                       "medián dĺžky": int(np.median(lengths)), "podiel UNK tokenov": round(float((nz == UNK).mean()) if nz.size else 0.0, 4)})
     st = pd.DataFrame(stats)
     write_json({"created": now_iso(), "script": "src/data/build_dynamic_sequence.py", "config": scfg,
+                "exclude_family": exclude_family,
                 "vocab_size": len(vocab) + 2, "stats": stats, "git": git_info(), "environment": environment(),
                 "outputs": describe_files(outputs + [out / "vocab.json"]), "duration_s": time.perf_counter() - t0},
                out / "manifest.json")
@@ -88,5 +90,9 @@ if __name__ == "__main__":
     ap.add_argument("--cache", default=str(PROCESSED_DIR / "dynamic" / "cache"))
     ap.add_argument("--out", default=str(PROCESSED_DIR / "dynamic" / "sequence"))
     ap.add_argument("--config", default="configs/data/dynamic.yaml")
+    ap.add_argument("--exclude-family", default=None, help="zero-day: slovník bez tejto rodiny -> processed/dynamic/lofo/<rodina>/sequence")
     a = ap.parse_args()
-    main(Path(a.cache), Path(a.out), a.config)
+    out = Path(a.out)
+    if a.exclude_family and a.out == str(PROCESSED_DIR / "dynamic" / "sequence"):
+        out = PROCESSED_DIR / "dynamic" / "lofo" / a.exclude_family / "sequence"
+    main(Path(a.cache), out, a.config, a.exclude_family)

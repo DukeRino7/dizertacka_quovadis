@@ -3,6 +3,7 @@
 Komponent sa zadáva ako '<prístup>/<model>' (posledný dokončený beh v runs/) alebo cesta k behu.
 """
 import json
+import os
 from pathlib import Path
 
 import pandas as pd
@@ -18,11 +19,14 @@ def resolve_run(spec: str, runs_root: Path = RUNS_DIR) -> Path:
         cand = PROJECT_ROOT / spec
         if (cand / "metrics.json").exists():
             return cand
-        base = runs_root / spec
-        runs = sorted(r for r in base.iterdir() if (r / "metrics.json").exists()) if base.exists() else []
-        if not runs:
-            raise FileNotFoundError(f"komponent {spec!r}: žiadny dokončený beh v {base}")
-        return runs[-1]
+        # DIZERTACKA_RESULTS_FALLBACK: ďalšie koreňe výsledkov (oddelené ';'), napr. runs_final pre kaskády B na modeloch V1
+        roots = [runs_root] + [PROJECT_ROOT / r for r in os.environ.get("DIZERTACKA_RESULTS_FALLBACK", "").split(";") if r]
+        for root in roots:
+            base = root / spec
+            runs = sorted(r for r in base.iterdir() if (r / "metrics.json").exists()) if base.exists() else []
+            if runs:
+                return runs[-1]
+        raise FileNotFoundError(f"komponent {spec!r}: žiadny dokončený beh v {[str(r) for r in roots]}")
     return p
 
 
@@ -38,6 +42,9 @@ class Component:
     def threshold(self, seed: int, kind: str = "val_fpr") -> float:
         r = next(r for r in self.metrics["per_seed"] if r["seed"] == seed)
         return float(r["thresholds"][kind])
+
+    def has_split(self, split: str, seed: int) -> bool:
+        return (self.run / "predictions" / f"{split}_seed{seed}.parquet").exists()
 
     def scores(self, split: str, seed: int) -> pd.DataFrame:
         return pd.read_parquet(self.run / "predictions" / f"{split}_seed{seed}.parquet")
