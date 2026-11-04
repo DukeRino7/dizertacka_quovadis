@@ -18,4 +18,9 @@ Varianty kaskády. Kľúče: `name` (= priečinok v `runs/cascade/`), `component
 `b_main` (hlavný, téza 4), `b_direct` (neisté rovno na hybrid), `b_heavy` (dvojvetvová sieť), `b_baselines`
 (LightGBM namiesto študentov), `b_nokd`, `b_twobranch`.
 
+**V3 (docs/12)** – spúšťa `src.cascade.specialist`: statický LightGBM → rozpočet emulácie (hlavný 10 %) → „špecialista“
+(LightGBM s hyperparametrami hybridného LightGBM, učený iba na `train_fraction` tréningu najbližšie prahu podľa OOF skóre):
+`v3_spec` (hlavný: statické + dynamické + log-odds statického skóre), `v3_spec_dyn` (iba dynamické + skóre),
+`v3_spec_f10`, `v3_spec_f40` (citlivosť na veľkosť tréningovej oblasti, nie výber).
+
 Spustenie: `.venv\Scripts\python.exe -m src.cascade.evaluate --config configs/cascade/<variant>.yaml`.

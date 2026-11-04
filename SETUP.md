@@ -73,7 +73,32 @@ Spúšťa sa **v priečinku projektu z V1** na pracovnom notebooku (tam sú `dat
 doň z priečinka V1 `data\`, `processed\` a `.venv\` (`runs_final\` bez modelov je už v ZIP-e a na V2 stačí).
 Ak by skopírované `.venv\` nefungovalo, spustiť v novom priečinku `scripts\setup.ps1`. Pozor na voľné miesto na disku.
 
-Čo beh robí: (1) `runs_v2\full` – učiteľ dvojvetvová sieť, noví študenti (ladenie 30 pokusov) a ich meranie spotreby,
+Čo beh V2 robí: (1) `runs_v2\full` – učiteľ dvojvetvová sieť, noví študenti (ladenie 30 pokusov) a ich meranie spotreby,
 kaskády B na modeloch V1; (2) `runs_v2\lofo\<rodina>` – pre každú zo 7 rodín slovníky API bez rodiny, celý rebríček
 modelov s hyperparametrami z V1, učitelia, študenti, kaskády A aj B; (3) súhrn a vyhodnotenie téz.
 Dočasné dáta zero-day behov: `processed\dynamic\lofo\` (~7,5 GB, dajú sa po behu zmazať).
+
+## 7. Verzia V3 (špecialista pre neisté súbory + prekalibrovanie prahu, docs/12)
+Spúšťa sa **v priečinku, kde bežala V2** (na pracovnom notebooku `dizertacka_quovadis-2`). Potrebné sú `data\`, `processed\`
+(aj `processed\dynamic\lofo\` z V2 – ak chýba, skript ho znova vytvorí), `.venv\`, `runs_final\` a `runs_v2\`.
+Modely netreba, stačia uložené predikcie a `teachers\`.
+1. GitHub → *Tags* → `v3` → *Source code (zip)* a ZIP rozbaliť do **dočasného** priečinka (napr. `Downloads\v3`).
+2. Do priečinka V2 skopírovať **iba kód a dokumenty** (dáta a výsledky V1/V2 ostanú nedotknuté). V PowerShelli:
+   ```
+   $Z = "$HOME\Downloads\v3\dizertacka_quovadis-3"
+   $P = "D:\dizertacka\dizertacka_quovadis-2"
+   robocopy $Z $P /E /XD "$Z\data" "$Z\processed" "$Z\runs" "$Z\runs_final" "$Z\runs_v2"
+   ```
+   `$Z` = rozbalený priečinok, v ktorom je `SETUP.md`; `$P` = priečinok, kde bežala V2 (obe cesty upraviť podľa
+   skutočnosti). Vylúčenie je cez celé cesty, aby sa neprepísali dáta ani výsledky, ale skopíroval sa kód vrátane `src\data`.
+   Potom `cd $P` a pokračovať ďalším krokom.
+3. Kontrola (~5 min): `powershell -ExecutionPolicy Bypass -File scripts\run_v3.ps1 -Smoke -Families rat`
+   → `runs_v3_smoke\` (iba technická kontrola; potom ho možno zmazať).
+4. Celý beh (odhad 30–60 min, pokračuje po prerušení): `powershell -ExecutionPolicy Bypass -File scripts\run_v3.ps1`
+5. Preniesť bez modelov: `robocopy runs_v3 E:\runs_v3 /E /XD model`. Súhrny: `runs_v3\comparison\v3\README.md` (B)
+   a `RECALIBRATION.md` (C).
+
+Čo beh V3 robí: (1) `runs_v3\full` – špecialisti (4 varianty × 3 seedy) na rozdelení V1 a meranie ich CPU času;
+(2) `runs_v3\lofo\<rodina>` – to isté pre 7 vynechaných rodín, komponenty z `runs_v2\lofo\<rodina>`;
+(3) súhrn kritérií B1–B3 a scenár C (prekalibrovanie prahu, iba z uložených predikcií).
+Merania CPU času porovnávať iba s V1/V2 z toho istého počítača.

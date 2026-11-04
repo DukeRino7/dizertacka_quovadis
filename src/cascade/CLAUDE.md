@@ -8,6 +8,7 @@
 |---|---|
 | `components.py` | načítanie uložených predikcií, prahov a benchmarkov komponentov (`'<prístup>/<model>'` alebo cesta k behu) |
 | `evaluate_b.py` | **kaskáda B** (V2, docs/09): statický model → pri neistom skóre emulácia + dynamický → pri nezhode hybrid (`second_stage: dynamic`) alebo rovno hybrid (`hybrid`); pásmo neistoty z validácie, krivka rozpočtov emulácie, podiel emulovaných súborov, TPR na januárových vzorkách vynechanej rodiny → `runs*/cascade/b_*/` |
+| `specialist.py` | **V3 – B** (docs/12): kaskáda so špecialistom – statický LightGBM, eskalácia podľa rozpočtu, druhý stupeň učený iba na neistých tréningových súboroch (OOF skóre); prah špecialistu z validácie (FPR kaskády ≤ 1 %); referencie (statický, dynamický, hybrid, B-baselines) na rovnakých dátach; `--benchmark` meria CPU čas → `runs_v3/*/cascade/v3_*/` |
 | `evaluate.py` | vyhodnotenie z uložených predikcií: kvalita kaskády vs. hybrid na každej vzorke, samostatní študenti, neskorá fúzia (priemer, stacking); podiel eskalácií, chyby pri zhode, prínos hybridu na eskalovaných vzorkách; odhad nárokov z benchmarkov → `runs/cascade/<variant>/<beh>/` |
 
 Rozhodnuté: prahy študentov aj hybridu = prah pre FPR ≤ 1 % na validácii (`configs/protocol.yaml`).
