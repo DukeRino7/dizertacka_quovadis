@@ -13,7 +13,7 @@ Plán a kritériá boli určené vopred v `docs/09_plan_v2.md` a podľa výsledk
 - **Emulované súbory** = podiel súborov, ktoré treba spustiť v emulátore. Emulácia sa nemeria, 60 s na súbor je **predpoklad**.
 
 Súhrny: `runs_v2/comparison/v2/README.md` (tabuľky, tézy), `BUDGET.md` (krivka rozpočtu emulácie),
-`temporal_test.csv`, `zero_day_per_family.csv`. Body označené **Interpretácia** sú môj návrh výkladu, nie odsúhlasený záver.
+`ANALYSIS.md` (analýza príčin, oddiel 6), `temporal_test.csv`, `zero_day_per_family.csv`. Body označené **Interpretácia** sú môj návrh výkladu, nie odsúhlasený záver.
 
 Prečo beh trval kratšie ako V1 (2–3 dni): vo V2 sa hyperparametre preberajú z V1 (ladili sa iba dvaja noví študenti)
 a dynamická cache sa nevytvára nanovo. Na jednu rodinu pripadli ~2 h.
@@ -108,9 +108,11 @@ na validácii; na teste je podiel emulovaných súborov vyšší, lebo dáta sú
 Kritérium: TPR vynechanej rodiny a stabilita (sm. odchýlka cez rodiny) oproti samostatným modelom.
 - Kaskády A-main a B-main sú lepšie ako dynamický LightGBM (7 zo 7, resp. 6 zo 7 rodín), ale horšie ako statický
   aj hybridný LightGBM v každej rodine. Oproti dvojvetvovej sieti sú lepšie v 3 zo 7 rodín.
-- **Interpretácia:** kaskáda sa v zero-day nemá od čoho „odraziť“. Dynamické príznaky (API volania zo Speakeasy)
-  sa na novú rodinu zovšeobecňujú horšie ako statické (január 0,47 oproti 0,88), takže dynamický stupeň pri nezhode
-  pridá menej, ako pokazí. Najväčšie straty kaskády sú pri keyloggeri (statický 0,24, B-main 0,10).
+- **Prečo sa nepotvrdila (analýza príčin, oddiel 6):** dynamické príznaky (API volania zo Speakeasy) nenesú
+  doplnkovú informáciu o nových rodinách. Aj pravidlo „malvér, ak ho označí statický *alebo* dynamický model“, ktoré je
+  hornou hranicou pre každú kombináciu týchto dvoch rozhodnutí, by zvýšilo TPR vynechanej rodiny iba z 0,792 na 0,798
+  (pri 4× vyššom FPR). Kaskáda teda nemôže prekonať statický model pri žiadnom pravidle kombinácie. Pri nezhode
+  dynamický stupeň pridá menej, ako pokazí; najväčšie straty kaskády sú pri keyloggeri (statický 0,24, B-main 0,10).
 - Keylogger je ťažký pre všetky modely aj bez časového posunu (január: statický 0,43). Coinminer klesá z 0,87
   (január) na 0,60 (apríl), teda pri ňom pôsobí hlavne časový posun.
 
@@ -153,7 +155,85 @@ Pásmo neistoty je určené na validácii: nad hornou hranicou je FPR ≤ 0,1 %,
   Je to ten istý jav ako vo V1 (eskalácie 5,6 % na validácii, 25 % na teste). Pevný rozpočet emulácie je voči posunu
   odolnejší ako pásmo z prahov. Nastaviť pásmo podľa testu by porušilo pravidlá, preto sa to nerobí.
 
-## 6. Zhrnutie
+## 6. Analýza príčin (zero-day)
+Zdroj: `runs_v2/comparison/v2/ANALYSIS.md` (`src/evaluation/v2_analysis.py`, iba z uložených predikcií,
+modely LightGBM, prahy z validácie, priemer cez seedy 0–2). Cieľ: zistiť, či zlyhanie tézy 1 spôsobil návrh kaskády,
+alebo vlastnosti dát, a kde je priestor na zlepšenie. Veličiny označené **orákulum** používajú test (prah na teste,
+dokonalé rozhodnutie). Sú to iba horné hranice na vysvetlenie, nikdy nie výsledok metódy.
+
+### 6.1 Strop kombinácie statického a dynamického rozhodnutia
+| | TPR vynech. rodiny (test) | TPR vynech. rodiny (január) | FPR (test) |
+|---|---|---|---|
+| statický LightGBM | 0,792 | 0,879 | 0,0047 |
+| dynamický LightGBM | 0,509 | 0,471 | 0,0184 |
+| statický **alebo** dynamický (horná hranica kombinácie) | 0,798 | 0,883 | 0,022 |
+
+- Dynamický model zachytí iba **9 %** vzoriek vynechanej rodiny, ktoré statický minie. Výnimkou je backdoor (39 %),
+  ale tam statický minie iba 31 vzoriek.
+- **Záver:** žiadne pravidlo kombinujúce tieto dve rozhodnutia nezvýši TPR o viac ako 0,6 p. b. Téza 1 v zmysle
+  „vyššia detekcia“ teda pri týchto dynamických príznakoch nemôže vyjsť. Nejde o chybu návrhu kaskády.
+
+### 6.2 Statický model nevidené rodiny rozpozná – stratu spôsobuje hlavne posun prahu
+| rodina | ROC-AUC statický | ROC-AUC dynamický | TPR (prah z validácie) | FPR na teste | orákulum: TPR pri FPR testu 1 % |
+|---|---|---|---|---|---|
+| backdoor | 1,000 | 0,918 | 0,984 | 0,005 | 0,988 |
+| coinminer | 0,990 | 0,835 | 0,601 | 0,005 | 0,782 |
+| dropper | 0,998 | 0,964 | 0,943 | 0,005 | 0,959 |
+| keylogger | **0,840** | **0,877** | 0,241 | 0,005 | 0,260 |
+| ransomware | 0,999 | 0,902 | 0,982 | 0,005 | 0,993 |
+| rat | 0,998 | 0,983 | 0,923 | 0,005 | 0,969 |
+| trojan | 0,994 | 0,946 | 0,872 | 0,003 | 0,917 |
+| **priemer** | 0,974 | 0,918 | 0,792 | 0,005 | **0,838** |
+
+- ROC-AUC (vynechaná rodina oproti neškodným testu, nezávislé od prahu) je pri 6 zo 7 rodín ≥ 0,99. Statický model
+  teda nové rodiny **zoraďuje** správne nad neškodné súbory.
+- Prah určený na validácii (FPR 1 %) dáva na aprílovom teste FPR iba ~0,5 %. Pri posune dát sa pracovný bod sprísnil.
+  Keby prah na teste dosahoval plánované FPR 1 %, TPR vynechanej rodiny by bolo 0,838 namiesto 0,792
+  (coinminer 0,78 namiesto 0,60).
+- Skutočne „novou“ rodinou je iba keylogger (AUC 0,84). Je to jediná rodina, kde je dynamický model lepší ako statický.
+
+### 6.3 Kaskáda B eskaluje správne súbory, slabým miestom je rozhodnutie druhého stupňa
+Rozpočet 10 % (hranica z validácie) eskaluje na teste 22,8 % súborov.
+
+| | priemer cez rodiny |
+|---|---|
+| podiel chýb statického modelu (vynechaná rodina), ktoré sa eskalujú | **0,946** (6 rodín 0,97–1,00, keylogger 0,67) |
+| ROC-AUC v eskalovanej oblasti – statický / dynamický / hybrid | 0,914 / 0,784 / 0,902 |
+| TPR vynechanej rodiny – statický model | 0,792 |
+| orákulum: TPR, keby druhý stupeň rozhodol eskalované súbory dokonale | **0,963** |
+
+- Eskalácia sa trafí takmer do všetkých chýb. Medzi 0,792 a 0,963 je priestor, ktorý súčasný druhý stupeň nevyužíva.
+- V eskalovanej oblasti rozlišuje najlepšie samotné statické skóre. Hybrid LightGBM (učený na všetkých dátach)
+  sa správa takmer ako statický model a jeho chyby opakuje; dynamický model je slabší. Výnimka: keylogger
+  (dynamický 0,73, statický 0,54).
+
+### 6.4 Chyby sa sústreďujú v podskupine `unsupported_api` – aj pri statickom modeli
+TPR vynechanej rodiny podľa výsledku emulácie (test, seed 0):
+
+| rodina | statický: emulácia ok | statický: `unsupported_api` | dynamický: emulácia ok | dynamický: `unsupported_api` |
+|---|---|---|---|---|
+| coinminer | 0,938 | 0,371 | 0,796 | 0,299 |
+| keylogger | 0,658 | 0,106 | 0,284 | 0,081 |
+| trojan | 0,979 | 0,792 | 0,798 | 0,784 |
+| ransomware | 0,975 | 0,986 | 0,541 | 0,052 |
+
+- Statický model emuláciu nepoužíva, a predsa pri coinminer a keylogger zlyháva práve na vzorkách, ktorých emulácia
+  skončila `unsupported_api`. Táto podskupina (v teste 52 %, v tréningu 0 %) teda nie je iba chyba emulátora
+  (docs/04), ale zrejme aj **nová podskupina vzoriek** v apríli (iné verzie alebo zbaľovače).
+  **Interpretácia, neoverené:** overenie by vyžadovalo analýzu samotných súborov.
+- Dynamický model na vzorkách s `unsupported_api` takmer nefunguje (okrem rat a trojan), takže pri nich ani nemôže
+  pomôcť statickému.
+
+### 6.5 Čo z analýzy vyplýva
+1. Téza 1 sa nepotvrdila pre **vlastnosti dynamických dát** (strop kombinácie +0,6 p. b.), nie pre návrh kaskády.
+2. Najväčšia strata v zero-day vzniká **posunom prahu** pri časovom posune (≈ 4,6 p. b. podľa orákula), nie chýbajúcou
+   informáciou v statických príznakoch. Výnimkou je keylogger.
+3. Eskalácia kaskády B je cielená správne. **Najväčší nevyužitý priestor je v rozhodnutí druhého stupňa**
+   (0,79 oproti hornej hranici 0,96).
+4. Na základe toho je navrhnutá V3 (`docs/12_plan_v3.md`): (B) druhý stupeň učený iba na neistých súboroch,
+   (C) prekalibrovanie prahu na nových neškodných súboroch.
+
+## 7. Zhrnutie
 1. V zero-day je najlepší **statický LightGBM** (TPR vynechanej rodiny 0,79). Hybridný model je rovnaký (0,79)
    a dynamický výrazne horší (0,51). Behaviorálne príznaky z emulácie Speakeasy na nové rodiny nepomáhajú.
 2. Kaskády zhruba **polovičia falošné poplachy** (FPR 0,0021–0,0036 oproti 0,0047). Bez straty TPR to však dokážu
@@ -163,20 +243,22 @@ Pásmo neistoty je určené na validácii: nad hornou hranicou je FPR ≤ 0,1 %,
 4. Destilovaný statický študent dosahuje kvalitu komplexného hybridu (dvojvetvová sieť) pri 107× nižšom CPU čase;
    lacný hybrid LightGBM je však ešte lacnejší aj lepší.
 5. Slabým miestom kaskád so študentmi je prvý stupeň, teda statický študent (o 1,4–2,6 p. b. horší ako LightGBM).
+6. Analýza príčin (oddiel 6): dynamická časť môže pridať najviac 0,6 p. b.; stratu v zero-day spôsobuje hlavne posun
+   prahu; eskalácia trafí 95 % chýb, ale druhý stupeň ich nevyrieši.
 
-## 7. Obmedzenia V2
+## 8. Obmedzenia V2
 - Hyperparametre sú z V1, kde ladenie videlo validáciu so všetkými rodinami (docs/09).
 - Rodina = označenie datasetu; rodiny môžu zdieľať kód (napr. dropper a trojan), takže „nevidená rodina“ nie je
   nutne nevidený kód.
 - Emulácia je iba predpoklad 60 s na súbor; skutočný čas emulácie ani celej kaskády sa nemeral.
-- Krivka rozpočtu je doplnková analýza. Bod 10 % nebol vybraný podľa testu, ale je jediný, kde to funguje,
-  a preto sa uvádza celá krivka.
+- Krivka rozpočtu je doplnková analýza. Rozpočty 10–40 % dávajú pri B-baselines rovnaké TPR aj FPR, výsledok teda
+  nezávisí od voľby jedného bodu; uvádza sa celá krivka.
 
-## 8. Návrhy na ďalší postup (NÁVRH, nerozhodnuté)
-- Prerokovať s vedúcou spresnenie téz podľa výsledkov:
+## 9. Ďalší postup
+- **Rozhodnuté 2026-11-04 (autor):** V3 podľa `docs/12_plan_v3.md` – druhý stupeň učený na neistých súboroch (B)
+  a prekalibrovanie prahu na nových neškodných súboroch (C). Zdôvodnenie je v oddiele 6.
+- Prerokovať s vedúcou spresnenie téz podľa výsledkov (NÁVRH):
+  - téza 1: nepotvrdená, vysvetliť stropom kombinácie (oddiel 6.1);
   - téza 2: „kaskáda“ ako princíp (LightGBM);
-  - téza 4: rozpočet emulácie;
-  - téza 1: nepotvrdená, vysvetliť slabou zovšeobecniteľnosťou dynamických príznakov.
-- Analýza komplementarity pre zero-day (ktoré chyby statického modelu kaskáda opraví a ktoré pokazí podľa rodín) –
-  z uložených predikcií, bez nového tréningu.
+  - téza 4: rozpočet emulácie.
 - Ak by bol čas: skutočné meranie celej kaskády (docs/09, bod 7) a overenie na reálnych súboroch (docs/00).

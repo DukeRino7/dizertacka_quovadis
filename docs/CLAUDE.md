@@ -16,6 +16,7 @@ Texty, z ktorých sa budú preberať informácie do práce. Číslované podľa 
 | `09_plan_v2.md` | **plán V2** (zero-day = vynechanie rodiny, kaskáda B, spresnenie téz, kritériá vopred) | dohodnuté 2026-11-03 |
 | `10_vysledky_v2.md` | **výsledky V2** (`runs_v2/`): časový test, zero-day po rodinách, krivka rozpočtu emulácie, tézy podľa kritérií docs/09 | hotové 2026-11-04 |
 | `11_zhrnutie_v2.md` | stručné zhrnutie V2 pre vedúcu: súhrnná tabuľka, zistenia, tézy, otázky na konzultáciu | hotové 2026-11-04 |
+| `12_plan_v3.md` | **plán V3** (zdôvodnenie z analýzy príčin V2; B: druhý stupeň učený na neistých súboroch, C: prekalibrovanie prahu na nových neškodných súboroch; kritériá vopred) | rozhodnuté 2026-11-04 (autor), pred výsledkami |
 
 Pravidlá:
 - Uvádzať iba overené fakty s popisom, ako boli overené. Návrhy a otvorené rozhodnutia jasne označiť.

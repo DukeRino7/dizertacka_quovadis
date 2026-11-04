@@ -51,20 +51,43 @@ Prahy z validácie (FPR ≤ 1 %), priemer 3 seedov. Zero-day = priemer cez 7 vyn
    validácii; pri LightGBM je pásmo neistoty také úzke, že kaskáda B s pásmom stratí 6 p. b. TPR. Pevný rozpočet
    emulácie je odolnejší.
 
-## 4. Súvis s tézami (kritériá z docs/09)
+## 4. Prečo to tak dopadlo – analýza príčin
+Z uložených predikcií, bez nového tréningu (podrobne `docs/10`, oddiel 6). Hodnoty označené ako horná hranica
+používajú test a slúžia iba na vysvetlenie.
+1. **Dynamická časť nemá čo pridať.** Aj keby sa súbor označil ako malvér vždy, keď ho označí statický *alebo*
+   dynamický model, TPR nevidenej rodiny stúpne iba z 0,792 na 0,798. Dynamický model zachytí len 9 % vzoriek,
+   ktoré statický minie. Žiadna kombinácia týchto dvoch modelov preto nemôže výrazne prekonať statický model.
+2. **Statický model nové rodiny rozpozná, ale prah sa pri posune dát sprísni.** ROC-AUC je pri 6 zo 7 rodín ≥ 0,99.
+   Prah z validácie (FPR 1 %) dáva na aprílovom teste FPR iba 0,5 %; pri plánovanom 1 % by TPR bolo 0,84 namiesto
+   0,79. Skutočne novou rodinou je iba keylogger (AUC 0,84).
+3. **Kaskáda B posiela na emuláciu správne súbory.** Pri rozpočte 10 % sa eskaluje 95 % chýb statického modelu.
+   Keby druhý stupeň rozhodol eskalované súbory dokonale, TPR by bolo 0,96. Súčasný hybrid však v tejto oblasti
+   opakuje chyby statického modelu.
+4. **Chyby sa sústreďujú vo vzorkách, ktorých emulácia skončila `unsupported_api`, aj pri statickom modeli.**
+   Zrejme ide o novú podskupinu vzoriek v apríli, nielen o chybu emulátora.
+
+## 5. Súvis s tézami (kritériá z docs/09)
 | téza | výsledok | vysvetlenie |
 |---|---|---|
-| 1. Kaskáda dosahuje vyššiu presnosť a stabilitu v zero-day | **nepotvrdená** | Kaskády sú lepšie ako dynamický model, ale horšie ako statický vo všetkých 7 rodinách. Príčina: dynamické príznaky sa na nové rodiny zovšeobecňujú slabo. Prínosom kaskády je nižšie FPR, nie vyššia detekcia. |
+| 1. Kaskáda dosahuje vyššiu presnosť a stabilitu v zero-day | **nepotvrdená** | Kaskády sú lepšie ako dynamický model, ale horšie ako statický vo všetkých 7 rodinách. Príčina nie je v návrhu kaskády: aj najlepšia možná kombinácia statického a dynamického rozhodnutia by pridala najviac 0,6 p. b. (oddiel 4). Prínosom kaskády je nižšie FPR, nie vyššia detekcia. |
 | 2. Kaskáda má menej falošných poplachov pri zachovaní citlivosti | **potvrdená pre kaskádu z LightGBM** | FPR 0,0039 oproti 0,0048 (časový), 0,0036 oproti 0,0047 (zero-day), TPR v tolerancii 1 p. b. Platí pre kaskádu A aj kaskádu B s rozpočtom 10 %. S destilovanými študentmi nie (TPR −2 až −3 p. b.). |
 | 3. Destilácia vytvorí rýchlejší model s porovnateľnou presnosťou ako komplexný hybrid | **čiastočne potvrdená** | Platí pre statického študenta s učiteľom dvojvetvová sieť (rovnaké TPR, 107× rýchlejší). Neplatí pre dynamických študentov ani oproti lacnému hybridu LightGBM. |
 | 4. Viacstupňová architektúra zníži náročnosť | **potvrdená v hlavnej miere** | Kaskáda B emuluje 11–12 % súborov (so študentmi) alebo ~22 % (z LightGBM, bez straty kvality) namiesto 100 %. Čas emulácie je predpoklad, nie meranie. |
 
-## 5. Otázky na konzultáciu (návrhy, nerozhodnuté)
-1. **Téza 1** – ponechať ako nepotvrdenú s vysvetlením (dynamické príznaky z emulácie sa na nové rodiny
-   nezovšeobecňujú), alebo ju preformulovať na „kaskáda znižuje falošné poplachy aj pri nových rodinách“,
-   čo výsledky podporujú?
+## 6. Ďalší postup – V3 (rozhodnuté 2026-11-04, plán `docs/12_plan_v3.md`)
+Na základe analýzy príčin (oddiel 4) sa V3 zameria na dve miesta, kde je merateľný priestor na zlepšenie:
+- **Druhý stupeň učený iba na neistých súboroch.** Eskalácia trafí 95 % chýb, ale súčasný hybrid ich nevyrieši
+  (0,79 oproti hornej hranici 0,96). Model učený len na tréningových súboroch blízko prahu statického modelu sa môže
+  naučiť rozlišovať práve v tejto oblasti.
+- **Prekalibrovanie prahu na nových neškodných súboroch** (samostatný scenár). Strata v zero-day vzniká hlavne
+  sprísnením prahu pri posune dát. Nový legitímny softvér sa v praxi zbiera ľahko, malvér sa na kalibráciu nepoužije.
+- Lepšie dynamické príznaky sa nerobia: obmedzuje ich chyba emulátora v dátach a pomohli by najmä jednej rodine.
+
+## 7. Otázky na konzultáciu (návrhy, nerozhodnuté)
+1. **Téza 1** – ponechať ako nepotvrdenú s vysvetlením (strop kombinácie +0,6 p. b.), alebo ju preformulovať na
+   „kaskáda znižuje falošné poplachy aj pri nových rodinách“, čo výsledky podporujú? Výsledok V3 môže odpoveď zmeniť.
 2. **Téza 2 a 4** – je prijateľné, že ich potvrdzuje kaskáda zložená z LightGBM modelov (bez destilácie),
    a nie hlavný variant so študentmi?
 3. **Téza 3** – stačí potvrdenie pre statického študenta voči komplexnému hybridu (dvojvetvová sieť)?
-4. Ďalší krok: analýza, ktoré chyby kaskáda v zero-day opraví a ktoré pokazí (podľa rodín), z uložených výsledkov
-   bez nového tréningu; prípadne overenie na reálnych súboroch.
+4. **Scenár s prekalibrovaním prahu** (V3, C) – je prijateľný ako doplnkový scenár, ak sa vykáže oddelene
+   od hlavných výsledkov?

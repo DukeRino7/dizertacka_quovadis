@@ -35,6 +35,7 @@ Neodhadovať neznáme vlastnosti dát ani nevymýšľať výsledky. Neurčené v
 - Pred každým výberom alebo vyhodnotením tieto dokumenty skontrolovať; pravidlá nemeniť podľa výsledkov.
 - **Finálne výsledky V1:** `runs_final/` (pracovný notebook, 2026-11-02), súhrn `docs/07_vysledky_v1.md`. Finálne čísla brať iba odtiaľ.
 - **Výsledky V2** (zero-day + kaskáda B): `runs_v2/` (pracovný notebook, 2026-11-04), súhrn `docs/10_vysledky_v2.md`, pre vedúcu `docs/11_zhrnutie_v2.md`.
+- **Plán V3** (rozhodnuté 2026-11-04, pred výsledkami): `docs/12_plan_v3.md` – zdôvodnenie z analýzy príčin V2 (docs/10, oddiel 6).
 
 ## Štruktúra projektu
 Každý priečinok má vlastný `CLAUDE.md` s popisom účelu, pravidiel a aktuálneho stavu. Pri zmene ho aktualizovať.
