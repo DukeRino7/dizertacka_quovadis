@@ -1,0 +1,57 @@
+# Kaskáda B `b_direct` – beh `20261104-012502`
+
+> Generované `src/cascade/evaluate_b.py` (2026-11-04T01:25:02+01:00). Seedy: [0, 1, 2]; hodnoty = priemer ± sm. odchýlka.
+> Všetky prahy a pásmo neistoty sú z validácie; test sa na nič nenastavuje. Postup: `docs/09_plan_v2.md`.
+
+| rola | beh |
+|---|---|
+| static | `runs_v2/lofo/coinminer/students_static/mlp_kd/20261104-012050` |
+| hybrid | `runs_v2/lofo/coinminer/hybrid/lightgbm/20261104-001521` |
+
+Druhý stupeň: **hybrid**. Pásmo neistoty statického modelu: FPR ≤ 0.1% nad `hi`,
+najviac 1% malvéru validácie pod `lo` (seed 0: lo = 0.6290, hi = 0.9979, seed 1: lo = 0.6102, hi = 0.9924, seed 2: lo = 0.6720, hi = 0.9951).
+
+## Test
+| prístup | accuracy | balanced_accuracy | precision | recall_tpr | fpr | f1 | mcc |
+|---|---|---|---|---|---|---|---|
+| kaskáda B | 0.9438 ± 0.0012 | 0.9478 ± 0.0011 | 0.9963 ± 0.0008 | 0.8996 ± 0.0015 | 0.0039 ± 0.0009 | 0.9455 ± 0.0012 | 0.8927 ± 0.0023 |
+| statický | 0.9433 ± 0.0022 | 0.9472 ± 0.0021 | 0.9936 ± 0.0003 | 0.9012 ± 0.0039 | 0.0068 ± 0.0003 | 0.9452 ± 0.0023 | 0.8913 ± 0.0041 |
+| hybrid (každá vzorka) | 0.9528 ± 0.0018 | 0.9560 ± 0.0016 | 0.9950 ± 0.0011 | 0.9175 ± 0.0043 | 0.0055 ± 0.0013 | 0.9547 ± 0.0018 | 0.9088 ± 0.0031 |
+
+- **emulované súbory: 8.64%** (ostatné rozhodne iba statický model); na hybrid ide 8.64% súborov
+- chyby pri istom rozhodnutí statického modelu (seed 0): 903
+- validácia: emulované 1.98%, na hybrid 1.98%
+
+## Validácia
+| prístup | accuracy | balanced_accuracy | precision | recall_tpr | fpr | f1 | mcc |
+|---|---|---|---|---|---|---|---|
+| kaskáda B | 0.9925 ± 0.0012 | 0.9932 ± 0.0011 | 0.9976 ± 0.0004 | 0.9907 ± 0.0017 | 0.0042 ± 0.0006 | 0.9941 ± 0.0010 | 0.9839 ± 0.0027 |
+| statický | 0.9905 ± 0.0015 | 0.9905 ± 0.0011 | 0.9946 ± 0.0003 | 0.9905 ± 0.0024 | 0.0096 ± 0.0005 | 0.9926 ± 0.0012 | 0.9795 ± 0.0031 |
+| hybrid (každá vzorka) | 0.9949 ± 0.0004 | 0.9940 ± 0.0004 | 0.9947 ± 0.0004 | 0.9974 ± 0.0004 | 0.0094 ± 0.0007 | 0.9960 ± 0.0003 | 0.9890 ± 0.0008 |
+
+## Januárové vzorky vynechanej rodiny (iba malvér → TPR)
+| prístup | TPR |
+|---|---|
+| kaskáda B | 0.8032 ± 0.0019 |
+| statický | 0.7763 ± 0.0490 |
+| hybrid (každá vzorka) | 0.8711 ± 0.0072 |
+
+Podiel emulovaných: 31.13%
+
+## Krivka rozpočtu emulácie (test, priemer cez seedy)
+| budget_val | emulation_rate | hybrid_rate | recall_tpr | fpr | f1 |
+|---|---|---|---|---|---|
+| 0.1000 | 0.2757 | 0.2757 | 0.9175 | 0.0062 | 0.9544 |
+| 0.2000 | 0.3877 | 0.3877 | 0.9175 | 0.0062 | 0.9544 |
+| 0.3000 | 0.4966 | 0.4966 | 0.9175 | 0.0060 | 0.9545 |
+| 0.4000 | 0.5760 | 0.5760 | 0.9175 | 0.0060 | 0.9545 |
+
+## Výpočtové nároky
+Emulácia (Speakeasy) sa nedá zmerať (dataset neobsahuje PE súbory). **Predpoklad** 60 s na súbor
+(limit z `speakeasy-config.json`): kaskáda B ≈ 5.2 s na súbor v priemere, dynamický/hybridný model
+a kaskáda A 60 s (emulujú každý súbor).
+
+_Chýba benchmark niektorého komponentu (v zero-day behoch sa nemeria)._
+
+![krivka](plots/budget_curve_test.png)
+![rodiny](plots/emulation_by_family.png)

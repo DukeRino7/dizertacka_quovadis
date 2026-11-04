@@ -14,6 +14,8 @@ Texty, z ktorých sa budú preberať informácie do práce. Číslované podľa 
 | `07_vysledky_v1.md` | **finálne výsledky V1** (`runs_final/`): odpovede na otázky a tézy, kaskáda, komplementarita, nároky, návrhy pre V2 | hotové 2026-11-03 |
 | `08_zhrnutie_v1.md` | stručné zhrnutie V1 pre vedúcu: dáta, modely, súhrnná tabuľka, najlepší podľa parametrov, tézy, otázky na konzultáciu | hotové 2026-11-03 |
 | `09_plan_v2.md` | **plán V2** (zero-day = vynechanie rodiny, kaskáda B, spresnenie téz, kritériá vopred) | dohodnuté 2026-11-03 |
+| `10_vysledky_v2.md` | **výsledky V2** (`runs_v2/`): časový test, zero-day po rodinách, krivka rozpočtu emulácie, tézy podľa kritérií docs/09 | hotové 2026-11-04 |
+| `11_zhrnutie_v2.md` | stručné zhrnutie V2 pre vedúcu: súhrnná tabuľka, zistenia, tézy, otázky na konzultáciu | hotové 2026-11-04 |
 
 Pravidlá:
 - Uvádzať iba overené fakty s popisom, ako boli overené. Návrhy a otvorené rozhodnutia jasne označiť.

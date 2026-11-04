@@ -1,0 +1,25 @@
+# Študent (V2, docs/09 bod 5): malé MLP učené destiláciou z dvojvetvovej siete (komplexný hybridný učiteľ).
+# Veľkosť siete (NÁVRH): 1 skrytá vrstva s 16–64 neurónmi; overiť benchmarkom, že CPU čas na vzorku
+# je aspoň 10× nižší než u učiteľa (docs/00, docs/05). Rovnaký priestor ako kontrolný model, aby sa porovnanie týkalo iba destilácie.
+name: mlp_kd_twobranch
+approach: static
+results_approach: students_static
+model: mlp
+description: "študent – malé MLP učené destiláciou z dvojvetvovej siete (V2)"
+protocol: configs/protocol.yaml
+distillation:
+  teacher: hybrid/two_branch      # V2 (docs/09 bod 5): komplexný hybridný učiteľ – dvojvetvová sieť
+search_space:
+  hidden_width: {type: categorical, choices: [16, 32, 64]}
+  dropout: {type: float, low: 0.0, high: 0.3}
+  lr: {type: float, low: 3.0e-4, high: 3.0e-3, log: true}
+  weight_decay: {type: float, low: 1.0e-6, high: 1.0e-3, log: true}
+  batch_size: {type: categorical, choices: [256, 512, 1024]}
+  kd_alpha: {type: float, low: 0.1, high: 0.9}          # váha skutočných označení (zvyšok = učiteľ)
+  kd_temperature: {type: float, low: 1.0, high: 8.0}
+fixed_params:
+  hidden_layers: 1
+  max_epochs: 100
+  patience: 8
+smoke_overrides:
+  max_epochs: 2

@@ -14,6 +14,7 @@
 | `subset_analysis.py` | výsledky podľa výsledku emulácie (malé reporty, `unsupported_api`, ostatné) → `runs/comparison/subsets/` |
 | `complementarity.py` | komplementarita vybraných modelov: ktoré chyby statického modelu opraví hybrid/dynamický (test, prah z validácie) → `runs*/comparison/complementarity/` |
 | `v2_report.py` | súhrn V2: časový test + zero-day (priemer cez rodiny), vyhodnotenie téz podľa kritérií z docs/09 → `runs_v2/comparison/v2/` |
+| `v2_budget.py` | doplnok k súhrnu V2: krivka rozpočtu emulácie kaskád B (časový test + priemer cez rodiny), kritérium tézy 2 pre body krivky → `runs_v2/comparison/v2/BUDGET.md` |
 | `compare.py` | porovnanie modelov prístupu → `runs/comparison/<prístup>/` (tabuľka, kvalita vs. latencia) |
 
 Vyhodnotenie kaskády je v `src/cascade/evaluate.py`.

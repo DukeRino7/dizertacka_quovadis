@@ -1,0 +1,21 @@
+# Vrstva B: sekvenčný model nad postupnosťou API volaní (vstup processed/dynamic/sequence).
+name: seq_cnn
+approach: dynamic_seq           # dáta: ID tokenov API
+results_approach: dynamic       # výsledky: runs/dynamic/seq_cnn (porovnáva sa s ostatnými dynamickými modelmi)
+model: seq_cnn
+description: embedding API + paralelné 1D konvolúcie + maximum cez postupnosť
+protocol: configs/protocol.yaml
+search_space:
+  emb_dim: {type: categorical, choices: [32, 64, 128]}
+  channels: {type: categorical, choices: [64, 128, 256]}
+  kernels: {type: categorical, choices: ["2-3-4", "3-5-7", "2-4-8"]}
+  hidden: {type: categorical, choices: [64, 128, 256]}
+  dropout: {type: float, low: 0.1, high: 0.5}
+  lr: {type: float, low: 1.0e-4, high: 3.0e-3, log: true}
+  weight_decay: {type: float, low: 1.0e-6, high: 1.0e-2, log: true}
+  batch_size: {type: categorical, choices: [64, 128, 256]}
+fixed_params:
+  max_epochs: 30
+  patience: 4
+smoke_overrides:
+  max_epochs: 1

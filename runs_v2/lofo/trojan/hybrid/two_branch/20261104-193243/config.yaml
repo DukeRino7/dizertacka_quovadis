@@ -1,0 +1,25 @@
+# Vrstva B: dvojvetvová hybridná sieť – kandidát na veľký hybridný model v kaskáde.
+name: two_branch
+approach: hybrid_seq            # dáta: EMBER | ID tokenov API
+results_approach: hybrid
+model: two_branch
+description: statická MLP vetva + sekvenčná CNN vetva nad API volaniami, spojené v spoločnej hlave
+protocol: configs/protocol.yaml
+search_space:
+  static_layers: {type: int, low: 1, high: 3}
+  static_width: {type: categorical, choices: [256, 512, 1024]}
+  emb_dim: {type: categorical, choices: [32, 64, 128]}
+  channels: {type: categorical, choices: [64, 128, 256]}
+  kernels: {type: categorical, choices: ["2-3-4", "3-5-7", "2-4-8"]}
+  hidden: {type: categorical, choices: [128, 256, 512]}
+  dropout: {type: float, low: 0.1, high: 0.5}
+  lr: {type: float, low: 1.0e-4, high: 3.0e-3, log: true}
+  weight_decay: {type: float, low: 1.0e-6, high: 1.0e-2, log: true}
+  batch_size: {type: categorical, choices: [64, 128, 256]}
+fixed_params:
+  n_static: 2381                # počet EMBER príznakov na začiatku vstupu
+  width_decay: 0.5
+  max_epochs: 30
+  patience: 4
+smoke_overrides:
+  max_epochs: 1

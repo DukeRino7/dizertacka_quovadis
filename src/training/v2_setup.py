@@ -1,4 +1,4 @@
-"""Príprava priečinka zero-day behu (docs/09): pevný výber architektúr z V1.
+r"""Príprava priečinka zero-day behu (docs/09): pevný výber architektúr z V1.
 
 Vo V2 sa výber modelov neopakuje – v každom behu sa použijú rovnaké architektúry ako vo V1, aby boli behy
 porovnateľné. Zapíše <RUNS_DIR>/selection/{static,dynamic,hybrid}.json s kľúčom 'chosen' prevzatým z V1
