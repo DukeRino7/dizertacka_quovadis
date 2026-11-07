@@ -17,6 +17,8 @@ Texty, z ktorých sa budú preberať informácie do práce. Číslované podľa 
 | `10_vysledky_v2.md` | **výsledky V2** (`runs_v2/`): časový test, zero-day po rodinách, krivka rozpočtu emulácie, tézy podľa kritérií docs/09 | hotové 2026-11-04 |
 | `11_zhrnutie_v2.md` | stručné zhrnutie V2 pre vedúcu: súhrnná tabuľka, zistenia, tézy, otázky na konzultáciu | hotové 2026-11-04 |
 | `12_plan_v3.md` | **plán V3** (zdôvodnenie z analýzy príčin V2; B: druhý stupeň učený na neistých súboroch, C: prekalibrovanie prahu na nových neškodných súboroch; kritériá vopred) | rozhodnuté 2026-11-04 (autor), pred výsledkami |
+| `13_vysledky_v3.md` | **výsledky V3** (`runs_v3/`): špecialista (kritériá B1–B3, porovnanie pri rovnakom FPR), prekalibrovanie prahu, výpočtové nároky (emulácia nemerateľná, 60 s = horná hranica), stav téz po V1–V3 | hotové 2026-11-07 |
+| `14_zhrnutie_v1_v3.md` | zhrnutie V1–V3 pre vedúcu: čo sa robilo, stav téz, hlavné zistenia, obmedzenia, otázky na konzultáciu | hotové 2026-11-07 |
 
 Pravidlá:
 - Uvádzať iba overené fakty s popisom, ako boli overené. Návrhy a otvorené rozhodnutia jasne označiť.
