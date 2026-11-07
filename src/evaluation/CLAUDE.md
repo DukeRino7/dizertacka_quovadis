@@ -18,6 +18,7 @@
 | `v2_analysis.py` | analýza príčin V2 (zero-day): strop kombinácie S/D, oddeliteľnosť a posun prahu, eskalácia a horná hranica 2. stupňa, podskupiny emulácie (orákulá iba na vysvetlenie) → `runs_v2/comparison/v2/ANALYSIS.md` |
 | `v3_report.py` | súhrn V3 – B: časový test, zero-day po rodinách, kritériá B1–B3 z docs/12, krivka rozpočtu → `runs_v3/comparison/v3/README.md` |
 | `v3_recalibration.py` | V3 – C: prekalibrovanie prahu na kalibračnej časti aprílových neškodných súborov (1/5/20 %, 10 rozdelení), pôvodné vs. prekalibrované prahy, téza 2 v scenári → `runs_v3/comparison/v3/RECALIBRATION.md` |
+| `robustness.py` | overenie robustnosti (docs/16): R1 párový bootstrap testu pre hlavné tvrdenia (nižšie / nie horšie / rovnocenné), body 7–8 zo scenára C; R2 to isté iba na súboroch s úspešnou emuláciou → `runs_v3/comparison/robustness/ROBUSTNESS.md` |
 | `compare.py` | porovnanie modelov prístupu → `runs/comparison/<prístup>/` (tabuľka, kvalita vs. latencia) |
 
 Vyhodnotenie kaskády je v `src/cascade/evaluate.py`.
