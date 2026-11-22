@@ -26,11 +26,11 @@ platformu a iné príznaky; porovnanie dvoch datasetov je popisné.
 ### 2.1 Vetvy (spoločné rozdelenie)
 | vetva | vzorky | dynamika | účel |
 |---|---|---|---|
-| **real_full** (hlavná) | celé skutočné zariadenie: 78 133 APK (po vyradení 4 SHA-256) | zariadenie | otázka 1, tézy 1–4, celý postup ako na Quo Vadis |
+| **real_full** (hlavná) | celé skutočné zariadenie: 78 129 APK (po vyradení 4 SHA-256; oddiel 8.2) | zariadenie | otázka 1, tézy 1–4, celý postup ako na Quo Vadis |
 | **real_P** | prekrytie: 63 316 APK (34 977 benign, 28 339 malware) | zariadenie | otázka 2 (párovo s emu_P) |
 | **emu_P** | to isté prekrytie | emulátor | otázka 2 |
 
-- Rozdelenie sa urobí raz na celom zariadení (78 133). real_P a emu_P sú jeho podmnožina, takže každý súbor patrí
+- Rozdelenie sa urobí raz na celom zariadení (78 129). real_P a emu_P sú jeho podmnožina, takže každý súbor patrí
   vo všetkých vetvách do tej istej časti. 667 súborov iba z emulátora sa nepoužije.
 - real_P oproti real_full doplnkovo ukáže vplyv veľkosti tréningu.
 - Vyradené: 4 SHA-256, ktoré sú v oboch triedach (v každej podmnožine tie isté, všetky v prekrytí).
@@ -263,3 +263,12 @@ Bez zmeny správania V1–V3: predvolený dataset ostáva Quo Vadis, staré skri
 |---|---|---|
 | 2026-11-22 | pôvodná verzia (commit 431ad47) | – |
 | 2026-11-22 | doplnený špecialista z V3 (oddiel 3.4) s kritériami B1–B3; B1 prepočítané na 4 z 5 rodín | požiadavka autora na čo najväčšiu zhodu s Quo Vadis; zatiaľ sa netrénovalo nič |
+| 2026-11-22 | spresnenia pri implementácii (pred tréningom, `src/data/kronodroid/build_kronodroid.py`, `src/evaluation/v4_report.py`): | |
+| | – real_full má **78 129** súborov (78 137 riadkov − 8 riadkov 4 SHA-256 s oboma označeniami; číslo 78 133 v oddiele 2.1 počítalo unikátne SHA-256 vrátane nich) | oprava počtu |
+| | – zvyšné chýbajúce metadáta (379 súborov) = 0 pre všetky modely + príznak `meta_missing` (namiesto NaN pre stromy) | rovnaký vstup pre všetky modely; `StaticPreprocessor` NaN nespracuje |
+| | – D-norm aj pre **hybrid** (statika + podiely volaní), všetkých 5 architektúr rebríčka, hyperparametre z pôvodného modelu | kritérium v 4.3 porovnáva prínos hybridu; bez hybridu by sa nedalo vyhodnotiť |
+| | – doplnená kaskáda **A-heavyteacher** (obdoba A-twobranch z V2) → 12 variantov kaskád ako vo V2 | zhoda s V2 |
+| | – O1 pre kaskády: rozdiel TPR a FPR oproti statickému modelu sa vykáže pre **všetky** varianty (bez výberu „najlepšej“), kritérium O1 sa hodnotí na vybranom hybride | výber najlepšej kaskády podľa testu by porušil pravidlá; podľa validácie pravidlo nebolo určené |
+| | – zero-day v real_p a emu_p: statické modely sa trénujú raz (real_p) a do emu_p sa kopírujú (`src/training/v4_share_static.py`, overenie zhody dát SHA-256) | oddiel 4.2: statický model je v oboch vetvách ten istý |
+| | – časový posun (real_time): skupina identických statických vektorov, ktorej člen ide do testu, ide celá do testu; 448 malvérových súborov bez platného roku vyradených | žiadna skupina naprieč časťami |
+| | – kaskáda B na KronoDroid: čas dynamickej analýzy sa neodhaduje (`assumed_emulation_s: null`), úspora = podiel súborov | dataset neuvádza čas behu |

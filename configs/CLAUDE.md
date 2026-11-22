@@ -13,7 +13,9 @@ Jedna konfigurácia = jeden experiment. Štruktúra kopíruje `runs/` a `src/mod
 | `students_static/` | ľahké statické modely z destilácie | `runs/students_static/<model>/` |
 | `students_dynamic/` | ľahké dynamické modely z destilácie | `runs/students_dynamic/<model>/` |
 | `cascade/` | finálna kaskáda (výber študentov, učiteľa, prahov) | `runs/cascade/<variant>/` |
-| `kronodroid/` | V4: dataset KronoDroid (zdroj, skupiny stĺpcov) | `processed/kronodroid/` |
+| `kronodroid/` | V4: dataset KronoDroid (zdroj, skupiny stĺpcov, príprava dát, vynechávané rodiny) | `processed/kronodroid/` |
+| `kronodroid/cascade/` | V4: 12 kaskád A/B a 4 špecialisti (obdoby `cascade/`; komplexný hybrid = `hybrid/mlp_large`) | `runs_v4/<vetva>/*/cascade/` |
+| `kronodroid/dynamic_ablations/` | V4: D-norm – dynamické aj hybridné modely na podieloch volaní, hyperparametre z pôvodných | `runs_v4/<vetva>/full/dynamic_ablations/` |
 
 Návrh konvencií (zatiaľ neschválené):
 - Formát YAML, názov súboru = názov modelu, napr. `configs/static/lr.yaml`.

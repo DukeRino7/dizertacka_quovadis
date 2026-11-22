@@ -11,3 +11,5 @@ Postup: 1) vybrať učiteľa podľa `docs/00_vyskumne_otazky.md` a doplniť `dis
 2) `python -m src.training.teacher_oof --teacher <prístup>/<model>` (mäkké označenia krížovo);
 3) `python -m src.training.run_tabular --config configs/students_static/mlp_kd.yaml` a `mlp_nokd.yaml`.
 Veľkosť študenta (1 vrstva, 16–64 neurónov) je NÁVRH – overiť benchmarkom pravidlo „aspoň 10× lacnejší než učiteľ“.
+
+- `mlp_kd_heavy.yaml` (V4, docs/19 3.2): učiteľ `hybrid/mlp_large` – komplexný hybrid na KronoDroid (obdoba `mlp_kd_twobranch` z V2).

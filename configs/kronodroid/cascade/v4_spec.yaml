@@ -1,0 +1,13 @@
+# V4 (docs/19, 3.4): špecialista z V3 (docs/12) – obdoba configs/cascade/v3_spec.yaml
+# HLAVNÝ variant: statické + dynamické príznaky + log-odds skóre 1. stupňa
+name: v4_spec
+features: hybrid
+train_fraction: 0.2
+main_budget: 0.1
+budgets: [0.1, 0.2, 0.3, 0.4]
+roles:                      # 1. stupeň a referencie = vybrané modely (vo V3 to bol vybraný statický LightGBM)
+  static: auto:static
+  dynamic: auto:dynamic
+  hybrid: auto:hybrid
+params_from: hybrid/lightgbm   # hyperparametre špecialistu = hybridný LightGBM vetvy (ako V3), bez ladenia
+protocol: configs/protocol.yaml

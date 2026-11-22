@@ -13,6 +13,7 @@
 
 Rozhodnuté: prahy študentov aj hybridu = prah pre FPR ≤ 1 % na validácii (`configs/protocol.yaml`).
 Neskorá fúzia je v `src/models/hybrid/late_fusion.py`.
+V4 (docs/19): konfigurácie kaskád a špecialistov v `configs/kronodroid/cascade/`; `specialist.py` berie komponenty z `roles` (predvolene LightGBM ako vo V3) a hyperparametre z `params_from`; `evaluate_b.py` pri `assumed_emulation_s: null` čas dynamickej analýzy neodhaduje.
 `components.py`: premenná `DIZERTACKA_RESULTS_FALLBACK` (napr. `runs_final`) – komponent sa hľadá aj tam (kaskády B na modeloch V1); v zero-day behoch sa nepoužíva.
 Plánované: meranie nárokov celej kaskády skutočným spustením modelov (nielen odhad zo súčtu komponentov).
 Podrobnosti: `docs/05_destilacia_a_kaskada.md`.

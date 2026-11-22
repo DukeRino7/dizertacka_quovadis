@@ -18,12 +18,15 @@ _TENSOR_CACHE: dict = {}
 
 
 def _to_tensor(X, device):
+    # Cache drží aj odkaz na pôvodné pole: id() uvoľneného poľa môže Python prideliť novému poľu (napr. v ďalšej časti
+    # teacher_oof), a bez kontroly identity by sieť dostala staré dáta. Pri platnom zásahu sa správanie nemení.
     key = (id(X), len(X), device)
-    if key not in _TENSOR_CACHE:
+    hit = _TENSOR_CACHE.get(key)
+    if hit is None or hit[0] is not X:
         if len(_TENSOR_CACHE) > 4:
             _TENSOR_CACHE.clear()
-        _TENSOR_CACHE[key] = torch.as_tensor(np.ascontiguousarray(X), dtype=torch.float32, device=device)
-    return _TENSOR_CACHE[key]
+        hit = _TENSOR_CACHE[key] = (X, torch.as_tensor(np.ascontiguousarray(X), dtype=torch.float32, device=device))
+    return hit[1]
 
 
 def layer_widths(p: dict) -> list[int]:

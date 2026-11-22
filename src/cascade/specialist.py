@@ -98,15 +98,26 @@ def main(config_path: str, runs_root: Path = RUNS_DIR, benchmark: bool = False, 
     cfg = load_config(config_path)
     protocol = load_protocol(cfg.get("protocol", "configs/protocol.yaml"))
     fam = paths.HOLDOUT_FAMILY
-    comps = {r: Component(spec, runs_root) for r, spec in ROLES.items()}
-    oof_path = find_oof(runs_root)
-    params = dict(comps["hybrid"].metrics["best_params"])   # hyperparametre hybridného LightGBM (V1), bez ladenia
+    # V4 (docs/19, 3.4): komponenty z konfigurácie ('roles', napr. auto:static); predvolene LightGBM ako vo V3
+    roles = {**ROLES, **(cfg.get("roles") or {})}
+    comps = {r: Component(spec, runs_root) for r, spec in roles.items()}
+    from src.training.select_best import resolve_auto
+    oof_path = find_oof(runs_root, resolve_auto(roles["static"]).replace("/", "_"))
+    params_comp = Component(cfg.get("params_from", "hybrid/lightgbm"), runs_root)
+    if params_comp.metrics["model"] != "lightgbm":
+        raise ValueError(f"params_from musí byť LightGBM (špecialista = LightGBM), nie {params_comp.metrics['model']}")
+    params = dict(params_comp.metrics["best_params"])   # hyperparametre hybridného LightGBM, bez ladenia
     seeds = sorted(set.intersection(*(set(c.seeds) for c in comps.values())))
     if smoke:
         seeds = seeds[:1]
         params.update(num_boost_round=200, early_stopping_rounds=20)
 
     data = load_tabular("hybrid")
+    if smoke:   # technická kontrola: komponenty zo --smoke behov majú predikcie iba pre podvzorku -> len tie súbory
+        for s in [x for x in ("validation", "test", "holdout") if x in data]:
+            have = set(comps["static"].scores(s, seeds[0])["sha256"])
+            keep = data[s][2]["sha256"].isin(have).to_numpy()
+            data[s] = (data[s][0][keep], data[s][1][keep], data[s][2][keep].reset_index(drop=True))
     n_static = len(feature_names("static"))
     splits = [s for s in ("validation", "test", "holdout") if s in data]
     sha = {s: data[s][2]["sha256"].to_numpy() for s in ["train"] + splits}
@@ -188,6 +199,7 @@ def main(config_path: str, runs_root: Path = RUNS_DIR, benchmark: bool = False, 
                  "emulation_rate": emu}
     write_json({"created": now_iso(), "type": "V3-specialist", "config": cfg, "git": git_info(), "holdout_family": fam,
                 "components": {r: rel(c.run) for r, c in comps.items()}, "oof": rel(oof_path), "params": params,
+                "params_from": rel(params_comp.run),
                 "seeds": seeds, "smoke": smoke, "summary": summary, "per_seed": per_seed, "costs": costs}, out / "metrics.json")
     if bench:
         write_json({**bench, "environment": environment()}, out / "benchmark.json")
@@ -235,6 +247,12 @@ LABELS = {"spec": "kaskáda so špecialistom", "b_baselines": "kaskáda B-baseli
 
 
 def write_readme(out, cfg, comps, oof_path, seeds, S, costs, fam):
+    from src.training.select_best import resolve_auto
+    names = {r: resolve_auto(c.spec) for r, c in comps.items()}
+    if any(n != ROLES[r] for r, n in names.items()):   # V4: iné komponenty než LightGBM -> názov podľa výberu
+        LABELS.update({f"{r}_only": f"{lab} ({names[r]})" for r, lab in
+                       [("static", "statický"), ("dynamic", "dynamický"), ("hybrid", "hybrid")]})
+
     def f(v):
         return "–" if v is None else f"{v[0]:.4f} ± {v[1]:.4f}"
     mb = str(cfg["main_budget"])

@@ -102,3 +102,30 @@ Modely netreba, stačia uložené predikcie a `teachers\`.
 (2) `runs_v3\lofo\<rodina>` – to isté pre 7 vynechaných rodín, komponenty z `runs_v2\lofo\<rodina>`;
 (3) súhrn kritérií B1–B3 a scenár C (prekalibrovanie prahu, iba z uložených predikcií).
 Merania CPU času porovnávať iba s V1/V2 z toho istého počítača.
+
+## 8. Verzia V4 (iný dataset: KronoDroid, emulátor vs. skutočné zariadenie, docs/19)
+Spúšťa sa v **novom priečinku** (na pracovnom notebooku `dizertacka_quovadis-4`). Dáta Quo Vadis ani výsledky V1–V3
+netreba; potrebné sú iba `.venv\` a `data\kronodroid\`.
+1. GitHub → *Tags* → `v4` → *Source code (zip)* a ZIP rozbaliť, napr. do `D:\dizertacka\dizertacka_quovadis-4`.
+2. Skopírovať `.venv\` z priečinka V3 (`dizertacka_quovadis-2`) a `data\kronodroid\` zo súkromného notebooku (USB,
+   ~25 MB ZIP + ~160 MB CSV; stačí `zip\` a `csv\`, `SOURCE_COMMIT.txt`, `README.md`). V PowerShelli:
+   ```
+   $P = "D:\dizertacka\dizertacka_quovadis-4"
+   robocopy "D:\dizertacka\dizertacka_quovadis-2\.venv" "$P\.venv" /E
+   robocopy "E:\dizertacka_data\kronodroid" "$P\data\kronodroid" /E
+   cd $P
+   ```
+   (cesty upraviť podľa skutočnosti). Overenie dát: `.venv\Scripts\python.exe -m src.data.kronodroid.audit_kronodroid`
+   – v `processed\kronodroid\audit\AUDIT.md` musí byť „ZIP súbory sedia s konfiguráciou: True“.
+3. Kontrola (~45 min): `powershell -ExecutionPolicy Bypass -File scripts\run_v4.ps1 -Smoke -Families Boxer`
+   → `runs_v4_smoke\` (iba technická kontrola; potom ho možno zmazať). Príprava dát (`processed\kronodroid\`) sa
+   spustí automaticky pri prvom behu.
+4. Celý beh (odhad 1–2 večery, pokračuje po prerušení): `powershell -ExecutionPolicy Bypass -File scripts\run_v4.ps1`
+   Počas behu počítač nezaťažovať (merania CPU času).
+5. Preniesť bez modelov: `robocopy runs_v4 E:\runs_v4 /E /XD model`. Súhrn na súkromnom notebooku:
+   `.venv\Scripts\python.exe -m src.evaluation.v4_report --root runs_v4` → `runs_v4\comparison\v4\README.md`.
+
+Čo beh V4 robí (pre každú vetvu `real_full`, `real_p`, `emu_p`): (1) `runs_v4\<vetva>\full` – rebríček s ladením,
+benchmark, D-norm, výber, učitelia, študenti, 12 kaskád, 4 špecialisti; (2) `runs_v4\<vetva>\lofo\<rodina>` –
+5 zero-day behov s hyperparametrami z (1); (3) `runs_v4\real_full\time` – časový posun malvéru. emu_p preberá
+statické modely z real_p (rovnaký statický model, docs/19 4.2).

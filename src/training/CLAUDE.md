@@ -7,6 +7,8 @@
 | `run_ablations.py` | všetky kontrolné experimenty z `configs/<priečinok>/` + porovnanie s pôvodnými modelmi |
 | `teacher_oof.py` | mäkké označenia učiteľa na tréningu krížovo (5 častí, hyperparametre z behu učiteľa) → `runs/teachers/<prístup>_<model>/` |
 | `select_best.py` | výber najlepšieho modelu skupiny podľa dohodnutého pravidla (`configs/selection.yaml`) → `runs/selection/<skupina>.json`; `auto:<skupina>` v konfiguráciách |
+| `v2_setup.py` | pevný výber architektúr z hlavného behu (V2 zero-day; V4 zero-day a časový posun z `runs_v4/<vetva>/full`) |
+| `v4_share_static.py` | V4: statické behy real_p → emu_p (rovnaký statický model, overené SHA-256 dát; `SHARED_FROM.json`) |
 | `search_space.py` | priestor hyperparametrov z YAML → návrhy Optuna |
 
 Spustenie: `.venv\Scripts\python.exe -m src.training.run_tabular --config configs/static/lr.yaml`

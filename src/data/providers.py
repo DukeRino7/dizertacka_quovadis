@@ -17,11 +17,13 @@ import numpy as np
 import pandas as pd
 
 from src.common import paths
-from src.common.paths import PROCESSED_DIR, STATIC_DIR
+from src.common.paths import FEATURES_DIR, PROCESSED_DIR, STATIC_DIR
 
-DIRS = {"static": STATIC_DIR, "dynamic": PROCESSED_DIR / "dynamic" / "tabular",
-        "dynamic_seq": PROCESSED_DIR / "dynamic" / "sequence",
-        "dynamic_full": PROCESSED_DIR / "dynamic" / "tabular_full"}   # kontrolný variant s udalosťami a súhrnom
+DIRS = {"static": STATIC_DIR, "dynamic": FEATURES_DIR / "dynamic" / "tabular",
+        "dynamic_seq": FEATURES_DIR / "dynamic" / "sequence",
+        "dynamic_full": FEATURES_DIR / "dynamic" / "tabular_full"}   # kontrolný variant s udalosťami a súhrnom
+if paths.DATASET:   # V4 (KronoDroid): kontrolný experiment D-norm = podiely volaní (docs/19, 2.2)
+    DIRS["dynamic_norm"] = FEATURES_DIR / "dynamic" / "tabular_norm"
 
 
 def _load_dir(base, split: str):
@@ -35,7 +37,7 @@ def _load_dir(base, split: str):
 def _dirs() -> dict:
     """Priečinky dát; pri zero-day behu dynamické reprezentácie bez vynechanej rodiny."""
     fam = paths.HOLDOUT_FAMILY
-    if not fam:
+    if not fam or paths.DATASET:   # KronoDroid: počty volaní bez slovníka -> nie je čo fitovať bez rodiny
         return DIRS
     lofo = PROCESSED_DIR / "dynamic" / "lofo" / fam
     for sub in ("tabular", "sequence"):
@@ -73,9 +75,9 @@ def _load_splits(approach: str, splits, DIRS: dict) -> dict:
     for s in splits:
         if approach in DIRS:
             out[s] = _load_dir(DIRS[approach], s)
-        elif approach in ("hybrid", "hybrid_seq"):
+        elif approach in ("hybrid", "hybrid_seq", "hybrid_norm"):   # hybrid_norm: V4 D-norm (docs/19, 2.2)
             Xs, ys, ms = _load_dir(DIRS["static"], s)
-            Xd, yd, md = _load_dir(DIRS["dynamic" if approach == "hybrid" else "dynamic_seq"], s)
+            Xd, yd, md = _load_dir(DIRS[{"hybrid": "dynamic", "hybrid_seq": "dynamic_seq", "hybrid_norm": "dynamic_norm"}[approach]], s)
             if not (ms["sha256"].to_numpy() == md["sha256"].to_numpy()).all() or not (ys == yd).all():
                 raise ValueError(f"{s}: statické a dynamické dáta nie sú zarovnané podľa SHA-256")
             out[s] = (np.hstack([Xs, Xd.astype(np.float32)]), ys, ms)
@@ -88,9 +90,9 @@ def feature_table(approach: str) -> pd.DataFrame:
     """Tabuľka príznakov: name, group (pri hybride s predponou static:/dynamic: v skupine)."""
     if approach in DIRS:
         return pd.read_csv(_dirs()[approach] / "feature_names.csv")[["name", "group"]]
-    if approach == "hybrid":
+    if approach in ("hybrid", "hybrid_norm"):
         s = feature_table("static").assign(group=lambda d: "static:" + d["group"])
-        d = feature_table("dynamic").assign(group=lambda d: "dynamic:" + d["group"])
+        d = feature_table("dynamic" if approach == "hybrid" else "dynamic_norm").assign(group=lambda d: "dynamic:" + d["group"])
         return pd.concat([s, d], ignore_index=True)
     raise ValueError(approach)
 

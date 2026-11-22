@@ -19,10 +19,18 @@ HOLDOUT_FAMILY = os.environ.get("DIZERTACKA_HOLDOUT_FAMILY") or None
 PARAMS_ROOTS = [Path(r) if Path(r).is_absolute() else PROJECT_ROOT / r
                 for r in (os.environ.get("DIZERTACKA_PARAMS_ROOTS") or "").split(";") if r]
 
+# V4 (docs/19): DIZERTACKA_DATASET=<vetva> (real_full, real_p, emu_p, real_time) presmeruje index a príznaky
+# na processed/kronodroid/<vetva>/ (rovnaká štruktúra ako processed/). Bez nej = Quo Vadis, nič sa nemení.
+DATASET = os.environ.get("DIZERTACKA_DATASET") or None
+KRONODROID_BRANCHES = ("real_full", "real_p", "emu_p", "real_time")
+if DATASET and DATASET not in KRONODROID_BRANCHES:
+    raise ValueError(f"DIZERTACKA_DATASET={DATASET!r}: povolené {KRONODROID_BRANCHES}")
+FEATURES_DIR = PROCESSED_DIR / "kronodroid" / DATASET if DATASET else PROCESSED_DIR
+
 EMBER_DIR = DATA_DIR / "quovadis-ember"
 SPEAKEASY_DIR = DATA_DIR / "quovadis-speakeasy"
-INDEX_DIR = PROCESSED_DIR / "index"
-STATIC_DIR = PROCESSED_DIR / "static"
+INDEX_DIR = FEATURES_DIR / "index"
+STATIC_DIR = FEATURES_DIR / "static"
 
 
 def resolve(path: str | Path) -> Path:

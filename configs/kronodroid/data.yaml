@@ -30,3 +30,17 @@ columns:
                     TotalIntentFilters, NrServices]
 
 out_dir: processed/kronodroid/audit
+
+# Príprava dát V4 (docs/19, oddiel 2) – src/data/kronodroid/build_kronodroid.py
+build:
+  seed: 42
+  n_parts: 10              # 10 častí: 7 train, 1 validation, 2 test (70 / 10 / 20 %)
+  train_parts: 7
+  val_parts: 1
+  min_family: 50           # rodiny s menej vzorkami -> 'other' (stratifikácia, výsledky podľa rodiny)
+  drop_static: [FilesInsideAPK]   # v emulátore chýba pre všetok malvér
+  time_test_from: 2015     # doplnkový časový posun malvéru: test = malvér 2015–2020
+
+v4:
+  # zero-day (docs/19, 2.3): ≥ 1 000 vzoriek v prekrytí a nie všeobecný názov antivírusu (vyradené Agent, Malap)
+  holdout_families: ["Airpush/StopSMS", "Boxer", "FakeInst", "Locker/SLocker Ransomware", "BankBot"]

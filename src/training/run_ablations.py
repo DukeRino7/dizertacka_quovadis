@@ -14,6 +14,6 @@ if __name__ == "__main__":
     ap.add_argument("--skip-done", action="store_true", help="preskočiť ablácie s dokončeným behom")
     a = ap.parse_args()
     failed = run_configs([f"configs/{a.dir}/{c.name}" for c in sorted((CONFIGS_DIR / a.dir).glob("*.yaml"))], a.skip_done)
-    compare(a.dir)
+    compare(a.dir.split("/")[-1])   # V4: --dir kronodroid/dynamic_ablations -> výsledky v runs/dynamic_ablations
     if failed:
         raise SystemExit(f"zlyhali: {failed}")

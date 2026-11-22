@@ -20,5 +20,6 @@ Pravidlá:
 | `dynamic/sequence/` | ID tokenov API pre sekvenčné modely (slovník iba z tréningu) | `python -m src.data.build_dynamic_sequence` | čaká na dáta |
 | `dynamic/tabular/` | vektor pre rebríček (slovník n-gramov iba z tréningu) | `python -m src.data.build_dynamic_tabular` | čaká na dáta |
 | `kronodroid/audit/` | V4: audit KronoDroid (AUDIT.md, súhrn, roky a rodiny) | `python -m src.data.kronodroid.audit_kronodroid` | hotové 2026-11-22 |
+| `kronodroid/<vetva>/` | V4: real_full, real_p, emu_p, real_time v štruktúre ako `processed/` (index, static, dynamic/tabular, dynamic/tabular_norm); spoločný index `kronodroid/index/` a `README.md` sa verzujú | `python -m src.data.kronodroid.build_kronodroid` | hotové 2026-11-22 |
 
 Poradie: najprv `build_index`, potom `build_static` (a neskôr dynamická časť).

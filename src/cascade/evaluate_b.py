@@ -147,7 +147,8 @@ def main(config_path: str, runs_root: Path = RUNS_DIR) -> Path:
     seeds = sorted(set.intersection(*(set(c.seeds) for c in comps.values())))
     per_seed = [evaluate_seed(comps, cfg, s) for s in seeds]
     S = summarize(per_seed)
-    emu_s = float(cfg.get("assumed_emulation_s", 60))
+    emu_s = cfg.get("assumed_emulation_s", 60)   # V4 (KronoDroid): null = čas dynamickej analýzy sa neodhaduje
+    emu_s = float(emu_s) if emu_s is not None else None
     costs = cost_table(comps, S["test"]["_emulation_rate"][0], S["test"]["_hybrid_rate"][0], cfg["second_stage"], emu_s)
 
     out = runs_root / "cascade" / cfg["name"] / datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -207,6 +208,15 @@ def _tbl(df: pd.DataFrame, fmt="{:.4f}") -> str:
                       for r in df.itertuples(index=False)])
 
 
+def emulation_text(emu: float, emu_s: float | None) -> str:
+    if emu_s is None:   # V4 (KronoDroid): dataset neuvádza čas behu v emulátore ani na zariadení
+        return (f"Čas dynamickej analýzy (beh v emulátore alebo na zariadení) dataset neuvádza, preto sa neodhaduje. "
+                f"Úspora kaskády B = podiel súborov s dynamickou analýzou: **{emu:.2%}** (ostatné prístupy 100 %).")
+    return (f"Emulácia (Speakeasy) sa nedá zmerať (dataset neobsahuje PE súbory). **Predpoklad** {emu_s:.0f} s na súbor\n"
+            f"(limit z `speakeasy-config.json`): kaskáda B ≈ {emu * emu_s:.1f} s na súbor v priemere, dynamický/hybridný model\n"
+            f"a kaskáda A {emu_s:.0f} s (emulujú každý súbor).")
+
+
 def write_readme(out, cfg, comps, seeds, S, per_seed, costs, emu_s):
     def block(split):
         rows = [{"prístup": LABELS[a], **{m: f"{S[split][a][m][0]:.4f} ± {S[split][a][m][1]:.4f}" for m in DEC_METRICS}}
@@ -214,6 +224,7 @@ def write_readme(out, cfg, comps, seeds, S, per_seed, costs, emu_s):
         return _tbl(pd.DataFrame(rows))
     t = S["test"]
     emu, hyb = t["_emulation_rate"][0], t["_hybrid_rate"][0]
+    emu_txt = emulation_text(emu, emu_s)
     c0 = per_seed[0]["test"]["cascade"]
     curve = pd.DataFrame(t["_budget_curve"])[["budget_val", "emulation_rate", "hybrid_rate", "recall_tpr", "fpr", "f1"]] \
         if t["_budget_curve"] else None
@@ -251,9 +262,7 @@ najviac {cfg['uncertainty']['fnr_lo']:.0%} malvéru validácie pod `lo` ({band_t
 {_tbl(curve) if curve is not None else '_bez krivky_'}
 
 ## Výpočtové nároky
-Emulácia (Speakeasy) sa nedá zmerať (dataset neobsahuje PE súbory). **Predpoklad** {emu_s:.0f} s na súbor
-(limit z `speakeasy-config.json`): kaskáda B ≈ {emu * emu_s:.1f} s na súbor v priemere, dynamický/hybridný model
-a kaskáda A {emu_s:.0f} s (emulujú každý súbor).
+{emu_txt}
 
 {cost_txt}
 

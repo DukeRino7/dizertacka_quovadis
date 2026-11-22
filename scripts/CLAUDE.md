@@ -12,6 +12,7 @@ Návod: `SETUP.md`. Skripty sú uložené ako UTF-8 s BOM (kvôli diakritike vo 
 | `run_all.ps1` | finálny beh všetkého do `runs_final\` (`-RunsDir`) |
 | `run_v2.ps1` | **V2** (docs/09): časový test s novými študentmi a kaskádami B (`runs_v2\full`), 7 zero-day behov (`runs_v2\lofo\<rodina>`), súhrn; `-Smoke -Families rat` = technická kontrola do `runs_v2_smoke\` |
 | `run_v3.ps1` | **V3** (docs/12): špecialisti v časovom teste (`runs_v3\full`, s meraním CPU) a v 7 zero-day behoch (`runs_v3\lofo\<rodina>`, komponenty z `runs_v2`), súhrn B a scenár C; `-Smoke -Families rat` = technická kontrola do `runs_v3_smoke\` |
+| `run_v4.ps1` | **V4** (docs/19): KronoDroid, vetvy `real_full`, `real_p`, `emu_p` (`DIZERTACKA_DATASET`) – hlavné rozdelenie s ladením (`runs_v4/<vetva>/full`), 5 zero-day behov (`lofo/<rodina>`), časový posun malvéru (`real_full/time`); emu_p preberá statické modely z real_p; `-Smoke -Families Boxer` = technická kontrola do `runs_v4_smoke/`; súhrn `src.evaluation.v4_report` |
 | `status.ps1` | prehľad stavu: hotové / rozpracované kroky, ďalší krok (`src/common/status.py`) |
 | `_common.ps1` | spoločné funkcie: krok so značkou `runs\_state\<id>.done` (pokračovanie po prerušení) |
 

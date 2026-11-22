@@ -99,7 +99,8 @@ def per_family(tables: dict, path, title):
         if fams is None:
             fams = ["benign"] + sorted(f for f in t.index if f != "benign")
         y = np.arange(len(fams))[::-1]
-        ax.barh(y + (0.5 - k) * h, t.loc[fams, "detected_rate"] * 100, height=h - 0.04,
+        # rodina môže v jednej časti chýbať (V4: malé rodiny v prekrytí) -> prázdny stĺpec namiesto chyby
+        ax.barh(y + (0.5 - k) * h, t["detected_rate"].reindex(fams).fillna(0).to_numpy() * 100, height=h - 0.04,
                 color=SPLIT_COLOR[split], label=SPLIT_SK[split])
     ax.set_yticks(np.arange(len(fams))[::-1], fams)
     ax.set_xlim(0, 100)

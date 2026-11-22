@@ -20,6 +20,7 @@ Spúšťať z koreňa projektu cez `.venv\Scripts\python.exe -m src.data.<modul>
 | `build_dynamic_sequence.py` | postupnosti ID tokenov API pre sekvenčné modely → `processed/dynamic/sequence` (slovník iba z tréningu); `--exclude-family` (V2) | hotové |
 | `providers.py` | jednotné načítanie static / dynamic / hybrid / dynamic_seq / hybrid_seq (zarovnanie podľa SHA-256); zero-day (`DIZERTACKA_HOLDOUT_FAMILY`): rodina mimo train/validation, časť `holdout`, slovníky z `processed/dynamic/lofo/<rodina>` | hotové |
 | `kronodroid/audit_kronodroid.py` | V4: audit KronoDroid CSV → `processed/kronodroid/audit` (`configs/kronodroid/data.yaml`, docs/18) | hotové |
+| `kronodroid/build_kronodroid.py` | V4: príprava vetiev real_full, real_p, emu_p, real_time v rovnakom formáte ako Quo Vadis → `processed/kronodroid/<vetva>/{index,static,dynamic/tabular,dynamic/tabular_norm}`; `providers.py` ich číta pri `DIZERTACKA_DATASET=<vetva>` (aj `dynamic_norm`, `hybrid_norm`) | hotové |
 
 Konfigurácie: `configs/data/index.yaml`, `configs/data/static.yaml`, `configs/data/dynamic.yaml`.
 Dynamické dáta: `docs/04_dynamicke_data.md` (formát, postup, poradie spustenia).

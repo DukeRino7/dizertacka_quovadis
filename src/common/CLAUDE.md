@@ -4,7 +4,7 @@ Kód, ktorý používajú všetky ostatné časti. Nemá obsahovať nič špecif
 
 | Modul | Obsah |
 |---|---|
-| `paths.py` | cesty projektu; `RUNS_DIR` presmerovateľný premennou `DIZERTACKA_RUNS_DIR` |
+| `paths.py` | cesty projektu; `RUNS_DIR` presmerovateľný premennou `DIZERTACKA_RUNS_DIR`; V4: `DIZERTACKA_DATASET=<vetva>` presmeruje `INDEX_DIR`, `STATIC_DIR` a `FEATURES_DIR` na `processed/kronodroid/<vetva>/` (bez nej Quo Vadis) |
 | `config.py` | načítanie YAML |
 | `hardware.py` | `load_protocol()`: počet vlákien podľa počítača (`auto_threads`) |
 | `seed.py` | seedy Python, NumPy, PyTorch |

@@ -19,6 +19,7 @@
 | `v3_report.py` | súhrn V3 – B: časový test, zero-day po rodinách, kritériá B1–B3 z docs/12, krivka rozpočtu → `runs_v3/comparison/v3/README.md` |
 | `v3_recalibration.py` | V3 – C: prekalibrovanie prahu na kalibračnej časti aprílových neškodných súborov (1/5/20 %, 10 rozdelení), pôvodné vs. prekalibrované prahy, téza 2 v scenári → `runs_v3/comparison/v3/RECALIBRATION.md` |
 | `robustness.py` | overenie robustnosti (docs/16): R1 párový bootstrap testu pre hlavné tvrdenia (nižšie / nie horšie / rovnocenné), body 7–8 zo scenára C; R2 to isté iba na súboroch s úspešnou emuláciou → `runs_v3/comparison/robustness/ROBUSTNESS.md` |
+| `v4_report.py` | súhrn V4 (docs/19): O1, O2, D-norm s párovým bootstrapom, modely po vetvách, zero-day po rodinách, tézy 1–4, B1–B3, časový posun malvéru → `runs_v4/comparison/v4/README.md` |
 | `compare.py` | porovnanie modelov prístupu → `runs/comparison/<prístup>/` (tabuľka, kvalita vs. latencia) |
 
 Vyhodnotenie kaskády je v `src/cascade/evaluate.py`.

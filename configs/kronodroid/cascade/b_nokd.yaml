@@ -1,0 +1,13 @@
+# V4 (docs/19, 3.3): KronoDroid – obdoba configs/cascade/b_nokd.yaml
+# študenti bez destilácie
+name: b_nokd
+type: B
+second_stage: dynamic
+components:
+  static: students_static/mlp_nokd
+  dynamic: students_dynamic/mlp_nokd
+  hybrid: auto:hybrid
+uncertainty: {fpr_hi: 0.001, fnr_lo: 0.01}   # ako docs/09: isto malvér FPR ≤ 0,1 %, isto neškodný pod ≤ 1 % malvéru
+budgets: [0.1, 0.2, 0.3, 0.4]                 # krivka: podiel súborov s dynamickou analýzou (určené na validácii)
+assumed_emulation_s: null                    # KronoDroid neuvádza čas behu -> neodhaduje sa (docs/19)
+protocol: configs/protocol.yaml

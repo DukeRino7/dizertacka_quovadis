@@ -1,0 +1,143 @@
+{
+  "script": "src/data/kronodroid/build_kronodroid.py",
+  "created": "2026-11-22T16:16:05+01:00",
+  "branch": "real_full",
+  "representation": "dynamic/tabular_norm",
+  "n_features": 288,
+  "config": {
+    "source": {
+      "repo": "https://github.com/aleguma/kronodroid",
+      "commit": "c6ec342167bc449967a802824d068900ac8120c5",
+      "zip_sha256": {
+        "emu_legitimate_v1.zip": "de3ba7838a6d660adc16be06b49db8f9f63ee8a055cc9ff0576e302d303ce8a2",
+        "emu_malware_v1.zip": "c5758b2957db65c704db032bac987d47be30d0374dfacac1357757ebe652aec4",
+        "real_legitimate_v1.zip": "21f6d507321856eefa6c40a31f484d3e532b5dea23144e3c2a9470161bd5f782",
+        "real_malware_v1.zip": "03aa36a9c3aa3430523fcf87042659562e5af3219688562087107817095cb8cd"
+      }
+    },
+    "raw_dir": "data/kronodroid/csv",
+    "files": {
+      "emulator": {
+        "benign": "emu_legitimate_v1.csv",
+        "malware": "emu_malware_v1.csv"
+      },
+      "real_device": {
+        "benign": "real_legitimate_v1.csv",
+        "malware": "real_malware_v1.csv"
+      }
+    },
+    "columns": {
+      "id": [
+        "sha256",
+        "Package"
+      ],
+      "label": "Malware",
+      "family": "MalFamily",
+      "external_label_like": [
+        "Scanners",
+        "Detection_Ratio",
+        "TimesSubmitted",
+        "NrContactedIps"
+      ],
+      "dates": {
+        "emulator": [
+          "FirstModDate",
+          "LastModDate"
+        ],
+        "real_device": [
+          "EarliestModDate",
+          "HighestModDate"
+        ]
+      },
+      "dynamic_last": "nr_syscalls",
+      "static_metadata": [
+        "CFileSize",
+        "UFileSize",
+        "FilesInsideAPK",
+        "Activities",
+        "NrIntServices",
+        "NrIntServicesActions",
+        "NrIntActivities",
+        "NrIntActivitiesActions",
+        "NrIntReceivers",
+        "NrIntReceiversActions",
+        "TotalIntentFilters",
+        "NrServices"
+      ]
+    },
+    "out_dir": "processed/kronodroid/audit",
+    "build": {
+      "seed": 42,
+      "n_parts": 10,
+      "train_parts": 7,
+      "val_parts": 1,
+      "min_family": 50,
+      "drop_static": [
+        "FilesInsideAPK"
+      ],
+      "time_test_from": 2015
+    },
+    "v4": {
+      "holdout_families": [
+        "Airpush/StopSMS",
+        "Boxer",
+        "FakeInst",
+        "Locker/SLocker Ransomware",
+        "BankBot"
+      ]
+    }
+  },
+  "git": {
+    "commit": "1b8790d03306a979f7c55f74b5fc1425c67dbe5a",
+    "dirty": true,
+    "version": "v3 (špecialista pre neisté súbory + prekalibrovanie prahu, docs/12; V1/V2 zo značiek v1/v2)",
+    "source": "git"
+  },
+  "outputs": [
+    {
+      "path": "processed/kronodroid/real_full/dynamic/tabular_norm/X_train.npy",
+      "bytes": 63003008,
+      "sha256": "a535ce9af00c6b1dd1e8750b7e341136acd034e759330405b2944abaabda834f"
+    },
+    {
+      "path": "processed/kronodroid/real_full/dynamic/tabular_norm/y_train.npy",
+      "bytes": 54818,
+      "sha256": "b6fbf4110a6d3b00fd9a3174c1720cc717e0fb706c560c04c98e88c1eedd1227"
+    },
+    {
+      "path": "processed/kronodroid/real_full/dynamic/tabular_norm/meta_train.parquet",
+      "bytes": 3667103,
+      "sha256": "47fdd39407a0acdae04b4a198e7c167cf5a1bb889c3f3a47f9f433cc37ff605e"
+    },
+    {
+      "path": "processed/kronodroid/real_full/dynamic/tabular_norm/X_validation.npy",
+      "bytes": 9001856,
+      "sha256": "22a97c37003dfd3ddee164ef54234ed8d33d766f3a9f1ee2cb42092e05c9a664"
+    },
+    {
+      "path": "processed/kronodroid/real_full/dynamic/tabular_norm/y_validation.npy",
+      "bytes": 7942,
+      "sha256": "5d703ccfeb2cf91e5570e0f28f2b22b6b475adba1a0b80f638e7667d4aad1ebf"
+    },
+    {
+      "path": "processed/kronodroid/real_full/dynamic/tabular_norm/meta_validation.parquet",
+      "bytes": 529360,
+      "sha256": "31fc1301e45e0ec1e09c5a70727a29fdb525969e93bad4f0bf7aff3694137fca"
+    },
+    {
+      "path": "processed/kronodroid/real_full/dynamic/tabular_norm/X_test.npy",
+      "bytes": 18000128,
+      "sha256": "393476e7253c03810fe0247ec9ffaad636aaed9cc3025fe585bd50f6c1e16c9d"
+    },
+    {
+      "path": "processed/kronodroid/real_full/dynamic/tabular_norm/y_test.npy",
+      "bytes": 15753,
+      "sha256": "341dd3367dd2f6c23b2de910f543cd1dcbb660aa7a405e2568fa9b3c1e1a423f"
+    },
+    {
+      "path": "processed/kronodroid/real_full/dynamic/tabular_norm/meta_test.parquet",
+      "bytes": 1048558,
+      "sha256": "57ead01ddf26fd46ad781c546e12af46e7eccca68065aec3e65ddcf536b18967"
+    }
+  ]
+}
