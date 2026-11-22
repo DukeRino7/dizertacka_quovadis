@@ -23,7 +23,7 @@ Texty, z ktorých sa budú preberať informácie do práce. Číslované podľa 
 | `16_plan_robustnost.md` | plán overenia robustnosti: štatistická významnosť (bootstrap), citlivosť na chybu emulácie; kritériá vopred | rozhodnuté 2026-11-07, pred výpočtom |
 | `17_vysledky_robustnost.md` | výsledky overenia robustnosti: hlavné tvrdenia významné, prekalibrovanie spoľahlivé pri ~1 600 súboroch, zistenie D platí aj pri úspešnej emulácii (dynamika tam škodí) | hotové 2026-11-07 |
 | `18_audit_kronodroid.md` | V4: audit datasetu KronoDroid (Android, emulátor vs. skutočné zariadenie), riziká, návrhy rozhodnutí | hotové 2026-11-22, rozhodnutia v docs/19 |
-| `19_plan_v4.md` | **plán V4** (KronoDroid: emulátor vs. skutočné zariadenie na 63 316 rovnakých APK, vetvy real_full, real_P, emu_P; otázky O1, O2; všetky varianty kaskád a študentov ako V1/V2, kritériá vopred, implementácia) | rozhodnuté 2026-11-22 (autor), pred tréningom |
+| `19_plan_v4.md` | **plán V4** (KronoDroid: emulátor vs. skutočné zariadenie na 63 316 rovnakých APK, vetvy real_full, real_P, emu_P; otázky O1, O2; všetky varianty kaskád a študentov ako V1/V2, špecialista V3, prehľad prevzatého a neprevzatého, kritériá vopred, implementácia) | rozhodnuté 2026-11-22 (autor), pred tréningom |
 
 Pravidlá:
 - Uvádzať iba overené fakty s popisom, ako boli overené. Návrhy a otvorené rozhodnutia jasne označiť.

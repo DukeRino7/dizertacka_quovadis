@@ -122,10 +122,34 @@ CPU čas než učiteľ“ sa overí benchmarkom.
 - Kaskáda B: pásmo neistoty ako v docs/09 a krivka pevných rozpočtov 10 / 20 / 30 / 40 % (vzdialenosť od prahu
   v log-odds, hranica z validácie). „Emulácia“ tu znamená dynamickú analýzu v prostredí danej vetvy.
 - Zero-day behy: hyperparametre z hlavného rozdelenia (ako V2), architektúry podľa výberu na hlavnom rozdelení.
-- **Nepoužije sa:** špecialista V3 (nepreukázal prínos) a prekalibrovanie prahu z V3 (nie sú neškodné súbory
-  z neskoršieho obdobia).
+- **Nepoužije sa:** prekalibrovanie prahu z V3 (scenár C), zdôvodnenie v oddiele 8.
 
-### 3.4 Analýzy ako na Quo Vadis
+### 3.4 Špecialista pre neisté súbory (V3, scenár B; doplnené 2026-11-22, oddiel 8)
+Postup ako v `docs/12`, oddiel 2; vo všetkých troch vetvách, na hlavnom rozdelení aj v 5 zero-day behoch.
+1. **1. stupeň:** najlepší statický model podľa výberu (vo V3 to bol statický LightGBM, vybraný vo V1).
+   Prah z validácie (FPR 1 %).
+2. **Eskalácia:** rozpočet 10 %, súbory najbližšie prahu (vzdialenosť v log-odds). Hranica = kvantil 10 % na validácii.
+3. **Tréningové dáta špecialistu:** 20 % tréningu s OOF skóre 1. stupňa najbližšie prahu. Citlivosť 10 % a 40 %
+   sa uvedie ako citlivosť, nie ako výber.
+4. **Špecialista:** LightGBM s hyperparametrami hybridného LightGBM danej vetvy (bez ladenia), 3 seedy.
+   Early stopping na validačných súboroch v tej istej oblasti.
+   - **B-spec:** statické + dynamické príznaky + log-odds skóre 1. stupňa;
+   - **B-spec-dyn:** dynamické príznaky + log-odds skóre 1. stupňa (model musí použiť dynamiku).
+5. **Rozhodnutie:** neeskalované súbory rozhodne 1. stupeň, eskalované špecialista. Prah špecialistu sa určí tak,
+   aby mala celá kaskáda na validácii FPR ≤ 1 %. Doplnkovo krivka rozpočtu 10 / 20 / 30 / 40 %.
+
+**Kritériá (prevzaté z docs/12; zmenený iba počet rodín):**
+| | kritérium |
+|---|---|
+| **B1 – téza 1** | priemerné TPR vynechanej rodiny ≥ statický **+ 1 p. b.**, FPR ≤ FPR statického a B-spec ≥ statický **aspoň v 4 z 5 rodín** (vo V3: 5 zo 7) |
+| **B2 – téza 2** | FPR < FPR statického aj dynamického **a** TPR ≥ TPR statického − 1 p. b. (hlavné rozdelenie aj zero-day) |
+| **B3 – prínos oproti kaskáde** | TPR vynechanej rodiny ≥ B-baselines (rozpočet 10 %) **+ 1 p. b.** pri FPR vyššom najviac o 0,1 p. b. |
+
+Dôvod zaradenia: ak dynamika zo zariadenia nesie viac informácie než emulácia Speakeasy, špecialista ju môže
+v neistej oblasti využiť lepšie než bežná kaskáda. Porovnanie B-spec-dyn medzi real_P a emu_P je preto doplnkom
+k otázke 2.
+
+### 3.5 Analýzy ako na Quo Vadis
 Komplementarita (ktoré chyby statického modelu opraví dynamika), strop „statický alebo dynamický správne“,
 dôležitosť príznakov (skupiny: oprávnenia, metadáta, systémové volania), robustnosť bootstrapom (docs/16).
 
@@ -213,3 +237,29 @@ Bez zmeny správania V1–V3: predvolený dataset ostáva Quo Vadis, staré skri
 - Hlavné rozdelenie je náhodné (bez časového posunu); časový posun iba doplnkovo pre malvér.
 - Šum v označeniach benígnej triedy (docs/18, bod 3.1); vykazuje sa podskupina.
 - Porovnanie s Quo Vadis je popisné; doplnkový beh Quo Vadis s náhodným rozdelením sa nerobil.
+- Scenár C z V3 (prekalibrovanie prahu) sa neopakuje (oddiel 8).
+
+## 8. Čo sa z V1–V3 prevzalo a čo nie
+### 8.1 Prehľad
+| z Quo Vadis | vo V4 | dôvod |
+|---|---|---|
+| protokol tréningu, ladenie, seedy, metriky, pravidlo výberu (V1) | **áno, bez zmeny** | porovnateľnosť |
+| rebríček `lr`, `rf`, `lightgbm`, `mlp_small`, `mlp_large`, neskorá fúzia (V1) | **áno** | porovnateľnosť |
+| sekvenčné modely `seq_cnn`, `two_branch` (V1) | **nie** | KronoDroid má iba počty volaní bez poradia; komplexný hybrid = `mlp_large` |
+| destilácia: `mlp_kd`, `mlp_nokd`, `mlp_kd_modal` (V1), `mlp_kd_twobranch` (V2) | **áno**; `twobranch` → `mlp_kd_heavy` (učiteľ `mlp_large`) | porovnateľnosť; dvojvetvová sieť nie je |
+| kaskády A (V1) a B vrátane krivky rozpočtu (V2) | **áno, všetkých 11 variantov** | porovnateľnosť |
+| časový test (V1) | **nie ako hlavný**, iba doplnkovo pre malvér | dataset nemá neskoršie obdobie zberu ani dátum objavenia; čas súvisí s triedou |
+| zero-day vynechaním rodiny (V2) | **áno, 5 rodín** | pravidlo ≥ 1 000 vzoriek bez všeobecných názvov (`Agent`, `Malap`) |
+| nízka prevalencia (V1) | **áno** | prepočet z TPR a FPR |
+| kontrolný experiment reprezentácie (V1, `dynamic_ablations`) | **áno, D-norm** | obdoba: overenie artefaktu zberu |
+| špecialista B-spec, B-spec-dyn, kritériá B1–B3 (V3) | **áno** (doplnené 2026-11-22) | lacný; pri kvalitnejšej dynamike môže mať iný výsledok než na Quo Vadis |
+| prekalibrovanie prahu, scenár C (V3) | **nie** | rieši posun neškodných súborov medzi validáciou a testom; pri náhodnom rozdelení posun nie je a neškodné súbory z neskoršieho obdobia s platným dátumom dataset nemá |
+| robustnosť: bootstrap (docs/16) | **áno** | štatistická významnosť O1, O2 a téz |
+| robustnosť: iba súbory s úspešnou emuláciou (docs/16, R2) | **nie** | KronoDroid neuvádza výsledok behu; najbližšia obdoba je podskupina `nr_syscalls` = 0, vykáže sa popisne |
+| doplnkový beh Quo Vadis s náhodným rozdelením | **nie** (rozhodnutie autora) | porovnanie datasetov ostáva popisné; dá sa dorobiť neskôr samostatne |
+
+### 8.2 Zmeny plánu (všetky pred tréningom)
+| dátum | zmena | dôvod |
+|---|---|---|
+| 2026-11-22 | pôvodná verzia (commit 431ad47) | – |
+| 2026-11-22 | doplnený špecialista z V3 (oddiel 3.4) s kritériami B1–B3; B1 prepočítané na 4 z 5 rodín | požiadavka autora na čo najväčšiu zhodu s Quo Vadis; zatiaľ sa netrénovalo nič |
