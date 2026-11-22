@@ -13,6 +13,7 @@ Jedna konfigurácia = jeden experiment. Štruktúra kopíruje `runs/` a `src/mod
 | `students_static/` | ľahké statické modely z destilácie | `runs/students_static/<model>/` |
 | `students_dynamic/` | ľahké dynamické modely z destilácie | `runs/students_dynamic/<model>/` |
 | `cascade/` | finálna kaskáda (výber študentov, učiteľa, prahov) | `runs/cascade/<variant>/` |
+| `kronodroid/` | V4: dataset KronoDroid (zdroj, skupiny stĺpcov) | `processed/kronodroid/` |
 
 Návrh konvencií (zatiaľ neschválené):
 - Formát YAML, názov súboru = názov modelu, napr. `configs/static/lr.yaml`.

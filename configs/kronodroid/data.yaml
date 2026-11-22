@@ -1,0 +1,32 @@
+# KronoDroid (V4) – zdroj dát a skupiny stĺpcov pre audit.
+# Zdroj: https://github.com/aleguma/kronodroid (README: citovať Computers & Security 110 (2021) 102399).
+source:
+  repo: https://github.com/aleguma/kronodroid
+  commit: c6ec342167bc449967a802824d068900ac8120c5   # stiahnuté 2026-11-22
+  zip_sha256:
+    emu_legitimate_v1.zip: de3ba7838a6d660adc16be06b49db8f9f63ee8a055cc9ff0576e302d303ce8a2
+    emu_malware_v1.zip: c5758b2957db65c704db032bac987d47be30d0374dfacac1357757ebe652aec4
+    real_legitimate_v1.zip: 21f6d507321856eefa6c40a31f484d3e532b5dea23144e3c2a9470161bd5f782
+    real_malware_v1.zip: 03aa36a9c3aa3430523fcf87042659562e5af3219688562087107817095cb8cd
+
+raw_dir: data/kronodroid/csv
+files:                       # podmnožina -> trieda -> súbor
+  emulator: {benign: emu_legitimate_v1.csv, malware: emu_malware_v1.csv}
+  real_device: {benign: real_legitimate_v1.csv, malware: real_malware_v1.csv}
+
+# Stĺpce mimo príznakov modelu (NÁVRH, rozhodnúť v docs/18 pred trénovaním):
+# identifikátory, označenia a údaje z VirusTotal, ktoré by prezradili triedu alebo nie sú vlastnosťou súboru.
+columns:
+  id: [sha256, Package]
+  label: Malware
+  family: MalFamily
+  external_label_like: [Scanners, Detection_Ratio, TimesSubmitted, NrContactedIps]
+  dates:                     # v emulátore iné názvy
+    emulator: [FirstModDate, LastModDate]
+    real_device: [EarliestModDate, HighestModDate]
+  dynamic_last: nr_syscalls  # dynamické = stĺpce od 3. po nr_syscalls vrátane
+  static_metadata: [CFileSize, UFileSize, FilesInsideAPK, Activities, NrIntServices, NrIntServicesActions,
+                    NrIntActivities, NrIntActivitiesActions, NrIntReceivers, NrIntReceiversActions,
+                    TotalIntentFilters, NrServices]
+
+out_dir: processed/kronodroid/audit

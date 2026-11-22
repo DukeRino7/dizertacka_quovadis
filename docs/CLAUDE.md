@@ -22,6 +22,7 @@ Texty, z ktorých sa budú preberať informácie do práce. Číslované podľa 
 | `15_zhrnutie_pre_veducu.pdf` | 4-stranové PDF pre vedúcu písané pre laika (slovník pojmov, obrázok kaskády, bez skratiek): techniky, výsledky, stav téz, zistenia, overenie robustnosti, návrhy alternatívnych téz s výsledkami (čísla z docs/07, 10, 13, 17) | hotové 2026-11-07 |
 | `16_plan_robustnost.md` | plán overenia robustnosti: štatistická významnosť (bootstrap), citlivosť na chybu emulácie; kritériá vopred | rozhodnuté 2026-11-07, pred výpočtom |
 | `17_vysledky_robustnost.md` | výsledky overenia robustnosti: hlavné tvrdenia významné, prekalibrovanie spoľahlivé pri ~1 600 súboroch, zistenie D platí aj pri úspešnej emulácii (dynamika tam škodí) | hotové 2026-11-07 |
+| `18_audit_kronodroid.md` | V4: audit datasetu KronoDroid (Android, emulátor vs. skutočné zariadenie), riziká, návrhy rozhodnutí | hotové 2026-11-22, rozhodnutia v docs/19 |
 
 Pravidlá:
 - Uvádzať iba overené fakty s popisom, ako boli overené. Návrhy a otvorené rozhodnutia jasne označiť.

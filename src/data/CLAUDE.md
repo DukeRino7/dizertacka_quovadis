@@ -19,6 +19,7 @@ Spúšťať z koreňa projektu cez `.venv\Scripts\python.exe -m src.data.<modul>
 | `build_dynamic_tabular.py` | dynamický dataset pre rebríček → `processed/dynamic/tabular`; `--exclude-family` (V2) → `processed/dynamic/lofo/<rodina>/tabular` | hotové |
 | `build_dynamic_sequence.py` | postupnosti ID tokenov API pre sekvenčné modely → `processed/dynamic/sequence` (slovník iba z tréningu); `--exclude-family` (V2) | hotové |
 | `providers.py` | jednotné načítanie static / dynamic / hybrid / dynamic_seq / hybrid_seq (zarovnanie podľa SHA-256); zero-day (`DIZERTACKA_HOLDOUT_FAMILY`): rodina mimo train/validation, časť `holdout`, slovníky z `processed/dynamic/lofo/<rodina>` | hotové |
+| `kronodroid/audit_kronodroid.py` | V4: audit KronoDroid CSV → `processed/kronodroid/audit` (`configs/kronodroid/data.yaml`, docs/18) | hotové |
 
 Konfigurácie: `configs/data/index.yaml`, `configs/data/static.yaml`, `configs/data/dynamic.yaml`.
 Dynamické dáta: `docs/04_dynamicke_data.md` (formát, postup, poradie spustenia).
