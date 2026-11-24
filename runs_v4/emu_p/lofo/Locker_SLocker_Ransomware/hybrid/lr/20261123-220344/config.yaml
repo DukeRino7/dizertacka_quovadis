@@ -1,0 +1,9 @@
+name: lr
+approach: hybrid
+model: logreg
+description: logistická regresia s L2 regularizáciou (vstup signed log1p + štandardizácia)
+protocol: configs/protocol.yaml
+search_space:
+  C: {type: float, low: 1.0e-4, high: 10.0, log: true}   # sila regularizácie (menšie C = silnejšia)
+fixed_params:
+  max_iter: 2000
