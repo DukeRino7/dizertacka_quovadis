@@ -1,0 +1,18 @@
+name: lightgbm
+approach: hybrid
+model: lightgbm
+description: LightGBM, gradient boosting stromov s early stopping na validácii (pôvodné hodnoty príznakov)
+protocol: configs/protocol.yaml
+search_space:
+  learning_rate: {type: float, low: 0.01, high: 0.2, log: true}
+  num_leaves: {type: int, low: 16, high: 512, log: true}
+  min_child_samples: {type: int, low: 10, high: 200, log: true}
+  feature_fraction: {type: float, low: 0.3, high: 1.0}
+  bagging_fraction: {type: float, low: 0.5, high: 1.0}
+  lambda_l1: {type: float, low: 1.0e-8, high: 10.0, log: true}
+  lambda_l2: {type: float, low: 1.0e-8, high: 10.0, log: true}
+fixed_params:
+  num_boost_round: 5000          # horná hranica; skutočný počet určí early stopping
+  early_stopping_rounds: 100
+smoke_overrides:
+  num_boost_round: 30

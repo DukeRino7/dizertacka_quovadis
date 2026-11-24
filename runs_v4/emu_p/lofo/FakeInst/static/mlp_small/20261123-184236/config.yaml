@@ -1,0 +1,18 @@
+name: mlp_small
+approach: static
+model: mlp
+description: malá neurónová sieť (1–2 skryté vrstvy), kandidát na ľahkého študenta
+protocol: configs/protocol.yaml
+search_space:
+  hidden_layers: {type: int, low: 1, high: 2}
+  hidden_width: {type: categorical, choices: [32, 64, 128, 256]}
+  dropout: {type: float, low: 0.0, high: 0.5}
+  lr: {type: float, low: 1.0e-4, high: 3.0e-3, log: true}
+  weight_decay: {type: float, low: 1.0e-6, high: 1.0e-2, log: true}
+  batch_size: {type: categorical, choices: [256, 512, 1024]}
+fixed_params:
+  width_decay: 0.5               # každá ďalšia vrstva má polovičnú šírku
+  max_epochs: 100
+  patience: 8                    # early stopping podľa ROC-AUC na validácii
+smoke_overrides:
+  max_epochs: 2
