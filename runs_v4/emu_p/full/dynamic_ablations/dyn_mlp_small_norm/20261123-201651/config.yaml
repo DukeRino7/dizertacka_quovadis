@@ -1,0 +1,12 @@
+# V4 (docs/19, 2.2) KONTROLNÝ EXPERIMENT D-norm: rovnaký model ako configs/dynamic/mlp_small.yaml, ale dynamika ako
+# podiely volaní (počet / nr_syscalls) bez nr_syscalls. Hyperparametre z dynamic/mlp_small (bez ladenia).
+# Účel: stojí prípadný prínos dynamiky iba na celkovom množstve aktivity? (obdoba configs/dynamic_ablations)
+name: dyn_mlp_small_norm
+approach: dynamic_norm
+results_approach: dynamic_ablations
+model: mlp
+description: dynamic mlp_small s dynamikou ako podiely systémových volaní (kontrola artefaktu množstva aktivity)
+protocol: configs/protocol.yaml
+params_from: dynamic/mlp_small
+search_space: {}
+fixed_params: {}

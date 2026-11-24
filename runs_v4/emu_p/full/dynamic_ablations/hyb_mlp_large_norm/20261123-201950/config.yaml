@@ -1,0 +1,12 @@
+# V4 (docs/19, 2.2) KONTROLNÝ EXPERIMENT D-norm: rovnaký model ako configs/hybrid/mlp_large.yaml, ale dynamika ako
+# podiely volaní (počet / nr_syscalls) bez nr_syscalls. Hyperparametre z hybrid/mlp_large (bez ladenia).
+# Účel: stojí prípadný prínos dynamiky iba na celkovom množstve aktivity? (obdoba configs/dynamic_ablations)
+name: hyb_mlp_large_norm
+approach: hybrid_norm
+results_approach: dynamic_ablations
+model: mlp
+description: hybrid mlp_large s dynamikou ako podiely systémových volaní (kontrola artefaktu množstva aktivity)
+protocol: configs/protocol.yaml
+params_from: hybrid/mlp_large
+search_space: {}
+fixed_params: {}
