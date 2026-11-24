@@ -25,6 +25,7 @@ Texty, z ktorých sa budú preberať informácie do práce. Číslované podľa 
 | `18_audit_kronodroid.md` | V4: audit datasetu KronoDroid (Android, emulátor vs. skutočné zariadenie), riziká, návrhy rozhodnutí | hotové 2026-11-22, rozhodnutia v docs/19 |
 | `19_plan_v4.md` | **plán V4** (KronoDroid: emulátor vs. skutočné zariadenie na 63 316 rovnakých APK, vetvy real_full, real_P, emu_P; otázky O1, O2; všetky varianty kaskád a študentov ako V1/V2, špecialista V3, prehľad prevzatého a neprevzatého, kritériá vopred, implementácia) | rozhodnuté 2026-11-22 (autor), pred tréningom |
 | `20_vysledky_v4.md` | **výsledky V4** (`runs_v4/`): O1 a O1-Z splnené (dynamika pomáha, zero-day +11 p. b.), O2 nesplnené (+0,76), O2-Z splnené (+9,6), D-norm, tézy na 3 vetvách, špecialista B1–B3, porovnanie s Quo Vadis, obmedzenia | hotové 2026-11-24 |
+| `21_porovnanie_datasetov.pdf` | podrobný dokument pre vedúcu: oba datasety (obsah, výhody, obmedzenia, naše rozhodnutia, výsledky), porovnanie s grafmi, výklad rozdielu, analýza „je slabinou dataset?“ (požiadavky P1–P10, ostatné slabiny), stav téz na oboch datasetoch; zdroj HTML a grafy v `21_zdroj/` (`make_figures.py`, tlač cez Edge) | hotové 2026-11-24 |
 
 Pravidlá:
 - Uvádzať iba overené fakty s popisom, ako boli overené. Návrhy a otvorené rozhodnutia jasne označiť.

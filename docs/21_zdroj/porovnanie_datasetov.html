@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Porovnanie datasetov</title>
+<style>
+  :root {
+    --ink: #0b0b0b; --ink2: #3d3c39; --muted: #6b6a66; --rule: #d9d8d3; --soft: #f4f3ef; --surface: #ffffff;
+    --stat: #2a78d6; --dyn: #eb6834; --hyb: #1baf7a; --accent: #2a78d6;
+    --ok: #0f7a3d; --no: #a33a2a; --part: #8a6100;
+  }
+  @page { size: A4; margin: 20mm 19mm 20mm 19mm; }
+  html { background: var(--surface); }
+  body { font-family: Cambria, Georgia, "Times New Roman", serif; font-size: 10.6pt; line-height: 1.5; color: var(--ink);
+         background: var(--surface); max-width: 172mm; margin: 0 auto; padding: 0 16px; }
+  h1, h2, h3, h4, .sans, table, figcaption, .box-title, .kicker { font-family: "Segoe UI", Calibri, Arial, sans-serif; }
+  h1 { font-size: 21pt; line-height: 1.2; margin: 0 0 4pt; font-weight: 650; }
+  .subtitle { font-size: 12pt; color: var(--ink2); margin: 0 0 10pt; font-family: "Segoe UI", Calibri, Arial, sans-serif; }
+  .meta { font-size: 9pt; color: var(--muted); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+          padding: 5pt 0; margin-bottom: 14pt; font-family: "Segoe UI", Calibri, Arial, sans-serif; }
+  h2 { font-size: 14.5pt; margin: 20pt 0 6pt; padding-top: 4pt; border-top: 2px solid var(--ink); font-weight: 650;
+       break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 13pt 0 4pt; font-weight: 650; break-after: avoid; }
+  h4 { font-size: 10.3pt; margin: 9pt 0 2pt; font-weight: 650; color: var(--ink2); break-after: avoid; }
+  p { margin: 0 0 7pt; text-align: justify; hyphens: auto; }
+  ul, ol { margin: 0 0 7pt; padding-left: 17pt; }
+  li { margin-bottom: 2.5pt; }
+  .kicker { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 2pt; }
+  table { width: 100%; border-collapse: collapse; font-size: 8.7pt; line-height: 1.35; margin: 4pt 0 10pt; }
+  tr { break-inside: avoid; }
+  th { text-align: left; font-weight: 600; color: var(--ink2); border-bottom: 1.5px solid var(--ink); padding: 3pt 5pt; vertical-align: bottom; }
+  td { border-bottom: 1px solid var(--rule); padding: 3pt 5pt; vertical-align: top; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.em td { background: var(--soft); font-weight: 600; }
+  .ok { color: var(--ok); font-weight: 600; } .no { color: var(--no); font-weight: 600; } .part { color: var(--part); font-weight: 600; }
+  figure { margin: 8pt 0 12pt; break-inside: avoid; }
+  figure img { width: 100%; display: block; }
+  figcaption { font-size: 8.6pt; color: var(--ink2); line-height: 1.4; margin-top: 3pt; }
+  figcaption b { color: var(--ink); }
+  .box { border: 1px solid var(--rule); border-left: 3px solid var(--accent); background: var(--soft); padding: 7pt 10pt;
+         margin: 8pt 0 11pt; break-inside: avoid; }
+  .box p:last-child, .box ul:last-child { margin-bottom: 0; }
+  .box-title { font-weight: 650; font-size: 9.6pt; margin-bottom: 3pt; }
+  .box.warn { border-left-color: var(--part); }
+  .box.key { border-left-color: var(--ink); background: #fff; }
+  dl.gloss { margin: 0; font-size: 9.6pt; columns: 2; column-gap: 14pt; }
+  dl.gloss div { break-inside: avoid; margin-bottom: 4.5pt; }
+  dl.gloss dt { font-weight: 700; font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 9pt; }
+  dl.gloss dd { margin: 0; text-align: left; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+  .two > div { break-inside: avoid; }
+  .pill { display: inline-block; font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 7.8pt; padding: 0 5pt;
+          border-radius: 8pt; border: 1px solid var(--rule); color: var(--ink2); }
+  .sw { display: inline-block; width: 8pt; height: 8pt; border-radius: 2pt; vertical-align: -0.5pt; margin-right: 2pt; }
+  .src { font-size: 8.3pt; color: var(--muted); text-align: left; }
+  .pb { break-before: page; }
+  .toc { font-family: "Segoe UI", Calibri, Arial, sans-serif; font-size: 9.4pt; columns: 2; column-gap: 16pt; margin: 0 0 6pt; padding-left: 15pt; }
+  svg text { font-family: "Segoe UI", Calibri, Arial, sans-serif; }
+  @media (max-width: 640px) { .two, dl.gloss, .toc { display: block; columns: 1; } body { padding: 0 16px; } }
+</style>
+</head>
+<body>
+
+<div class="kicker">Podklad pre dizertačnú prácu · porovnanie experimentov V1–V4</div>
+<h1>Hybridná detekcia malvéru na dvoch datasetoch</h1>
+<p class="subtitle">Quo Vadis (Windows) a KronoDroid (Android): popis, rozhodnutia, výsledky, porovnanie a analýza slabín</p>
+<div class="meta">Dušan Čatloch · 24. 11. 2026 · Výsledky: <code>runs_final</code>, <code>runs_v2</code>, <code>runs_v3</code>, <code>runs_v4</code> ·
+Podrobné dokumenty: docs/07, 10, 13, 17 (Quo Vadis), docs/18–20 (KronoDroid)</div>
+
+<div class="box key">
+  <div class="box-title">Zhrnutie v skratke</div>
+  <p>Práca skúma, či kombinácia <b>statickej</b> analýzy (vlastnosti súboru bez spustenia) a <b>dynamickej</b> analýzy
+  (správanie pri spustení) zlepší detekciu malvéru a či ju možno usporiadať do lacnej <b>kaskády</b>, ktorá drahú
+  dynamickú analýzu spustí iba pri sporných súboroch. Rovnaký postup bol použitý na dvoch verejných datasetoch.</p>
+  <ul>
+    <li><b>Na datasete Quo Vadis dynamika nepomohla.</b> Hybridný model bol rovnaký ako statický, a to aj pri nových,
+      nevidených rodinách malvéru (79,2 % oproti 78,7 % zachytených).</li>
+    <li><b>Na datasete KronoDroid dynamika pomohla</b>, najvýraznejšie pri nových rodinách: hybrid zachytí 83,6 %,
+      statický model 67,8 %. Prínos je štatisticky významný a nevysvetľuje ho iba množstvo aktivity aplikácie.</li>
+    <li>Na tých istých aplikáciách spustených raz v emulátore a raz na skutočnom zariadení je dynamika zo zariadenia
+      pri nových rodinách o 9,6 percentuálneho bodu (p. b.) užitočnejšia. Pri známych rodinách je rozdiel malý (0,8 p. b.).</li>
+    <li>Kaskáda, ktorá spustí dynamickú analýzu iba pri ~10 % súborov, má na oboch datasetoch <b>menej falošných
+      poplachov</b> než samotný statický model; na KronoDroid navyše zachytí viac malvéru.</li>
+    <li><b>Záver:</b> to, či dynamická analýza pomáha, závisí od kvality dát. Domnienka, že najväčšou slabinou práce je
+      chýbajúci kvalitný a veľký dataset so statickými aj dynamickými dátami, je podľa analýzy v kapitole 7
+      <b>opodstatnená</b>, no práca ju dokáže zmierniť a premeniť na samostatné zistenie.</li>
+  </ul>
+</div>
+
+<ol class="toc">
+  <li>Účel dokumentu a výskumná otázka</li>
+  <li>Základné pojmy</li>
+  <li>Spoločná metodika</li>
+  <li>Dataset Quo Vadis</li>
+  <li>Dataset KronoDroid</li>
+  <li>Porovnanie datasetov a výsledkov</li>
+  <li>Je najväčšou slabinou práce dataset?</li>
+  <li>Stav téz na oboch datasetoch</li>
+  <li>Záver</li>
+</ol>
+
+<h2>1. Účel dokumentu a výskumná otázka</h2>
+<p>Experimenty V1 až V3 na datasete Quo Vadis ukázali, že dynamické príznaky z emulácie neprinášajú žiadnu informáciu
+navyše oproti statickým príznakom. Z toho vyplýva otázka, na ktorú sa nedá odpovedať z jedného datasetu:
+<i>je to vlastnosť dynamickej analýzy všeobecne, alebo vlastnosť konkrétnych dát?</i> Na odporúčanie vedúcej práce bol
+preto celý postup zopakovaný na druhom datasete (verzia V4). Bol vybraný KronoDroid, pretože obsahuje dynamické
+záznamy tých istých aplikácií z emulátora aj zo skutočného zariadenia. Vďaka tomu možno vplyv zdroja dynamiky
+izolovať pri inak rovnakých podmienkach.</p>
+<p>Dokument opisuje oba datasety rovnakou štruktúrou (čo obsahujú, výhody, obmedzenia, naše rozhodnutia, výsledky),
+potom ich porovnáva a nakoniec podrobne analyzuje, nakoľko je kvalita dát hlavnou slabinou práce.
+Všetky čísla sú prevzaté z výstupov skriptov; pri každom je uvedené, ako bolo zmerané.
+Rozhodnutia a kritériá boli zapísané <b>pred</b> spustením príslušných experimentov (docs/09, 12, 16, 19), aby sa
+výsledky nedali prispôsobiť dodatočne.</p>
+
+<h2>2. Základné pojmy</h2>
+<p>Pre čitateľa, ktorý sa projektom nezaoberal, sú tu vysvetlené pojmy, ktoré sa v texte opakujú.</p>
+<dl class="gloss">
+  <div><dt>Statická analýza</dt><dd>Skúmanie súboru bez spustenia: hlavička, importované funkcie, reťazce, pri Androide
+    oprávnenia, ktoré aplikácia požaduje. Je rýchla a bezpečná.</dd></div>
+  <div><dt>Dynamická analýza</dt><dd>Súbor sa spustí v kontrolovanom prostredí a zaznamená sa, čo robí (volania funkcií
+    systému). Je pomalšia, no vidí správanie, ktoré sa dá v kóde skryť.</dd></div>
+  <div><dt>Emulácia, emulátor, skutočné zariadenie</dt><dd>Prostredia pre dynamickú analýzu. Speakeasy (Quo Vadis)
+    napodobňuje iba rozhranie Windows, nie celý systém. Emulátor Android spúšťa celý systém vo virtuálnom stroji.
+    Skutočné zariadenie je fyzický telefón.</dd></div>
+  <div><dt>Príznak</dt><dd>Jedna číselná vlastnosť súboru, ktorú model dostane na vstup (napr. „požaduje oprávnenie
+    na SMS“ alebo „počet volaní <code>read</code>“).</dd></div>
+  <div><dt>Statický, dynamický, hybridný model</dt><dd>Model, ktorý vidí iba statické príznaky, iba dynamické,
+    alebo oboje naraz.</dd></div>
+  <div><dt>Rodina malvéru</dt><dd>Skupina škodlivých programov s rovnakým pôvodom a správaním (napr. ransomvér Locker).</dd></div>
+  <div><dt>Nová rodina (zero-day)</dt><dd>Test, pri ktorom je jedna rodina celá vynechaná z učenia. Simuluje útok,
+    ktorý detektor nikdy predtým nevidel.</dd></div>
+  <div><dt>TPR (citlivosť)</dt><dd>Podiel zachyteného malvéru. TPR 0,95 = zachytených 95 % škodlivých súborov.</dd></div>
+  <div><dt>FPR (falošné poplachy)</dt><dd>Podiel neškodných súborov mylne označených ako malvér. Pri veľkom počte
+    neškodných súborov rozhoduje o použiteľnosti.</dd></div>
+  <div><dt>Prah, TPR pri FPR 1 %</dt><dd>Model dáva skóre; prah určuje, od akého skóre je súbor malvér. Prah sa
+    nastavuje na validačných dátach tak, aby FPR bolo najviac 1 %. „TPR pri FPR 1 %“ porovnáva modely pri rovnakom
+    počte falošných poplachov.</dd></div>
+  <div><dt>Tréning, validácia, test</dt><dd>Na tréningu sa model učí, na validácii sa vyberajú nastavenia a prah,
+    test slúži iba na záverečné meranie.</dd></div>
+  <div><dt>p. b.</dt><dd>Percentuálny bod: rozdiel 95 % a 93 % sú 2 p. b.</dd></div>
+  <div><dt>Interval spoľahlivosti (IS), bootstrap</dt><dd>Rozsah, v ktorom skutočný rozdiel leží s pravdepodobnosťou
+    95 %. Počíta sa opakovaným náhodným prevzorkovaním testu (2 000-krát). Ak celý interval leží nad nulou,
+    rozdiel nie je náhoda.</dd></div>
+  <div><dt>LightGBM, RF, LR, MLP</dt><dd>Typy modelov: gradientne boostované rozhodovacie stromy, náhodný les,
+    logistická regresia a neurónová sieť (malá a veľká).</dd></div>
+  <div><dt>Destilácia, učiteľ, študent</dt><dd>Veľký model (učiteľ) odovzdá svoje „mäkké“ odpovede menšiemu modelu
+    (študentovi), ktorý má byť rýchlejší pri podobnej presnosti.</dd></div>
+  <div><dt>Kaskáda</dt><dd>Postupnosť modelov: lacné modely rozhodnú jasné prípady, sporné prípady posunú ďalej.
+    Kaskáda A spúšťa dynamickú analýzu pre každý súbor, kaskáda B iba pre sporné.</dd></div>
+  <div><dt>Špecialista</dt><dd>Druhý stupeň kaskády B, ktorý sa učí iba na sporných súboroch (tých, pri ktorých si
+    statický model nie je istý), a pri nich rozhoduje so statickými aj dynamickými príznakmi.</dd></div>
+  <div><dt>D-norm</dt><dd>Kontrolný experiment: počty systémových volaní sa nahradia ich podielmi (koľko percent
+    volaní tvorí každé volanie). Overuje, či model neťaží len z toho, že malvér je „aktívnejší“.</dd></div>
+</dl>
+
+<h2>3. Spoločná metodika</h2>
+<p>Na oboch datasetoch bol použitý rovnaký postup, aby sa výsledky dali porovnať. Rozdiely vynútené dátami sú uvedené
+pri jednotlivých datasetoch.</p>
+<ol>
+  <li><b>Spárovanie a index vzoriek.</b> Statické a dynamické záznamy sa spájajú podľa odtlačku súboru (SHA-256),
+    nikdy podľa poradia riadkov. Jeden súbor je jedna vzorka.</li>
+  <li><b>Rovnaké rozdelenie</b> na tréning, validáciu a test pre všetky porovnávané modely. Súbory s identickými
+    príznakmi sú vždy v tej istej časti, aby sa ten istý vektor neobjavil v tréningu aj teste.</li>
+  <li><b>Rebríček piatich modelov</b> pre každý prístup (LR, RF, LightGBM, malá a veľká MLP), ladenie 30 pokusmi na
+    validácii, tri opakovania s rôznym náhodným semienkom (seedom).</li>
+  <li><b>Výber modelu vopred dohodnutým pravidlom</b>: najvyššie TPR pri FPR 1 % na validácii (docs/00). Na oboch
+    datasetoch vyhral pri všetkých prístupoch LightGBM.</li>
+  <li><b>Destilácia</b>: štyria študenti pre statickú aj dynamickú časť (s učiteľom, bez učiteľa, s učiteľom rovnakej
+    modality, s komplexným učiteľom).</li>
+  <li><b>Kaskády</b> všetkých variantov (obr. 0) a <b>špecialista</b> pre sporné súbory.</li>
+  <li><b>Test novej rodiny</b>: rodina je vynechaná z tréningu aj validácie a meria sa, koľko jej súborov model zachytí.</li>
+  <li><b>Meranie nárokov</b> na jednom počítači: CPU čas na vzorku, oneskorenie, veľkosť modelu, čas tréningu a ladenia.</li>
+</ol>
+
+<figure>
+<svg viewBox="0 0 640 230" width="100%" role="img" aria-label="Schéma kaskády A a kaskády B">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#52514e"/></marker></defs>
+  <style>.bx{fill:#fff;stroke:#52514e;stroke-width:1.2}.bs{fill:#e8f1fb;stroke:#2a78d6;stroke-width:1.2}
+  .bd{fill:#fdeee7;stroke:#eb6834;stroke-width:1.2}.bh{fill:#e4f6ef;stroke:#1baf7a;stroke-width:1.2}
+  .t{font-size:10.5px;fill:#0b0b0b}.t2{font-size:9px;fill:#52514e}.ln{stroke:#52514e;stroke-width:1.2;fill:none;marker-end:url(#ar)}
+  .h{font-size:12px;font-weight:600;fill:#0b0b0b}</style>
+  <text class="h" x="8" y="16">Kaskáda A – dynamická analýza vždy</text>
+  <rect class="bx" x="8" y="62" width="62" height="34" rx="4"/><text class="t" x="39" y="83" text-anchor="middle">súbor</text>
+  <rect class="bs" x="96" y="30" width="96" height="34" rx="4"/><text class="t" x="144" y="51" text-anchor="middle">statický model</text>
+  <rect class="bd" x="96" y="96" width="96" height="34" rx="4"/><text class="t" x="144" y="112" text-anchor="middle">dynamická</text><text class="t" x="144" y="124" text-anchor="middle">analýza + model</text>
+  <rect class="bx" x="218" y="62" width="70" height="34" rx="4"/><text class="t" x="253" y="83" text-anchor="middle">zhoda?</text>
+  <rect class="bx" x="218" y="150" width="70" height="30" rx="4"/><text class="t" x="253" y="169" text-anchor="middle">rozhodnutie</text>
+  <rect class="bh" x="218" y="196" width="70" height="30" rx="4"/><text class="t" x="253" y="215" text-anchor="middle">hybrid</text>
+  <path class="ln" d="M70,79 L84,79 L84,47 L94,47"/><path class="ln" d="M84,79 L84,113 L94,113"/>
+  <path class="ln" d="M192,47 L205,47 L205,72 L216,72"/><path class="ln" d="M192,113 L205,113 L205,88 L216,88"/>
+  <path class="ln" d="M240,96 L240,148"/><text class="t2" x="244" y="128">áno</text>
+  <path class="ln" d="M288,79 L300,79 L300,211 L290,211"/><text class="t2" x="304" y="150">nie</text>
+
+  <text class="h" x="340" y="16">Kaskáda B – dynamická analýza iba pri spore</text>
+  <rect class="bx" x="340" y="30" width="62" height="34" rx="4"/><text class="t" x="371" y="51" text-anchor="middle">súbor</text>
+  <rect class="bs" x="424" y="30" width="96" height="34" rx="4"/><text class="t" x="472" y="51" text-anchor="middle">statický model</text>
+  <rect class="bx" x="546" y="30" width="90" height="34" rx="4"/><text class="t" x="591" y="45" text-anchor="middle">isté (~90 %)</text><text class="t2" x="591" y="57" text-anchor="middle">→ rozhodnutie</text>
+  <rect class="bd" x="424" y="100" width="96" height="34" rx="4"/><text class="t" x="472" y="116" text-anchor="middle">dynamická</text><text class="t" x="472" y="128" text-anchor="middle">analýza + model</text>
+  <rect class="bx" x="546" y="100" width="86" height="34" rx="4"/><text class="t" x="589" y="121" text-anchor="middle">zhoda?</text>
+  <rect class="bx" x="546" y="160" width="86" height="28" rx="4"/><text class="t" x="589" y="178" text-anchor="middle">rozhodnutie</text>
+  <rect class="bh" x="424" y="160" width="96" height="28" rx="4"/><text class="t" x="472" y="178" text-anchor="middle">hybrid</text>
+  <path class="ln" d="M402,47 L422,47"/><path class="ln" d="M520,47 L544,47"/>
+  <path class="ln" d="M472,64 L472,98"/><text class="t2" x="477" y="85">sporné (~10 %)</text>
+  <path class="ln" d="M520,117 L544,117"/>
+  <path class="ln" d="M589,134 L589,158"/><text class="t2" x="594" y="150">áno</text>
+  <path class="ln" d="M570,134 L570,145 L500,145 L500,158"/><text class="t2" x="520" y="141">nie</text>
+</svg>
+<figcaption><b>Obr. 0.</b> Dve schémy kaskády. Kaskáda A analyzuje dynamicky každý súbor a pri nezhode modelov rozhodne
+hybrid. Kaskáda B najprv rozhodne statickým modelom a dynamickú analýzu spustí iba pre súbory so skóre blízko prahu.
+Prvé stupne môžu byť buď destilovaní študenti, alebo priamo modely LightGBM (varianty „baselines“). Špecialista nahrádza
+v kaskáde B druhý stupeň modelom učeným iba na sporných súboroch.</figcaption>
+</figure>
+
+<h2>4. Dataset Quo Vadis (Windows)</h2>
+<h3>4.1 Čo obsahuje</h3>
+<p>Quo Vadis (Trizna a kol., 2022) obsahuje spustiteľné súbory Windows (formát PE) v dvoch verejných častiach.
+<b>Statická časť</b> sú príznaky EMBER: 2 381 čísel na súbor (hlavička, sekcie, importované a exportované funkcie,
+histogramy bajtov, reťazce). <b>Dynamická časť</b> sú záznamy z emulátora Speakeasy, ktorý súbor nespúšťa v skutočnom
+Windows, ale napodobňuje jeho programové rozhranie a zaznamenáva volania funkcií. Emulácia mala limit 60 sekúnd
+a 500 volaní.</p>
+<table>
+  <tr><th>vlastnosť</th><th>hodnota</th></tr>
+  <tr><td>použiteľné spárované súbory</td><td>91 596 (tréning 74 703, test 17 339)</td></tr>
+  <tr><td>triedy</td><td>neškodné a 7 rodín malvéru (backdoor, coinminer, dropper, keylogger, ransomware, rat, trojan)</td></tr>
+  <tr><td>rozdelenie</td><td>časové: tréning zozbieraný v januári 2022, test v apríli 2022</td></tr>
+  <tr><td>statické príznaky</td><td>EMBER, 2 381 príznakov (kód, importy, štruktúra súboru)</td></tr>
+  <tr><td>dynamické príznaky (naša reprezentácia)</td><td>2 000 najčastejších jednotlivých volaní API a dvojíc volaní; pre sekvenčné modely postupnosť do 1 024 volaní</td></tr>
+</table>
+
+<h3>4.2 Výhody</h3>
+<ul>
+  <li><b>Bohatá statika.</b> EMBER je ustálený štandard; obsahuje aj informácie z kódu (importy), nielen metadáta.</li>
+  <li><b>Úplné párovanie</b>: každý z 91 596 súborov má statický aj dynamický záznam (overené podľa SHA-256).</li>
+  <li><b>Realistický časový test</b>: model sa učí na staršom zbere a testuje na novšom, ako v praxi.</li>
+  <li>Dynamické záznamy obsahujú <b>postupnosti</b> volaní, takže sa dali vyskúšať aj sekvenčné modely.</li>
+</ul>
+
+<h3>4.3 Obmedzenia (overené v dátach)</h3>
+<ul>
+  <li><b>Emulácia nie je skutočný beh.</b> Speakeasy pozná iba časť funkcií Windows. Keď program zavolá neznámu funkciu,
+    emulácia skončí. Záznam potom zachytí iba začiatok správania.</li>
+  <li><b>Test bol pravdepodobne emulovaný inou verziou nástroja.</b> Emulácia skončila na neznámej funkcii
+    (<code>unsupported_api</code>) v 0,0 % tréningových, ale v 54,6 % testovacích súborov; líšia sa aj názvy chýb
+    (docs/04). Dynamický model sa tak učí na inak vyzerajúcich dátach, než na akých sa testuje.</li>
+  <li><b>Artefakty zberu</b>: napríklad 42 % ransomvérov v tréningu má záznam s najviac piatimi volaniami, v teste iba 1,9 %.
+    Dĺžka záznamu by tak mohla prezrádzať rodinu bez súvisu so skutočným správaním.</li>
+  <li>446 súborov rodiny keylogger je v tréningu aj teste (vyradené z tréningu).</li>
+  <li>Iba 7 rodín; dataset neobsahuje samotné súbory, preto <b>nemožno zmerať čas emulácie</b> ani extrakcie príznakov.</li>
+</ul>
+
+<h3>4.4 Naše rozhodnutia</h3>
+<table>
+  <tr><th>rozhodnutie</th><th>dôvod</th></tr>
+  <tr><td>Dynamika = iba volania API (bez počtu chýb, udalostí a súhrnov emulácie)</td><td>súhrnné údaje nesú stopu inej verzie emulátora v teste; kontrolný experiment s nimi bol na teste horší (ROC-AUC 0,942 oproti 0,956)</td></tr>
+  <tr><td>Súbory s malými záznamami ponechané</td><td>sú skutočným výsledkom emulácie; vyradenie by zmenilo spoločné rozdelenie</td></tr>
+  <tr><td>Prekrývajúce sa keyloggery vyradené z tréningu, test ponechaný pôvodný</td><td>zachovanie porovnateľnosti s pôvodným testom</td></tr>
+  <tr><td>Validácia = 10 % tréningu, identické vektory spolu</td><td>prahy a výber modelov bez použitia testu</td></tr>
+</table>
+
+<h3>4.5 Výsledky (V1–V3)</h3>
+<table>
+  <tr><th>model (prah z validácie)</th><th class="n">TPR časový test</th><th class="n">FPR</th><th class="n">TPR novej rodiny</th></tr>
+  <tr><td><span class="sw" style="background:var(--stat)"></span>statický LightGBM</td><td class="n">0,984</td><td class="n">0,48 %</td><td class="n">0,792</td></tr>
+  <tr><td><span class="sw" style="background:var(--dyn)"></span>dynamický LightGBM</td><td class="n">0,657</td><td class="n">1,98 %</td><td class="n">0,509</td></tr>
+  <tr><td><span class="sw" style="background:var(--hyb)"></span>hybridný LightGBM</td><td class="n">0,984</td><td class="n">0,47 %</td><td class="n">0,787</td></tr>
+  <tr><td>kaskáda B-baselines, rozpočet 10 %</td><td class="n">0,983</td><td class="n">0,39 %</td><td class="n">–</td></tr>
+  <tr><td>horná hranica „statický alebo dynamický správne“</td><td class="n">–</td><td class="n">–</td><td class="n">0,798</td></tr>
+</table>
+<p class="src">Zdroj: docs/07 (časový test), docs/10 (nová rodina = priemer cez 7 rodín).</p>
+<ul>
+  <li>Hybrid je <b>rovnaký ako statický model</b>. Keď sa v hybride náhodne premiešajú dynamické príznaky, presnosť
+    (ROC-AUC) klesne najviac o 0,0001: model ich takmer nepoužíva.</li>
+  <li>Hybrid opraví približne 37 chýb statického modelu a približne 37 jeho správnych rozhodnutí pokazí; čistý prínos je nulový.</li>
+  <li>Ani teoretická horná hranica (súbor je zachytený, ak ho zachytí aspoň jeden z modelov) nepridá pri nových rodinách
+    viac ako 0,6 p. b. Dynamika teda nemá čo pridať, nie je to len chyba spôsobu kombinácie.</li>
+  <li>Platí to aj na súboroch, kde emulácia skončila úspešne. Tam dynamika detekciu novej rodiny dokonca zhoršuje
+    (hybrid −4,2 p. b. oproti statickému, docs/17). Samotné zlyhania emulácie to teda nevysvetľujú.</li>
+  <li>Kaskáda z LightGBM (B-baselines) dynamicky analyzuje iba 21,5 % súborov a má o ~20 % menej falošných poplachov
+    pri rovnakej citlivosti.</li>
+</ul>
+
+<h2>5. Dataset KronoDroid (Android)</h2>
+<h3>5.1 Čo obsahuje</h3>
+<p>KronoDroid (Guerra-Manzanares, Bahsi a Nõmm, 2021) obsahuje aplikácie Android analyzované dvakrát: raz
+v <b>emulátore</b> Android a raz na <b>skutočnom zariadení</b>. Dataset nemá samotné aplikácie ani surové záznamy, iba
+hotové príznaky v tabuľkách. <b>Statická časť</b> sú oprávnenia, ktoré aplikácia požaduje (173 stĺpcov), a metadáta
+(veľkosť, počty aktivít, služieb a podobne). <b>Dynamická časť</b> sú počty 288 systémových volaní jadra
+zaznamenaných počas behu aplikácie (bez poradia).</p>
+<table>
+  <tr><th>vlastnosť</th><th>hodnota</th></tr>
+  <tr><td>súbory zo zariadenia (hlavná vetva <i>real_full</i>)</td><td>78 129 (tréning 54 690, validácia 7 814, test 15 625)</td></tr>
+  <tr><td>tie isté súbory v emulátore aj na zariadení (<i>real_P</i>, <i>emu_P</i>)</td><td>63 316</td></tr>
+  <tr><td>rodiny malvéru</td><td>240 (na zariadení); testované nové rodiny: Airpush/StopSMS, Boxer, FakeInst, Locker/SLocker, BankBot</td></tr>
+  <tr><td>rozdelenie</td><td>náhodné 70 / 10 / 20 % so zohľadnením rodín; doplnkovo časový posun malvéru (tréning 2008–2014, test 2015–2020)</td></tr>
+  <tr><td>statické príznaky</td><td>173 oprávnení + 11 metadát + príznak chýbajúcich metadát = 185</td></tr>
+  <tr><td>dynamické príznaky</td><td>288 počtov systémových volaní + ich súčet = 289</td></tr>
+</table>
+
+<h3>5.2 Výhody</h3>
+<ul>
+  <li><b>Dynamika zo skutočného systému</b>, nie z napodobneného rozhrania. Aj emulátor Android spúšťa celý operačný systém.</li>
+  <li><b>Prirodzený kontrolovaný experiment</b>: 63 316 aplikácií má rovnakú statiku, rovnaké označenie a rovnaké rozdelenie;
+    líši sa iba prostredie dynamickej analýzy. Vplyv zdroja dynamiky sa tak dá zmerať priamo.</li>
+  <li><b>Veľa rodín</b> (240), takže test novej rodiny sa dá urobiť na piatich dostatočne veľkých rodinách.</li>
+  <li>Dlhé časové pokrytie (2008–2020).</li>
+</ul>
+
+<h3>5.3 Obmedzenia (overené v dátach, docs/18)</h3>
+<ul>
+  <li><b>Chudobná statika.</b> Iba oprávnenia a metadáta, žiadna analýza kódu. Unikátnych kombinácií oprávnení je iba
+    ~13 700 na 78 tisíc aplikácií. Statický model je preto slabší než na Quo Vadis a dynamika má viac priestoru pomôcť.</li>
+  <li><b>Dynamika je iba súhrnná</b> (počty volaní bez poradia). Dĺžka a nastavenie behu nie sú uvedené.</li>
+  <li><b>Časové údaje sú nespoľahlivé.</b> Dátumy pochádzajú zo súborov vnútri aplikácie, nie z dátumu objavenia
+    (tisíce hodnôt z roku 1980, niektoré až z roku 2107). Neškodné aplikácie sú väčšinou z rokov 2010–2011 (v emulátore 77 %),
+    malvér hlavne z rokov 2012–2014 a 2016–2018. Časové rozdelenie by preto meralo aj zmenu pomeru tried, a tak je iba doplnkové.</li>
+  <li><b>Šum v označeniach</b>: 12–13 % „neškodných“ aplikácií má aspoň jednu detekciu antivírusom; prah autorov nie je uvedený.</li>
+  <li>Stĺpce z VirusTotal (pomer detekcií, počet antivírusov) <b>prezrádzajú triedu</b>; boli vylúčené.</li>
+  <li>Bez aplikácií sa nedá zmerať čas dynamickej analýzy (rovnako ako pri Quo Vadis).</li>
+</ul>
+
+<h3>5.4 Naše rozhodnutia (docs/19, zapísané pred tréningom)</h3>
+<table>
+  <tr><th>rozhodnutie</th><th>dôvod</th></tr>
+  <tr><td>Tri vetvy: <i>real_full</i> (hlavná), <i>real_P</i> a <i>emu_P</i> (tie isté aplikácie, zariadenie vs. emulátor)</td><td>hlavná otázka O1 na všetkých dátach, otázka O2 na kontrolovanom páre</td></tr>
+  <tr><td>Náhodné rozdelenie, časový posun iba doplnkovo</td><td>dátumy nie sú dátumom objavenia a súvisia s triedou</td></tr>
+  <tr><td>Vylúčené stĺpce VirusTotal, rodina, dátumy a <code>FilesInsideAPK</code></td><td>prezrádzajú triedu alebo v emulátore chýbajú</td></tr>
+  <tr><td>Neškodné aplikácie s detekciami ponechané</td><td>rozhodnutie z princípu (označenie autorov), nie podľa výsledkov</td></tr>
+  <tr><td>Iba tabuľkové modely, bez sekvenčných</td><td>dataset neobsahuje poradie volaní</td></tr>
+  <tr><td>Kontrolný experiment D-norm</td><td>overiť, či prínos dynamiky nestojí iba na množstve aktivity</td></tr>
+  <tr><td>Statický model spoločný pre <i>real_P</i> a <i>emu_P</i></td><td>rozdiel medzi vetvami potom spôsobuje výlučne dynamika</td></tr>
+</table>
+<p>Vopred boli stanovené dve otázky s kritériom „rozdiel aspoň +1 p. b. a celý 95 % interval nad nulou“:
+<b>O1</b> – pridáva dynamika zo zariadenia informáciu nad statiku? <b>O2</b> – je dynamika zo zariadenia užitočnejšia
+ako z emulátora? Obe aj vo variante pre nové rodiny (O1-Z, O2-Z).</p>
+
+<h3>5.5 Výsledky (V4)</h3>
+<table>
+  <tr><th>model (prah z validácie, vetva real_full)</th><th class="n">TPR náhodný test</th><th class="n">FPR</th><th class="n">TPR novej rodiny</th><th class="n">TPR časový posun</th></tr>
+  <tr><td><span class="sw" style="background:var(--stat)"></span>statický LightGBM</td><td class="n">0,946</td><td class="n">0,62 %</td><td class="n">0,678</td><td class="n">0,746</td></tr>
+  <tr><td><span class="sw" style="background:var(--dyn)"></span>dynamický LightGBM</td><td class="n">0,869</td><td class="n">0,90 %</td><td class="n">0,635</td><td class="n">0,638</td></tr>
+  <tr><td><span class="sw" style="background:var(--hyb)"></span>hybridný LightGBM</td><td class="n">0,972</td><td class="n">0,76 %</td><td class="n">0,836</td><td class="n">0,885</td></tr>
+  <tr><td>kaskáda A-baselines</td><td class="n">0,969</td><td class="n">0,40 %</td><td class="n">0,790</td><td class="n">0,868</td></tr>
+  <tr><td>kaskáda B-baselines, rozpočet 10 %</td><td class="n">0,962</td><td class="n">0,38 %</td><td class="n">0,757</td><td class="n">0,841</td></tr>
+  <tr><td>horná hranica „statický alebo dynamický správne“</td><td class="n">0,982</td><td class="n">1,49 %</td><td class="n">0,865</td><td class="n">–</td></tr>
+</table>
+<p class="src">Zdroj: runs_v4/comparison/v4/README.md a výpočet z uložených predikcií tým istým kódom (src/evaluation/v4_report.py);
+priemer cez 3 seedy a pri novej rodine aj cez 5 rodín.</p>
+<ul>
+  <li><b>O1 je splnené</b>: pri rovnakom počte falošných poplachov (FPR 1 %) zachytí hybrid o 1,78 p. b. viac malvéru
+    (IS +1,15 až +2,38), pri nových rodinách o 11,38 p. b. (IS +9,70 až +13,00) a pri časovom posune o 5,40 p. b.</li>
+  <li><b>D-norm</b>: prínos ostal aj s podielmi volaní (+1,74 p. b.). Nestojí teda iba na množstve aktivity.</li>
+  <li>V hybride klesne presnosť po premiešaní systémových volaní o 0,131 (ROC-AUC); na Quo Vadis o ≤ 0,0001.
+    Hybrid opraví 290 chýb statického modelu na malvéri a pokazí 71.</li>
+  <li><b>O2 na známych rodinách nie je splnené</b> (+0,76 p. b., interval +0,30 až +1,28 – nenulový, ale pod hranicou 1 p. b.).
+    <b>O2-Z pri nových rodinách je splnené</b> výrazne (+9,60 p. b., IS +8,33 až +10,82).</li>
+  <li>Kaskády z LightGBM majú vo všetkých troch vetvách <b>vyššie TPR aj nižšie FPR</b> ako statický model.
+    Kaskáda B potrebuje dynamickú analýzu pri 10,3 % súborov.</li>
+  <li>Destilovaní študenti sú výrazne slabší ako komplexný hybrid (o 8 až 34 p. b.). Študent bez učiteľa je rovnako dobrý
+    ako s učiteľom, takže príčinou je malá kapacita siete, nie destilácia.</li>
+  <li><b>Špecialista</b> zachytí nové rodiny o 10 až 14 p. b. lepšie ako statický model a je lepší vo všetkých piatich
+    rodinách. Má však vyšší FPR (0,94 % oproti 0,62 %), preto vopred stanovené kritériá B1 a B3 nesplnil. Na Quo Vadis
+    nepriniesol nič, takže ide o pozitívne pozorovanie s výhradou.</li>
+</ul>
+
+<h2>6. Porovnanie datasetov a výsledkov</h2>
+<h3>6.1 Vlastnosti</h3>
+<table>
+  <tr><th></th><th>Quo Vadis</th><th>KronoDroid</th></tr>
+  <tr><td>platforma</td><td>Windows (PE súbory)</td><td>Android (APK)</td></tr>
+  <tr><td>počet spárovaných súborov</td><td>91 596</td><td>78 129 (63 316 v oboch prostrediach)</td></tr>
+  <tr><td>rodiny malvéru</td><td>7</td><td>240</td></tr>
+  <tr><td>statika</td><td><span class="ok">bohatá</span>: EMBER, 2 381 príznakov vrátane importov</td><td><span class="part">chudobná</span>: oprávnenia a metadáta, 185 príznakov</td></tr>
+  <tr><td>prostredie dynamiky</td><td><span class="no">emulácia API</span> (Speakeasy), limit 500 volaní</td><td><span class="ok">skutočný systém</span>: zariadenie aj emulátor Android</td></tr>
+  <tr><td>forma dynamiky</td><td>postupnosti volaní API</td><td>počty systémových volaní (bez poradia)</td></tr>
+  <tr><td>zhoda nástroja v tréningu a teste</td><td><span class="no">nie</span> (54,6 % testu končí <code>unsupported_api</code>)</td><td><span class="ok">áno</span> (jeden zber; v dátach bez náznaku zmeny)</td></tr>
+  <tr><td>časová informácia</td><td><span class="ok">spoľahlivá</span> (dva zbery: január, apríl 2022)</td><td><span class="part">nespoľahlivá</span> (dátumy súborov v APK)</td></tr>
+  <tr><td>hlavný test</td><td>časový posun 3 mesiace</td><td>náhodné rozdelenie</td></tr>
+  <tr><td>kvalita označení</td><td>bez zisteného problému</td><td><span class="part">šum</span>: 12–13 % neškodných s detekciou</td></tr>
+  <tr><td>samotné súbory (meranie času analýzy)</td><td><span class="no">nie</span></td><td><span class="no">nie</span></td></tr>
+</table>
+
+<h3>6.2 Tri prístupy na dvoch datasetoch</h3>
+<figure>
+  <img src="obr1_pristupy.svg" alt="Stĺpcový graf TPR statického, dynamického a hybridného modelu na oboch datasetoch">
+  <figcaption><b>Obr. 1.</b> Podiel zachyteného malvéru (TPR) pri prahu z validácie (FPR ≤ 1 %), priemer cez 3 seedy.
+  Vľavo známe rodiny (Quo Vadis: časový test; KronoDroid: náhodný test), vpravo priemer cez vynechané rodiny.
+  Na Quo Vadis sú statický a hybridný model rovnaké, na KronoDroid je hybrid lepší, najmä pri nových rodinách
+  (+15,8 p. b.). Absolútne hodnoty medzi datasetmi porovnávať nemožno (iné dáta, iný test); porovnateľný je rozdiel
+  medzi stĺpcami v rámci datasetu.</figcaption>
+</figure>
+
+<figure>
+  <img src="obr3_rodiny.svg" alt="Bodový graf TPR statického a hybridného modelu po jednotlivých vynechaných rodinách">
+  <figcaption><b>Obr. 2.</b> Nové rodiny po jednotlivých rodinách: <span class="sw" style="background:var(--stat)"></span>statický
+  a <span class="sw" style="background:var(--hyb)"></span>hybridný model, prah z validácie; čísla vpravo sú rozdiely
+  v p. b. Na Quo Vadis sa body takmer prekrývajú, pri rodine keylogger je hybrid dokonca horší. Na KronoDroid je hybrid lepší
+  vo všetkých piatich rodinách, najviac pri Airpush/StopSMS (+38 p. b.), kde statický model zachytí iba polovicu.</figcaption>
+</figure>
+
+<h3>6.3 Kontrolovaný experiment: zariadenie oproti emulátoru</h3>
+<figure>
+  <img src="obr2_rozdiely.svg" alt="Graf rozdielov s intervalmi spoľahlivosti pre otázky O1 a O2">
+  <figcaption><b>Obr. 3.</b> Rozdiely TPR pri FPR 1 % (z ROC krivky testu) s 95 % intervalom spoľahlivosti, KronoDroid.
+  Plný modrý bod = vopred stanovené kritérium splnené, prázdny = nesplnené, sivý = popisný údaj (nie kritérium).
+  Prerušovaná čiara je hranica kritéria +1 p. b. O2 na známych rodinách je nenulové, ale pod hranicou; O2-Z pri nových
+  rodinách hranicu prekračuje takmer desaťnásobne.</figcaption>
+</figure>
+<figure>
+  <img src="obr4_zariadenie_emulator.svg" alt="Bodový graf TPR po rodinách pre dynamiku zo zariadenia a z emulátora">
+  <figcaption><b>Obr. 4.</b> Tie isté aplikácie, rovnaký statický model (modrá čiarka), líši sa iba zdroj dynamiky.
+  Plný bod = dynamika zo zariadenia, prázdny = z emulátora; TPR vynechanej rodiny pri prahu z validácie. Dynamický model zo
+  zariadenia zachytí v priemere 63 % novej rodiny, z emulátora 46 %; najväčší rozdiel je pri Airpush/StopSMS a Locker/SLocker.
+  Výnimkou je BankBot, ktorý statický model zachytí takmer celý.</figcaption>
+</figure>
+
+<h3>6.4 Čo sa dá a čo sa nedá porovnať</h3>
+<div class="two">
+<div>
+<h4>Porovnateľné (relatívne veličiny)</h4>
+<ul>
+  <li>rozdiel hybrid − statický v rámci datasetu,</li>
+  <li>horná hranica kombinácie nad statickým modelom (Quo Vadis +0,6 p. b., KronoDroid +18,7 p. b. pri nových rodinách),</li>
+  <li>podiel súborov s dynamickou analýzou v kaskáde B (21,5 % oproti 10,3 %),</li>
+  <li>pomery výpočtových nárokov medzi modelmi (merané na tom istom počítači).</li>
+</ul>
+</div>
+<div>
+<h4>Neporovnateľné</h4>
+<ul>
+  <li>absolútne TPR, FPR a ROC-AUC (iné súbory, iná platforma),</li>
+  <li>typ hlavného testu (časový posun oproti náhodnému rozdeleniu),</li>
+  <li>rodiny malvéru,</li>
+  <li>absolútne časy tréningu (iná veľkosť dát a počet príznakov).</li>
+</ul>
+</div>
+</div>
+
+<h3>6.5 Výklad rozdielu</h3>
+<p>Prečo dynamika pomáha na jednom datasete a na druhom nie? Do úvahy pripadajú štyri vysvetlenia; dáta ich umožňujú
+čiastočne oddeliť.</p>
+<table>
+  <tr><th>vysvetlenie</th><th>čo ho podporuje</th><th>čo ho oslabuje</th></tr>
+  <tr><td><b>Kvalita zdroja dynamiky</b> (emulácia API vs. skutočný systém)</td>
+      <td>O2-Z: na tých istých aplikáciách je dynamika zo zariadenia pri nových rodinách o 9,6 p. b. užitočnejšia; dynamický
+          model zo zariadenia je lepší v 4 z 5 rodín</td>
+      <td>pri známych rodinách iba +0,8 p. b.; aj emulátor Android je skutočný systém, takže rozdiel oproti Speakeasy je väčší
+          ako rozdiel emulátor vs. zariadenie</td></tr>
+  <tr><td><b>Sila statiky</b> (EMBER je bohatý, oprávnenia chudobné)</td>
+      <td>statický model na KronoDroid zachytí novú rodinu iba v 68 %, takže ostáva priestor; na Quo Vadis je statika
+          takmer dokonalá pri známych rodinách</td>
+      <td>na Quo Vadis pri nových rodinách statika tiež zlyhávala (79 %), a predsa horná hranica kombinácie pridala iba 0,6 p. b.;
+          O2 sa meria pri rovnakej statike</td></tr>
+  <tr><td><b>Nezhoda nástroja medzi tréningom a testom</b> (Quo Vadis)</td>
+      <td>54,6 % testu s <code>unsupported_api</code>; dynamický model na teste prudko slabne (ROC-AUC 0,997 → 0,956)</td>
+      <td>dynamika nepomáha ani na súboroch s úspešnou emuláciou (docs/17)</td></tr>
+  <tr><td><b>Platforma a typ príznakov</b> (Windows API vs. systémové volania Android)</td>
+      <td>nedá sa vylúčiť</td>
+      <td>nedá sa oddeliť jedným porovnaním; na to by bol potrebný tretí dataset</td></tr>
+</table>
+<p>Najlepšie podložený výklad: <b>na Quo Vadis dynamika z emulácie nenesie užitočnú informáciu o správaní</b>, kým na
+KronoDroid áno. Kvalita prostredia dynamickej analýzy je jednou z príčin, ktorú sa podarilo zmerať priamo (O2-Z).
+Spolu s ňou pôsobí aj sila statiky a platforma. Ich podiel sa nedá presne rozdeliť.</p>
+
+<h2>7. Je najväčšou slabinou práce dataset?</h2>
+<p>Domnienka znie: <i>najväčšou slabinou práce je, že nemáme kvalitný a veľký dataset so statickými aj dynamickými
+dátami.</i> Táto kapitola ju posudzuje systematicky: najprv definuje, aký dataset by výskumná otázka potrebovala,
+potom porovná, čo z toho spĺňajú použité datasety, a nakoniec posúdi, či sú iné slabiny práce závažnejšie.</p>
+
+<h3>7.1 Aký dataset by otázka potrebovala</h3>
+<p>Na spoľahlivé posúdenie hybridnej detekcie a kaskády by mal dataset spĺňať tieto požiadavky:</p>
+<table>
+  <tr><th>požiadavka</th><th>prečo</th><th>Quo Vadis</th><th>KronoDroid</th></tr>
+  <tr><td>P1 statika aj dynamika pre tie isté súbory</td><td>bez párovania nemožno hybrid ani kaskádu</td><td class="ok">áno</td><td class="ok">áno</td></tr>
+  <tr><td>P2 bohatá statika (aj z kódu)</td><td>porovnanie so silným statickým modelom, ako v praxi</td><td class="ok">áno</td><td class="no">nie</td></tr>
+  <tr><td>P3 dynamika zo skutočného prostredia s dostatočným behom</td><td>inak dynamika nevidí skutočné správanie</td><td class="no">nie</td><td class="ok">áno</td></tr>
+  <tr><td>P4 rovnaký nástroj a nastavenie v tréningu aj teste</td><td>inak model meria zmenu nástroja, nie správania</td><td class="no">nie</td><td class="ok">áno</td></tr>
+  <tr><td>P5 bohatá dynamika (postupnosti, udalosti)</td><td>súhrnné počty strácajú poradie správania</td><td class="part">čiastočne</td><td class="no">nie</td></tr>
+  <tr><td>P6 spoľahlivý dátum objavenia</td><td>realistický časový test</td><td class="ok">áno</td><td class="no">nie</td></tr>
+  <tr><td>P7 veľa rodín s dostatkom vzoriek</td><td>test nových rodín</td><td class="part">7 rodín</td><td class="ok">240 rodín</td></tr>
+  <tr><td>P8 čisté označenia</td><td>šum skresľuje FPR</td><td class="ok">bez zisteného problému</td><td class="part">šum 12–13 %</td></tr>
+  <tr><td>P9 dostupné súbory alebo časy analýzy</td><td>meranie skutočných nákladov kaskády</td><td class="no">nie</td><td class="no">nie</td></tr>
+  <tr><td>P10 veľkosť (desaťtisíce a viac)</td><td>stabilné odhady pri FPR 1 %</td><td class="ok">92 tis.</td><td class="ok">78 tis.</td></tr>
+</table>
+<p><b>Ani jeden dataset nespĺňa všetky požiadavky.</b> Quo Vadis má silnú statiku a dobrý časový test, ale slabú dynamiku
+(P3, P4). KronoDroid má kvalitnejšiu dynamiku, ale slabú statiku a nespoľahlivé dátumy (P2, P6). Žiadny z nich neumožňuje
+zmerať čas dynamickej analýzy (P9). Datasety sa navzájom dopĺňajú: v čom je jeden slabý, je druhý silný.</p>
+
+<h3>7.2 Hodnotenie domnienky</h3>
+<div class="box">
+  <div class="box-title">Verdikt: domnienka je opodstatnená, s dvoma spresneniami</div>
+  <p><b>Prečo je opodstatnená.</b> Hlavný záver o prínose dynamiky sa medzi datasetmi <b>obracia</b>: na Quo Vadis je nulový,
+  na KronoDroid veľký (pri nových rodinách +11 p. b.). Výsledok práce teda priamo závisí od toho, aké dáta sú k dispozícii.
+  To je typická hrozba <i>vonkajšej platnosti</i> (zovšeobecniteľnosti): z jedného datasetu by sa dal vyvodiť opačný
+  záver ako z druhého. Pri Quo Vadis je navyše dynamika poškodená zmenou nástroja medzi tréningom a testom, takže záver
+  „dynamika nepomáha“ sa nedá oddeliť od kvality zberu.</p>
+  <p><b>Spresnenie 1 – nejde o veľkosť, ale o kvalitu a úplnosť.</b> Oba datasety sú dostatočne veľké (desaťtisíce
+  súborov; intervaly spoľahlivosti sú úzke, typicky ±0,6 p. b.). Chýba dataset, ktorý by spájal bohatú statiku, dynamiku
+  zo skutočného prostredia, spoľahlivý časový test a meranie nákladov analýzy (P2 + P3 + P4 + P6 + P9).</p>
+  <p><b>Spresnenie 2 – práca slabinu čiastočne zmierňuje.</b> Použitím dvoch datasetov s opačnými vlastnosťami a
+  kontrolovaného porovnania zariadenie–emulátor sa závislosť od dát stala <b>zisteniami</b>, nie iba obmedzeniami:
+  (a) prínos dynamiky je podmienený kvalitou dynamických dát, (b) kvalita prostredia rozhoduje najmä pri nových rodinách,
+  (c) prínos kaskády vo falošných poplachoch je stabilný na oboch datasetoch.</p>
+</div>
+
+<h3>7.3 Ostatné slabiny práce v porovnaní</h3>
+<p>Aby bolo posúdenie úplné, treba dataset porovnať s ďalšími slabinami. Zoradené podľa závažnosti:</p>
+<table>
+  <tr><th>#</th><th>slabina</th><th>čoho sa týka</th><th>závažnosť</th><th>dá sa zmierniť?</th></tr>
+  <tr><td>1</td><td><b>Kvalita a úplnosť dát</b> (kap. 7.1)</td><td>téza 1, otázky o prínose dynamiky</td><td class="no">vysoká</td><td>čiastočne – dva datasety, kontrolované O2</td></tr>
+  <tr><td>2</td><td><b>Čas dynamickej analýzy nie je merateľný</b> (P9)</td><td>téza 4 (úspora nákladov)</td><td class="no">vysoká</td><td>čiastočne – úspora sa vyjadruje podielom analyzovaných súborov (10–22 %), nie sekundami</td></tr>
+  <tr><td>3</td><td>Rozdielny typ testu (časový vs. náhodný)</td><td>porovnanie datasetov</td><td class="part">stredná</td><td>áno – na KronoDroid doplnkový časový posun so zhodným smerom (+5,4 p. b.)</td></tr>
+  <tr><td>4</td><td>Laboratórne podmienky, bez nasadenia</td><td>praktická použiteľnosť</td><td class="part">stredná</td><td>nie – je to vymedzenie práce</td></tr>
+  <tr><td>5</td><td>Destilácia nepriniesla zlepšenie</td><td>téza 3</td><td class="part">stredná</td><td>čiastočne – výsledok je konzistentný na dvoch datasetoch a vysvetlený</td></tr>
+  <tr><td>6</td><td>Analýza príčin V3 vychádzala z testu V2</td><td>nezávislosť V3</td><td>nízka</td><td>áno – kritériá vopred, V4 je nezávislé overenie</td></tr>
+</table>
+<p>Kvalita dát je teda <b>najzávažnejšou slabinou</b>, s ktorou úzko súvisí druhá: chýbajúce surové súbory neumožňujú
+zmerať čas dynamickej analýzy. Kaskáda šetrí práve tento čas, takže jej hlavnú výhodu možno vyjadriť iba nepriamo.</p>
+
+<h3>7.4 Ako slabinu v práci formulovať (návrh)</h3>
+<ul>
+  <li>V kapitole o dátach výslovne uviesť požiadavky P1–P10 a ukázať, že verejné datasety, ktoré sme mali k dispozícii,
+    ich nespĺňajú naraz. Pri overovaní sme napr. zistili, že SOREL-20M, rozsiahly dataset PE súborov, obsahuje iba
+    statické príznaky.</li>
+  <li>V diskusii prezentovať závislosť od dát ako výsledok: „Prínos dynamickej analýzy nie je univerzálny; na dvoch
+    datasetoch sa líši od nulového po +11 p. b. a súvisí s kvalitou prostredia, v ktorom sa správanie zaznamenalo.“</li>
+  <li>Tézy formulovať podmienene tam, kde to dáta vyžadujú (téza 1), a ako všeobecné tam, kde výsledok platí na oboch
+    datasetoch (tézy 2 a 4).</li>
+  <li>Ako budúcu prácu uviesť overenie na datasete so surovými súbormi a skutočným sandboxom, ktoré by umožnilo zmerať
+    aj čas dynamickej analýzy (návrh, nie súčasť tejto práce).</li>
+</ul>
+
+<h2>8. Stav téz na oboch datasetoch</h2>
+<table>
+  <tr><th style="width:27%">téza (kritériá docs/09)</th><th>Quo Vadis (V1–V3)</th><th>KronoDroid (V4, real_full)</th><th style="width:20%">spoločný záver</th></tr>
+  <tr><td><b>1.</b> Kaskáda zachytí viac novej rodiny (≥ +1 p. b.) pri FPR nanajvýš ako statický model</td>
+      <td class="no">nepotvrdená: kaskády 0,73–0,78 oproti 0,79 statického</td>
+      <td class="ok">potvrdená: A-baselines 0,790 oproti 0,678 pri nižšom FPR; platí pre 12 z 13 kaskád</td>
+      <td>závisí od kvality dynamiky</td></tr>
+  <tr><td><b>2.</b> Menej falošných poplachov ako statický aj dynamický model pri TPR v tolerancii 1 p. b.</td>
+      <td class="ok">potvrdená pre kaskády z LightGBM (FPR o ~20–25 % nižšie)</td>
+      <td class="ok">potvrdená pre 10 z 13 kaskád; z LightGBM FPR 0,38–0,42 % oproti 0,62 % a TPR vyššie</td>
+      <td class="ok">platí na oboch</td></tr>
+  <tr><td><b>3.</b> Destilovaný študent rovnako presný ako komplexný hybrid (±1 p. b.) a rýchlejší</td>
+      <td class="part">čiastočne: statický študent s dvojvetvovou sieťou ako učiteľom</td>
+      <td class="no">nepotvrdená: študenti o 8–34 p. b. horší, hoci 2–8× rýchlejší</td>
+      <td class="no">neplatí všeobecne</td></tr>
+  <tr><td><b>4.</b> Kaskáda zníži potrebu dynamickej analýzy pri splnení tézy 2</td>
+      <td class="ok">potvrdená: 21,5 % súborov</td>
+      <td class="ok">potvrdená: 10,3 % súborov</td>
+      <td class="ok">platí na oboch</td></tr>
+</table>
+<p class="src">Kaskády „z LightGBM“ (baselines) používajú v prvom stupni priamo vybrané modely LightGBM, nie destilovaných študentov.
+Na KronoDroid platí téza 2 aj na vetvách real_P a emu_P pre všetky kaskády z LightGBM; kaskády so študentmi ju pri
+emulátore nesplnia, lebo dynamický študent z emulátora je slabý.</p>
+
+<h2>9. Záver</h2>
+<p>Rovnaký experimentálny postup na dvoch verejných datasetoch viedol k rozdielnym záverom o prínose dynamickej
+analýzy. Na Quo Vadis, kde dynamika pochádza z emulácie rozhrania Windows a v testovacom období bola zaznamenaná
+pravdepodobne inou verziou nástroja, dynamické príznaky detekciu nezlepšili ani pri nových rodinách. Na KronoDroid,
+kde dynamika pochádza zo skutočného systému Android, hybridný model zachytil o 1,8 p. b. viac malvéru pri známych
+rodinách, o 11,4 p. b. viac pri nových rodinách a o 5,4 p. b. viac pri časovom posune, a to pri rovnakom počte
+falošných poplachov. Kontrolované porovnanie tých istých aplikácií ukázalo, že prostredie dynamickej analýzy rozhoduje
+najmä pri nových rodinách (+9,6 p. b. v prospech zariadenia), kým pri známych rodinách je jeho vplyv malý.</p>
+<p>Niektoré výsledky platia nezávisle od datasetu: kaskáda zostavená z modelov LightGBM znižuje počet falošných poplachov
+a dynamickú analýzu potrebuje iba pri 10–22 % súborov. Destilácia do malých neurónových sietí priniesla rýchlejšie
+modely, no na KronoDroid za cenu výrazne nižšej presnosti ako komplexný hybrid; študent bez učiteľa bol pritom rovnako
+dobrý ako s učiteľom, takže obmedzením je kapacita malej siete, nie destilácia.</p>
+<p>Domnienka, že najväčšou slabinou práce je chýbajúci kvalitný dataset so statickými aj dynamickými dátami, je
+opodstatnená. Spresnenie: problémom nie je veľkosť, ale to, že žiadny dostupný dataset nespája bohatú statiku,
+dynamiku zo skutočného prostredia, spoľahlivý časový test a možnosť zmerať čas analýzy. Práca túto slabinu nezakrýva,
+ale meria ju. Dva datasety s opačnými vlastnosťami a kontrolované porovnanie emulátora so zariadením z nej robia
+samostatné zistenie: <b>prínos dynamickej analýzy v hybridnej detekcii je podmienený kvalitou dynamických dát.</b></p>
+
+<h3>Zdroje čísel</h3>
+<p class="src">Quo Vadis: docs/07 (V1, časový test), docs/10 (V2, nové rodiny, horná hranica), docs/13 (V3, špecialista),
+docs/17 (robustnosť, súbory s úspešnou emuláciou), docs/01 a 04 (audit dát). KronoDroid: docs/18 (audit), docs/19
+(plán a kritériá, zapísané 22. 11. 2026 pred tréningom), docs/20 a runs_v4/comparison/v4/README.md (výsledky),
+runs_v4/real_full/full/comparison/complementarity a hybrid/IMPORTANCE.md. Grafy: docs/21_zdroj/make_figures.py.
+Datasety: Trizna a kol., Quo Vadis: Hybrid Machine Learning Meta-Model Based on Contextual and Behavioral Malware
+Representations (AISec 2022); Guerra-Manzanares, Bahsi, Nõmm, KronoDroid: Time-based Hybrid-featured Dataset for
+Effective Android Malware Detection and Characterization, Computers &amp; Security 110 (2021) 102399.</p>
+
+</body>
+</html>

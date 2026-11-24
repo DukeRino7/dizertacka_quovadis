@@ -93,8 +93,8 @@ Oproti statickému modelu (bootstrap, všetky varianty v README):
 ## 5. Tézy (kritériá docs/09; hlavná vetva real_full, doplnkovo real_P a emu_P)
 | téza | real_full | real_P | emu_P | Quo Vadis (docs/14) |
 |---|---|---|---|---|
-| 1. zero-day: kaskáda ≥ statický + 1 p. b., FPR ≤ | **áno** (všetky kaskády okrem B-direct a špecialistov) | **áno** pre väčšinu (nie A-main, B-main, B-heavy) | **áno** iba z LightGBM a B-direct | nie |
-| 2. FPR nižšie než statický aj dynamický, TPR v tolerancii 1 p. b. | **áno** pre 9 z 13 kaskád | áno pre LightGBM a nokd | áno iba z LightGBM a B-direct | áno (z LightGBM) |
+| 1. zero-day: kaskáda ≥ statický + 1 p. b., FPR ≤ | **áno** (12 z 13 kaskád, nie B-direct; špecialisti nie) | **áno** pre väčšinu (nie A-main, B-main, B-heavy) | **áno** iba z LightGBM a B-direct | nie |
+| 2. FPR nižšie než statický aj dynamický, TPR v tolerancii 1 p. b. | **áno** pre 10 z 13 kaskád | áno pre LightGBM a nokd | áno iba z LightGBM a B-direct | áno (z LightGBM) |
 | 3. študent ≈ `mlp_large` hybrid (±1 p. b.), rýchlejší | **nie** (−8 až −34 p. b.) | nie | nie | čiastočne |
 | 4. podiel dynamickej analýzy pri splnení tézy 2 | **10,3 %** (B-baselines 10 %) | 10,6 % | 10,6 % | 21,5 % |
 
@@ -103,7 +103,7 @@ Oproti statickému modelu (bootstrap, všetky varianty v README):
 
 **Téza 3 sa nepotvrdzuje vo všetkých vetvách.** Nie je to chyba destilácie: študent bez učiteľa (`mlp_nokd`) je rovnako
 dobrý (real_full statický 0,910 vs. 0,902 s učiteľom). Malá sieť (~10 tis. parametrov) na binárnych oprávneniach a počtoch
-volaní nedosiahne LightGBM ani `mlp_large`. Študenti sú pritom 2–7× rýchlejší (CPU 0,03–0,05 ms/vzorku oproti
+volaní nedosiahne LightGBM ani `mlp_large`. Študenti sú pritom 2–8× rýchlejší (CPU 0,03–0,05 ms/vzorku oproti
 0,11–0,24 ms pre `mlp_large`).
 
 ## 6. Špecialista V3 (kritériá B1–B3, docs/19, 3.4)
