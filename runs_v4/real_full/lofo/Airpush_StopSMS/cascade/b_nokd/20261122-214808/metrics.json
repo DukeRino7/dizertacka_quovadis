@@ -1,0 +1,4236 @@
+{
+  "created": "2026-11-22T21:48:08+01:00",
+  "type": "B",
+  "config": {
+    "name": "b_nokd",
+    "type": "B",
+    "second_stage": "dynamic",
+    "components": {
+      "static": "students_static/mlp_nokd",
+      "dynamic": "students_dynamic/mlp_nokd",
+      "hybrid": "auto:hybrid"
+    },
+    "uncertainty": {
+      "fpr_hi": 0.001,
+      "fnr_lo": 0.01
+    },
+    "budgets": [
+      0.1,
+      0.2,
+      0.3,
+      0.4
+    ],
+    "assumed_emulation_s": null,
+    "protocol": "configs/protocol.yaml"
+  },
+  "git": {
+    "commit": null,
+    "dirty": null,
+    "version": "v4 (KronoDroid: emulátor vs. skutočné zariadenie, docs/19; V1–V3 zo značiek v1–v3)",
+    "source": "zip/bez gitu"
+  },
+  "components": {
+    "static": "runs_v4/real_full/lofo/Airpush_StopSMS/students_static/mlp_nokd/20261122-214324",
+    "dynamic": "runs_v4/real_full/lofo/Airpush_StopSMS/students_dynamic/mlp_nokd/20261122-214508",
+    "hybrid": "runs_v4/real_full/lofo/Airpush_StopSMS/hybrid/lightgbm/20261122-213609"
+  },
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "summary": {
+    "validation": {
+      "cascade_b": {
+        "accuracy": [
+          0.9732367012457961,
+          0.0015061449571867295
+        ],
+        "balanced_accuracy": [
+          0.9721935436875523,
+          0.0015715188809249565
+        ],
+        "precision": [
+          0.9950086758670058,
+          0.00031599907579711703
+        ],
+        "recall_tpr": [
+          0.9487408288717033,
+          0.003052707578493101
+        ],
+        "fpr": [
+          0.004353741496598639,
+          0.0002721088435374149
+        ],
+        "f1": [
+          0.9713225078744784,
+          0.0016559501271328663
+        ],
+        "mcc": [
+          0.9472058836534085,
+          0.0029162537392114596
+        ]
+      },
+      "static_only": {
+        "accuracy": [
+          0.9524418549571313,
+          0.004060188662611842
+        ],
+        "balanced_accuracy": [
+          0.9506798134681197,
+          0.004249712593656973
+        ],
+        "precision": [
+          0.9884891381842227,
+          0.00020515099917422114
+        ],
+        "recall_tpr": [
+          0.9110648423557407,
+          0.008512247484386783
+        ],
+        "fpr": [
+          0.009705215419501133,
+          0.0001571021140652035
+        ],
+        "f1": [
+          0.9481856142626036,
+          0.00464921133125478
+        ],
+        "mcc": [
+          0.9069627677712377,
+          0.007662383507199585
+        ]
+      },
+      "dynamic_only": {
+        "accuracy": [
+          0.876462507697409,
+          0.0027567589459431665
+        ],
+        "balanced_accuracy": [
+          0.871163652452851,
+          0.002877794070650022
+        ],
+        "precision": [
+          0.9860879151736346,
+          0.00032264273707576337
+        ],
+        "recall_tpr": [
+          0.7520325203252033,
+          0.005598972002179409
+        ],
+        "fpr": [
+          0.009705215419501133,
+          0.0001571021140652035
+        ],
+        "f1": [
+          0.8532941991798082,
+          0.003718924360958254
+        ],
+        "mcc": [
+          0.7704887614950011,
+          0.0048064895053079315
+        ]
+      },
+      "hybrid_only": {
+        "accuracy": [
+          0.9828051726588035,
+          0.000512370509515978
+        ],
+        "balanced_accuracy": [
+          0.982418533941437,
+          0.000504619805362571
+        ],
+        "precision": [
+          0.9901201939570906,
+          0.0007568051477931101
+        ],
+        "recall_tpr": [
+          0.9737259567717628,
+          0.0003434564361627509
+        ],
+        "fpr": [
+          0.008888888888888889,
+          0.0006847922390268254
+        ],
+        "f1": [
+          0.9818546106921991,
+          0.0005369479202479233
+        ],
+        "mcc": [
+          0.9656394503640439,
+          0.001033079820394024
+        ]
+      },
+      "_emulation_rate": [
+        0.31898062621382217,
+        0.05096245968389445
+      ],
+      "_hybrid_rate": [
+        0.0788214674814078,
+        0.010381846714355993
+      ],
+      "_budget_curve": [
+        {
+          "budget_val": 0.1,
+          "emulation_rate": 0.1000900004736867,
+          "hybrid_rate": 0.040737056510823745,
+          "accuracy": 0.9665103500544739,
+          "balanced_accuracy": 0.9651836383968618,
+          "precision": 0.9942035158974515,
+          "recall_tpr": 0.9353559389252428,
+          "fpr": 0.004988662131519274,
+          "f1": 0.9638810156879969,
+          "mcc": 0.9342289616547615
+        },
+        {
+          "budget_val": 0.2,
+          "emulation_rate": 0.20008526360665055,
+          "hybrid_rate": 0.06650561318743782,
+          "accuracy": 0.972005115816399,
+          "balanced_accuracy": 0.9709046283593747,
+          "precision": 0.9949949373442876,
+          "recall_tpr": 0.946162998215348,
+          "fpr": 0.004353741496598639,
+          "f1": 0.9699626559681436,
+          "mcc": 0.9448324863326083
+        },
+        {
+          "budget_val": 0.3,
+          "emulation_rate": 0.3004121074321444,
+          "hybrid_rate": 0.07673724598550519,
+          "accuracy": 0.9729998578939889,
+          "balanced_accuracy": 0.9719456753552104,
+          "precision": 0.9950062072377325,
+          "recall_tpr": 0.9482450922070197,
+          "fpr": 0.004353741496598639,
+          "f1": 0.9710613352713034,
+          "mcc": 0.9467491476037884
+        },
+        {
+          "budget_val": 0.4,
+          "emulation_rate": 0.4000284212022169,
+          "hybrid_rate": 0.08578466202453698,
+          "accuracy": 0.9735682819383259,
+          "balanced_accuracy": 0.9725447815453765,
+          "precision": 0.9949098231081783,
+          "recall_tpr": 0.9495340075351972,
+          "fpr": 0.0044444444444444444,
+          "f1": 0.9716908911123633,
+          "mcc": 0.9478384370572166
+        }
+      ]
+    },
+    "test": {
+      "cascade_b": {
+        "accuracy": [
+          0.9540906666666666,
+          0.0014200694818681586
+        ],
+        "balanced_accuracy": [
+          0.9564487466688588,
+          0.0013438601657319933
+        ],
+        "precision": [
+          0.9964093600874131,
+          0.00032950354338254754
+        ],
+        "recall_tpr": [
+          0.9166163141993957,
+          0.0026503579697234308
+        ],
+        "fpr": [
+          0.0037188208616780044,
+          0.00034239611951341297
+        ],
+        "f1": [
+          0.9548474142151792,
+          0.0014584657869449495
+        ],
+        "mcc": [
+          0.9115979385460737,
+          0.0026183210529117655
+        ]
+      },
+      "static_only": {
+        "accuracy": [
+          0.8870613333333334,
+          0.0041006640112710565
+        ],
+        "balanced_accuracy": [
+          0.8929249645477526,
+          0.003840607906621615
+        ],
+        "precision": [
+          0.9911045265455981,
+          0.0012784628734741352
+        ],
+        "recall_tpr": [
+          0.793877139979859,
+          0.008295641951612724
+        ],
+        "fpr": [
+          0.008027210884353741,
+          0.0012092781520157262
+        ],
+        "f1": [
+          0.881576587330231,
+          0.0048874845282723895
+        ],
+        "mcc": [
+          0.7936599221852285,
+          0.006612014891607529
+        ]
+      },
+      "dynamic_only": {
+        "accuracy": [
+          0.8654933333333333,
+          0.0017554365079185382
+        ],
+        "balanced_accuracy": [
+          0.8724128765302698,
+          0.0016602645270771524
+        ],
+        "precision": [
+          0.9875746029590889,
+          0.0009303033607944353
+        ],
+        "recall_tpr": [
+          0.7555287009063444,
+          0.003357690390199324
+        ],
+        "fpr": [
+          0.010702947845804988,
+          0.0008200971120192794
+        ],
+        "f1": [
+          0.8561033868205135,
+          0.002147959926770121
+        ],
+        "mcc": [
+          0.757268705719638,
+          0.0028793409896607984
+        ]
+      },
+      "hybrid_only": {
+        "accuracy": [
+          0.973056,
+          6.40000000000085e-05
+        ],
+        "balanced_accuracy": [
+          0.9741436997759828,
+          4.9456992610676815e-05
+        ],
+        "precision": [
+          0.9930940001296503,
+          0.00021379773942894562
+        ],
+        "recall_tpr": [
+          0.9557703927492448,
+          0.0003197282551135657
+        ],
+        "fpr": [
+          0.007482993197278911,
+          0.00023565317109780625
+        ],
+        "f1": [
+          0.9740747469389128,
+          6.802726044642863e-05
+        ],
+        "mcc": [
+          0.9468023761781236,
+          0.00010761002058938131
+        ]
+      },
+      "_emulation_rate": [
+        0.37216000000000005,
+        0.052292778239447175
+      ],
+      "_hybrid_rate": [
+        0.12714666666666666,
+        0.01103352080404679
+      ],
+      "_budget_curve": [
+        {
+          "budget_val": 0.1,
+          "emulation_rate": 0.137088,
+          "hybrid_rate": 0.06965333333333333,
+          "accuracy": 0.9287253333333334,
+          "balanced_accuracy": 0.9324833699844491,
+          "precision": 0.995891673927792,
+          "recall_tpr": 0.8690030211480363,
+          "fpr": 0.0040362811791383214,
+          "f1": 0.9281238383711794,
+          "mcc": 0.8659472936136297
+        },
+        {
+          "budget_val": 0.2,
+          "emulation_rate": 0.25316266666666665,
+          "hybrid_rate": 0.10815999999999999,
+          "accuracy": 0.9464106666666666,
+          "balanced_accuracy": 0.9492005261319029,
+          "precision": 0.9963958216728921,
+          "recall_tpr": 0.9020745216515609,
+          "fpr": 0.0036734693877551023,
+          "f1": 0.9468892297199654,
+          "mcc": 0.8975871746200544
+        },
+        {
+          "budget_val": 0.3,
+          "emulation_rate": 0.354176,
+          "hybrid_rate": 0.12497066666666667,
+          "accuracy": 0.9531733333333333,
+          "balanced_accuracy": 0.9555953579820651,
+          "precision": 0.9966202419127065,
+          "recall_tpr": 0.9146827794561934,
+          "fpr": 0.003492063492063492,
+          "f1": 0.953894313259218,
+          "mcc": 0.9099478787970822
+        },
+        {
+          "budget_val": 0.4,
+          "emulation_rate": 0.453312,
+          "hybrid_rate": 0.13683199999999998,
+          "accuracy": 0.9564159999999999,
+          "balanced_accuracy": 0.9586466489919231,
+          "precision": 0.99646959506932,
+          "recall_tpr": 0.9209667673716012,
+          "fpr": 0.0036734693877551023,
+          "f1": 0.9572307603992295,
+          "mcc": 0.9158891070074441
+        }
+      ]
+    },
+    "holdout": {
+      "cascade_b": {
+        "accuracy": [
+          0.7939442658092175,
+          0.008166717289006437
+        ],
+        "balanced_accuracy": [
+          0.8969721329046086,
+          0.004083358644503252
+        ],
+        "precision": [
+          1.0,
+          0.0
+        ],
+        "recall_tpr": [
+          0.7939442658092175,
+          0.008166717289006437
+        ],
+        "fpr": [
+          0.0,
+          0.0
+        ],
+        "f1": [
+          0.8851227723416559,
+          0.005071142503875929
+        ],
+        "mcc": [
+          0.0,
+          0.0
+        ]
+      },
+      "static_only": {
+        "accuracy": [
+          0.3165058949624866,
+          0.018592838066711553
+        ],
+        "balanced_accuracy": [
+          0.6582529474812433,
+          0.009296419033355756
+        ],
+        "precision": [
+          1.0,
+          0.0
+        ],
+        "recall_tpr": [
+          0.3165058949624866,
+          0.018592838066711553
+        ],
+        "fpr": [
+          0.0,
+          0.0
+        ],
+        "f1": [
+          0.4806266298634411,
+          0.021298507927850714
+        ],
+        "mcc": [
+          0.0,
+          0.0
+        ]
+      },
+      "dynamic_only": {
+        "accuracy": [
+          0.8239549839228296,
+          0.002126809735582468
+        ],
+        "balanced_accuracy": [
+          0.9119774919614149,
+          0.001063404867791276
+        ],
+        "precision": [
+          1.0,
+          0.0
+        ],
+        "recall_tpr": [
+          0.8239549839228296,
+          0.002126809735582468
+        ],
+        "fpr": [
+          0.0,
+          0.0
+        ],
+        "f1": [
+          0.9034807155147276,
+          0.001279313680562266
+        ],
+        "mcc": [
+          0.0,
+          0.0
+        ]
+      },
+      "hybrid_only": {
+        "accuracy": [
+          0.8798499464094319,
+          0.002739416488559966
+        ],
+        "balanced_accuracy": [
+          0.939924973204716,
+          0.001369708244279983
+        ],
+        "precision": [
+          1.0,
+          0.0
+        ],
+        "recall_tpr": [
+          0.8798499464094319,
+          0.002739416488559966
+        ],
+        "fpr": [
+          0.0,
+          0.0
+        ],
+        "f1": [
+          0.9360837881520879,
+          0.0015516952840941847
+        ],
+        "mcc": [
+          0.0,
+          0.0
+        ]
+      },
+      "_emulation_rate": [
+        0.8680600214362272,
+        0.03256543213279204
+      ],
+      "_hybrid_rate": [
+        0.5434619506966774,
+        0.010909202261817342
+      ],
+      "_budget_curve": [
+        {
+          "budget_val": 0.1,
+          "emulation_rate": 0.5239013933547696,
+          "hybrid_rate": 0.3232047159699893,
+          "accuracy": 0.5987674169346194,
+          "balanced_accuracy": 0.7993837084673098,
+          "precision": 1.0,
+          "recall_tpr": 0.5987674169346194,
+          "fpr": 0.0,
+          "f1": 0.7488452974988493,
+          "mcc": 0.0
+        },
+        {
+          "budget_val": 0.2,
+          "emulation_rate": 0.7641479099678458,
+          "hybrid_rate": 0.47411575562700964,
+          "accuracy": 0.7339764201500536,
+          "balanced_accuracy": 0.8669882100750268,
+          "precision": 1.0,
+          "recall_tpr": 0.7339764201500536,
+          "fpr": 0.0,
+          "f1": 0.8465813192482453,
+          "mcc": 0.0
+        },
+        {
+          "budget_val": 0.3,
+          "emulation_rate": 0.8540192926045016,
+          "hybrid_rate": 0.532207931404073,
+          "accuracy": 0.7837084673097535,
+          "balanced_accuracy": 0.8918542336548768,
+          "precision": 1.0,
+          "recall_tpr": 0.7837084673097535,
+          "fpr": 0.0,
+          "f1": 0.8787346103306913,
+          "mcc": 0.0
+        },
+        {
+          "budget_val": 0.4,
+          "emulation_rate": 0.9261521972132906,
+          "hybrid_rate": 0.5730439442658092,
+          "accuracy": 0.8180600214362274,
+          "balanced_accuracy": 0.9090300107181136,
+          "precision": 1.0,
+          "recall_tpr": 0.8180600214362274,
+          "fpr": 0.0,
+          "f1": 0.8999249179447363,
+          "mcc": 0.0
+        }
+      ]
+    }
+  },
+  "per_seed": [
+    {
+      "seed": 0,
+      "thresholds": {
+        "static": 0.8928568363189697,
+        "dynamic": 0.8996427059173584,
+        "hybrid": 0.7761608573125275
+      },
+      "band": {
+        "lo": 0.03270833566784859,
+        "hi": 0.9973614811897278
+      },
+      "budget_cutoffs": {
+        "0.1": 2.236554684568669,
+        "0.2": 4.074418113459374,
+        "0.3": 5.080578806172584,
+        "0.4": 6.025921914805199
+      },
+      "validation": {
+        "n": 7037,
+        "approaches": {
+          "cascade_b": {
+            "threshold": 0.5,
+            "accuracy": 0.9729998578939889,
+            "balanced_accuracy": 0.971933008777574,
+            "precision": 0.995315427857589,
+            "recall_tpr": 0.9479476502082094,
+            "fpr": 0.004081632653061225,
+            "fnr": 0.05205234979179063,
+            "f1": 0.9710542352224254,
+            "mcc": 0.9467700882251511,
+            "tp": 3187,
+            "fp": 15,
+            "tn": 3660,
+            "fn": 175
+          },
+          "static_only": {
+            "threshold": 0.8928568363189697,
+            "accuracy": 0.9521102742646014,
+            "balanced_accuracy": 0.9503243534177502,
+            "precision": 0.9886914378029079,
+            "recall_tpr": 0.91017251635931,
+            "fpr": 0.009523809523809525,
+            "fnr": 0.08982748364069004,
+            "f1": 0.9478085798358371,
+            "mcc": 0.9063466198095146,
+            "tp": 3060,
+            "fp": 35,
+            "tn": 3640,
+            "fn": 302
+          },
+          "dynamic_only": {
+            "threshold": 0.8996427059173584,
+            "accuracy": 0.8746624982236748,
+            "balanced_accuracy": 0.8692840753195984,
+            "precision": 0.9858934169278997,
+            "recall_tpr": 0.7483640690065437,
+            "fpr": 0.009795918367346938,
+            "fnr": 0.25163593099345627,
+            "f1": 0.8508623605005073,
+            "mcc": 0.7673553813976518,
+            "tp": 2516,
+            "fp": 36,
+            "tn": 3639,
+            "fn": 846
+          },
+          "hybrid_only": {
+            "threshold": 0.7761608573125275,
+            "accuracy": 0.9833735967031405,
+            "balanced_accuracy": 0.9829796403986937,
+            "precision": 0.9909228441754917,
+            "recall_tpr": 0.9741225461035098,
+            "fpr": 0.00816326530612245,
+            "fnr": 0.02587745389649021,
+            "f1": 0.9824508774561272,
+            "mcc": 0.9667847612177279,
+            "tp": 3275,
+            "fp": 30,
+            "tn": 3645,
+            "fn": 87
+          }
+        },
+        "cascade": {
+          "emulation_rate": 0.26232769646156034,
+          "n_emulated": 1846,
+          "hybrid_rate": 0.06821088532044906,
+          "n_hybrid": 480,
+          "confident_errors": 36,
+          "per_family": [
+            {
+              "family": "Adwo",
+              "n": 6,
+              "emulation_rate": 0.8333333333333334,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.5
+            },
+            {
+              "family": "Agent",
+              "n": 294,
+              "emulation_rate": 0.3435374149659864,
+              "hybrid_rate": 0.14285714285714285,
+              "error_rate": 0.047619047619047616
+            },
+            {
+              "family": "AnServer/Answerbot",
+              "n": 29,
+              "emulation_rate": 0.1724137931034483,
+              "hybrid_rate": 0.10344827586206896,
+              "error_rate": 0.06896551724137931
+            },
+            {
+              "family": "BankBot",
+              "n": 129,
+              "emulation_rate": 0.05426356589147287,
+              "hybrid_rate": 0.007751937984496124,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Booster",
+              "n": 6,
+              "emulation_rate": 0.16666666666666666,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Boxer",
+              "n": 359,
+              "emulation_rate": 0.2618384401114206,
+              "hybrid_rate": 0.10863509749303621,
+              "error_rate": 0.008356545961002786
+            },
+            {
+              "family": "Coogos",
+              "n": 25,
+              "emulation_rate": 0.8,
+              "hybrid_rate": 0.36,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Cosha",
+              "n": 7,
+              "emulation_rate": 0.42857142857142855,
+              "hybrid_rate": 0.2857142857142857,
+              "error_rate": 0.14285714285714285
+            },
+            {
+              "family": "Counterclank",
+              "n": 11,
+              "emulation_rate": 0.5454545454545454,
+              "hybrid_rate": 0.18181818181818182,
+              "error_rate": 0.18181818181818182
+            },
+            {
+              "family": "Dialer",
+              "n": 7,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Dnotua",
+              "n": 14,
+              "emulation_rate": 0.2857142857142857,
+              "hybrid_rate": 0.07142857142857142,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Dowgin",
+              "n": 114,
+              "emulation_rate": 0.38596491228070173,
+              "hybrid_rate": 0.11403508771929824,
+              "error_rate": 0.008771929824561403
+            },
+            {
+              "family": "DroidDream",
+              "n": 9,
+              "emulation_rate": 0.8888888888888888,
+              "hybrid_rate": 0.4444444444444444,
+              "error_rate": 0.4444444444444444
+            },
+            {
+              "family": "DroidJack/SandoRAT",
+              "n": 5,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "DroidKungFu",
+              "n": 99,
+              "emulation_rate": 0.6161616161616161,
+              "hybrid_rate": 0.2222222222222222,
+              "error_rate": 0.04040404040404041
+            },
+            {
+              "family": "FakeAngry",
+              "n": 8,
+              "emulation_rate": 0.75,
+              "hybrid_rate": 0.375,
+              "error_rate": 0.5
+            },
+            {
+              "family": "FakeApp",
+              "n": 99,
+              "emulation_rate": 0.47474747474747475,
+              "hybrid_rate": 0.31313131313131315,
+              "error_rate": 0.10101010101010101
+            },
+            {
+              "family": "FakeBank",
+              "n": 30,
+              "emulation_rate": 0.13333333333333333,
+              "hybrid_rate": 0.1,
+              "error_rate": 0.03333333333333333
+            },
+            {
+              "family": "FakeDoc",
+              "n": 15,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "FakeFlash",
+              "n": 5,
+              "emulation_rate": 0.2,
+              "hybrid_rate": 0.2,
+              "error_rate": 0.0
+            },
+            {
+              "family": "FakeInst",
+              "n": 238,
+              "emulation_rate": 0.3025210084033613,
+              "hybrid_rate": 0.17647058823529413,
+              "error_rate": 0.0546218487394958
+            },
+            {
+              "family": "Gamex",
+              "n": 7,
+              "emulation_rate": 0.2857142857142857,
+              "hybrid_rate": 0.14285714285714285,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Gappusin",
+              "n": 7,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.2857142857142857,
+              "error_rate": 0.2857142857142857
+            },
+            {
+              "family": "GinMaster",
+              "n": 82,
+              "emulation_rate": 0.47560975609756095,
+              "hybrid_rate": 0.21951219512195122,
+              "error_rate": 0.024390243902439025
+            },
+            {
+              "family": "GoldDream",
+              "n": 9,
+              "emulation_rate": 0.1111111111111111,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Gumen",
+              "n": 8,
+              "emulation_rate": 0.875,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.0
+            },
+            {
+              "family": "HiddenAds",
+              "n": 11,
+              "emulation_rate": 0.9090909090909091,
+              "hybrid_rate": 0.8181818181818182,
+              "error_rate": 0.0
+            },
+            {
+              "family": "HongTouTou/Adrd",
+              "n": 9,
+              "emulation_rate": 0.5555555555555556,
+              "hybrid_rate": 0.2222222222222222,
+              "error_rate": 0.2222222222222222
+            },
+            {
+              "family": "Iconosys",
+              "n": 15,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.8,
+              "error_rate": 0.26666666666666666
+            },
+            {
+              "family": "Kmin",
+              "n": 8,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Ksapp",
+              "n": 15,
+              "emulation_rate": 0.2,
+              "hybrid_rate": 0.06666666666666667,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Kuguo",
+              "n": 84,
+              "emulation_rate": 0.2619047619047619,
+              "hybrid_rate": 0.047619047619047616,
+              "error_rate": 0.047619047619047616
+            },
+            {
+              "family": "LinuxLotoor",
+              "n": 6,
+              "emulation_rate": 0.6666666666666666,
+              "hybrid_rate": 0.3333333333333333,
+              "error_rate": 0.16666666666666666
+            },
+            {
+              "family": "Locker/SLocker Ransomware",
+              "n": 184,
+              "emulation_rate": 0.483695652173913,
+              "hybrid_rate": 0.17391304347826086,
+              "error_rate": 0.11956521739130435
+            },
+            {
+              "family": "Lovetrap/Luvrtrap",
+              "n": 5,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.2,
+              "error_rate": 0.8
+            },
+            {
+              "family": "Malap",
+              "n": 405,
+              "emulation_rate": 0.1580246913580247,
+              "hybrid_rate": 0.03209876543209877,
+              "error_rate": 0.0049382716049382715
+            },
+            {
+              "family": "MimobSMS",
+              "n": 12,
+              "emulation_rate": 0.5833333333333334,
+              "hybrid_rate": 0.16666666666666666,
+              "error_rate": 0.0
+            },
+            {
+              "family": "MobiDash",
+              "n": 16,
+              "emulation_rate": 0.625,
+              "hybrid_rate": 0.125,
+              "error_rate": 0.0
+            },
+            {
+              "family": "MobileSpy/Godwon",
+              "n": 22,
+              "emulation_rate": 0.5909090909090909,
+              "hybrid_rate": 0.3181818181818182,
+              "error_rate": 0.09090909090909091
+            },
+            {
+              "family": "Mseg",
+              "n": 10,
+              "emulation_rate": 0.1,
+              "hybrid_rate": 0.1,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Nandrobox",
+              "n": 8,
+              "emulation_rate": 0.375,
+              "hybrid_rate": 0.125,
+              "error_rate": 0.125
+            },
+            {
+              "family": "OpFake",
+              "n": 13,
+              "emulation_rate": 0.7692307692307693,
+              "hybrid_rate": 0.3076923076923077,
+              "error_rate": 0.07692307692307693
+            },
+            {
+              "family": "Plankton",
+              "n": 6,
+              "emulation_rate": 0.3333333333333333,
+              "hybrid_rate": 0.16666666666666666,
+              "error_rate": 0.16666666666666666
+            },
+            {
+              "family": "Robtes",
+              "n": 22,
+              "emulation_rate": 0.5909090909090909,
+              "hybrid_rate": 0.13636363636363635,
+              "error_rate": 0.045454545454545456
+            },
+            {
+              "family": "RuFraud",
+              "n": 28,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.07142857142857142,
+              "error_rate": 0.0
+            },
+            {
+              "family": "SMSSend",
+              "n": 31,
+              "emulation_rate": 0.12903225806451613,
+              "hybrid_rate": 0.06451612903225806,
+              "error_rate": 0.03225806451612903
+            },
+            {
+              "family": "SMSreg",
+              "n": 502,
+              "emulation_rate": 0.055776892430278883,
+              "hybrid_rate": 0.037848605577689244,
+              "error_rate": 0.00199203187250996
+            },
+            {
+              "family": "SMSspy",
+              "n": 11,
+              "emulation_rate": 0.09090909090909091,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.09090909090909091
+            },
+            {
+              "family": "SmForw",
+              "n": 9,
+              "emulation_rate": 0.2222222222222222,
+              "hybrid_rate": 0.1111111111111111,
+              "error_rate": 0.0
+            },
+            {
+              "family": "SmsPay",
+              "n": 5,
+              "emulation_rate": 0.2,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "TrojanSMS.Stealer",
+              "n": 8,
+              "emulation_rate": 0.375,
+              "hybrid_rate": 0.125,
+              "error_rate": 0.125
+            },
+            {
+              "family": "Vdloader",
+              "n": 25,
+              "emulation_rate": 0.24,
+              "hybrid_rate": 0.04,
+              "error_rate": 0.08
+            },
+            {
+              "family": "Waps/Simhosy",
+              "n": 40,
+              "emulation_rate": 0.35,
+              "hybrid_rate": 0.1,
+              "error_rate": 0.15
+            },
+            {
+              "family": "Wooboo",
+              "n": 16,
+              "emulation_rate": 0.625,
+              "hybrid_rate": 0.1875,
+              "error_rate": 0.1875
+            },
+            {
+              "family": "Youmi",
+              "n": 62,
+              "emulation_rate": 0.5967741935483871,
+              "hybrid_rate": 0.24193548387096775,
+              "error_rate": 0.27419354838709675
+            },
+            {
+              "family": "benign",
+              "n": 3675,
+              "emulation_rate": 0.22040816326530613,
+              "hybrid_rate": 0.010884353741496598,
+              "error_rate": 0.004081632653061225
+            },
+            {
+              "family": "other",
+              "n": 136,
+              "emulation_rate": 0.5367647058823529,
+              "hybrid_rate": 0.3235294117647059,
+              "error_rate": 0.17647058823529413
+            },
+            {
+              "family": "unknown",
+              "n": 16,
+              "emulation_rate": 0.5,
+              "hybrid_rate": 0.3125,
+              "error_rate": 0.5
+            }
+          ]
+        },
+        "budget_curve": [
+          {
+            "budget_val": 0.1,
+            "emulation_rate": 0.10004263180332527,
+            "hybrid_rate": 0.04035810714793236,
+            "accuracy": 0.9663208753730282,
+            "balanced_accuracy": 0.9649811215384428,
+            "precision": 0.994305599493831,
+            "recall_tpr": 0.9348602022605592,
+            "fpr": 0.004897959183673469,
+            "f1": 0.9636670243752874,
+            "mcc": 0.9338749163058782
+          },
+          {
+            "budget_val": 0.2,
+            "emulation_rate": 0.20008526360665055,
+            "hybrid_rate": 0.06792667329828052,
+            "accuracy": 0.9721472218274833,
+            "balanced_accuracy": 0.9710406827811433,
+            "precision": 0.9953066332916145,
+            "recall_tpr": 0.946162998215348,
+            "fpr": 0.004081632653061225,
+            "f1": 0.9701128392802684,
+            "mcc": 0.9451275022132659
+          },
+          {
+            "budget_val": 0.3,
+            "emulation_rate": 0.2999857893988916,
+            "hybrid_rate": 0.07659513997442091,
+            "accuracy": 0.9724314338496518,
+            "balanced_accuracy": 0.9713381247799535,
+            "precision": 0.9953095684803002,
+            "recall_tpr": 0.9467578822129684,
+            "fpr": 0.004081632653061225,
+            "f1": 0.9704268292682926,
+            "mcc": 0.945674777206576
+          },
+          {
+            "budget_val": 0.4,
+            "emulation_rate": 0.4000284212022169,
+            "hybrid_rate": 0.08696887878357254,
+            "accuracy": 0.9734261759272417,
+            "balanced_accuracy": 0.9723791717757895,
+            "precision": 0.9953198127925117,
+            "recall_tpr": 0.9488399762046401,
+            "fpr": 0.004081632653061225,
+            "f1": 0.9715242881072027,
+            "mcc": 0.9475922391711428
+          }
+        ]
+      },
+      "test": {
+        "n": 15625,
+        "approaches": {
+          "cascade_b": {
+            "threshold": 0.5,
+            "accuracy": 0.954496,
+            "balanced_accuracy": 0.956811147419693,
+            "precision": 0.9960650577124869,
+            "recall_tpr": 0.9177039274924471,
+            "fpr": 0.004081632653061225,
+            "fnr": 0.08229607250755289,
+            "f1": 0.9552802063022832,
+            "mcc": 0.9122855179633177,
+            "tp": 7594,
+            "fp": 30,
+            "tn": 7320,
+            "fn": 681
+          },
+          "static_only": {
+            "threshold": 0.8928568363189697,
+            "accuracy": 0.890432,
+            "balanced_accuracy": 0.896130053229751,
+            "precision": 0.9916104868913858,
+            "recall_tpr": 0.7998791540785498,
+            "fpr": 0.007619047619047619,
+            "fnr": 0.20012084592145019,
+            "f1": 0.8854849498327758,
+            "mcc": 0.7993892543969732,
+            "tp": 6619,
+            "fp": 56,
+            "tn": 7294,
+            "fn": 1656
+          },
+          "dynamic_only": {
+            "threshold": 0.8996427059173584,
+            "accuracy": 0.863488,
+            "balanced_accuracy": 0.8705246932609902,
+            "precision": 0.9876151159098127,
+            "recall_tpr": 0.7516616314199396,
+            "fpr": 0.010612244897959184,
+            "fnr": 0.24833836858006042,
+            "f1": 0.8536334316887395,
+            "mcc": 0.7540541011219632,
+            "tp": 6220,
+            "fp": 78,
+            "tn": 7272,
+            "fn": 2055
+          },
+          "hybrid_only": {
+            "threshold": 0.7761608573125275,
+            "accuracy": 0.972992,
+            "balanced_accuracy": 0.9740984853155763,
+            "precision": 0.9933408719688404,
+            "recall_tpr": 0.9554078549848942,
+            "fpr": 0.007210884353741497,
+            "fnr": 0.04459214501510578,
+            "f1": 0.9740051743254896,
+            "mcc": 0.946700430103166,
+            "tp": 7906,
+            "fp": 53,
+            "tn": 7297,
+            "fn": 369
+          }
+        },
+        "cascade": {
+          "emulation_rate": 0.314176,
+          "n_emulated": 4909,
+          "hybrid_rate": 0.115072,
+          "n_hybrid": 1798,
+          "confident_errors": 182,
+          "per_family": [
+            {
+              "family": "Adwo",
+              "n": 12,
+              "emulation_rate": 0.5,
+              "hybrid_rate": 0.3333333333333333,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Agent",
+              "n": 586,
+              "emulation_rate": 0.39078498293515357,
+              "hybrid_rate": 0.15017064846416384,
+              "error_rate": 0.040955631399317405
+            },
+            {
+              "family": "Airpush/StopSMS",
+              "n": 1555,
+              "emulation_rate": 0.8430868167202572,
+              "hybrid_rate": 0.5401929260450161,
+              "error_rate": 0.19614147909967847
+            },
+            {
+              "family": "AnServer/Answerbot",
+              "n": 59,
+              "emulation_rate": 0.1864406779661017,
+              "hybrid_rate": 0.1016949152542373,
+              "error_rate": 0.0847457627118644
+            },
+            {
+              "family": "BankBot",
+              "n": 259,
+              "emulation_rate": 0.03861003861003861,
+              "hybrid_rate": 0.007722007722007722,
+              "error_rate": 0.003861003861003861
+            },
+            {
+              "family": "Booster",
+              "n": 12,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Boxer",
+              "n": 720,
+              "emulation_rate": 0.24166666666666667,
+              "hybrid_rate": 0.08611111111111111,
+              "error_rate": 0.011111111111111112
+            },
+            {
+              "family": "Coogos",
+              "n": 50,
+              "emulation_rate": 0.64,
+              "hybrid_rate": 0.2,
+              "error_rate": 0.04
+            },
+            {
+              "family": "Cosha",
+              "n": 13,
+              "emulation_rate": 0.38461538461538464,
+              "hybrid_rate": 0.07692307692307693,
+              "error_rate": 0.15384615384615385
+            },
+            {
+              "family": "Counterclank",
+              "n": 22,
+              "emulation_rate": 0.9545454545454546,
+              "hybrid_rate": 0.5454545454545454,
+              "error_rate": 0.18181818181818182
+            },
+            {
+              "family": "Dialer",
+              "n": 15,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.06666666666666667
+            },
+            {
+              "family": "Dnotua",
+              "n": 29,
+              "emulation_rate": 0.3103448275862069,
+              "hybrid_rate": 0.2413793103448276,
+              "error_rate": 0.034482758620689655
+            },
+            {
+              "family": "Dowgin",
+              "n": 228,
+              "emulation_rate": 0.30701754385964913,
+              "hybrid_rate": 0.08771929824561403,
+              "error_rate": 0.02631578947368421
+            },
+            {
+              "family": "DroidDream",
+              "n": 18,
+              "emulation_rate": 0.7777777777777778,
+              "hybrid_rate": 0.4444444444444444,
+              "error_rate": 0.3888888888888889
+            },
+            {
+              "family": "DroidJack/SandoRAT",
+              "n": 11,
+              "emulation_rate": 0.09090909090909091,
+              "hybrid_rate": 0.09090909090909091,
+              "error_rate": 0.0
+            },
+            {
+              "family": "DroidKungFu",
+              "n": 198,
+              "emulation_rate": 0.5858585858585859,
+              "hybrid_rate": 0.23232323232323232,
+              "error_rate": 0.1111111111111111
+            },
+            {
+              "family": "FakeAngry",
+              "n": 18,
+              "emulation_rate": 0.7222222222222222,
+              "hybrid_rate": 0.16666666666666666,
+              "error_rate": 0.5
+            },
+            {
+              "family": "FakeApp",
+              "n": 200,
+              "emulation_rate": 0.52,
+              "hybrid_rate": 0.335,
+              "error_rate": 0.125
+            },
+            {
+              "family": "FakeBank",
+              "n": 61,
+              "emulation_rate": 0.21311475409836064,
+              "hybrid_rate": 0.06557377049180328,
+              "error_rate": 0.01639344262295082
+            },
+            {
+              "family": "FakeDoc",
+              "n": 30,
+              "emulation_rate": 0.03333333333333333,
+              "hybrid_rate": 0.03333333333333333,
+              "error_rate": 0.0
+            },
+            {
+              "family": "FakeFlash",
+              "n": 10,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "FakeInst",
+              "n": 477,
+              "emulation_rate": 0.33542976939203356,
+              "hybrid_rate": 0.18238993710691823,
+              "error_rate": 0.05450733752620545
+            },
+            {
+              "family": "Gamex",
+              "n": 15,
+              "emulation_rate": 0.3333333333333333,
+              "hybrid_rate": 0.06666666666666667,
+              "error_rate": 0.13333333333333333
+            },
+            {
+              "family": "Gappusin",
+              "n": 14,
+              "emulation_rate": 0.8571428571428571,
+              "hybrid_rate": 0.35714285714285715,
+              "error_rate": 0.35714285714285715
+            },
+            {
+              "family": "GinMaster",
+              "n": 166,
+              "emulation_rate": 0.4939759036144578,
+              "hybrid_rate": 0.1746987951807229,
+              "error_rate": 0.05421686746987952
+            },
+            {
+              "family": "GoldDream",
+              "n": 18,
+              "emulation_rate": 0.05555555555555555,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Gumen",
+              "n": 17,
+              "emulation_rate": 0.7647058823529411,
+              "hybrid_rate": 0.17647058823529413,
+              "error_rate": 0.0
+            },
+            {
+              "family": "HiddenAds",
+              "n": 27,
+              "emulation_rate": 0.8888888888888888,
+              "hybrid_rate": 0.5555555555555556,
+              "error_rate": 0.0
+            },
+            {
+              "family": "HongTouTou/Adrd",
+              "n": 18,
+              "emulation_rate": 0.4444444444444444,
+              "hybrid_rate": 0.2222222222222222,
+              "error_rate": 0.1111111111111111
+            },
+            {
+              "family": "Iconosys",
+              "n": 30,
+              "emulation_rate": 0.9666666666666667,
+              "hybrid_rate": 0.5666666666666667,
+              "error_rate": 0.2
+            },
+            {
+              "family": "Kmin",
+              "n": 16,
+              "emulation_rate": 0.0625,
+              "hybrid_rate": 0.0625,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Ksapp",
+              "n": 30,
+              "emulation_rate": 0.2,
+              "hybrid_rate": 0.1,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Kuguo",
+              "n": 170,
+              "emulation_rate": 0.20588235294117646,
+              "hybrid_rate": 0.041176470588235294,
+              "error_rate": 0.058823529411764705
+            },
+            {
+              "family": "LinuxLotoor",
+              "n": 13,
+              "emulation_rate": 0.5384615384615384,
+              "hybrid_rate": 0.15384615384615385,
+              "error_rate": 0.5384615384615384
+            },
+            {
+              "family": "Locker/SLocker Ransomware",
+              "n": 368,
+              "emulation_rate": 0.4375,
+              "hybrid_rate": 0.18206521739130435,
+              "error_rate": 0.07880434782608696
+            },
+            {
+              "family": "Lovetrap/Luvrtrap",
+              "n": 11,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.18181818181818182,
+              "error_rate": 0.6363636363636364
+            },
+            {
+              "family": "Malap",
+              "n": 812,
+              "emulation_rate": 0.16379310344827586,
+              "hybrid_rate": 0.04310344827586207,
+              "error_rate": 0.009852216748768473
+            },
+            {
+              "family": "MimobSMS",
+              "n": 25,
+              "emulation_rate": 0.52,
+              "hybrid_rate": 0.24,
+              "error_rate": 0.04
+            },
+            {
+              "family": "MobiDash",
+              "n": 30,
+              "emulation_rate": 0.7333333333333333,
+              "hybrid_rate": 0.43333333333333335,
+              "error_rate": 0.0
+            },
+            {
+              "family": "MobileSpy/Godwon",
+              "n": 45,
+              "emulation_rate": 0.3333333333333333,
+              "hybrid_rate": 0.15555555555555556,
+              "error_rate": 0.08888888888888889
+            },
+            {
+              "family": "Mseg",
+              "n": 20,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Nandrobox",
+              "n": 15,
+              "emulation_rate": 0.5333333333333333,
+              "hybrid_rate": 0.5333333333333333,
+              "error_rate": 0.0
+            },
+            {
+              "family": "OpFake",
+              "n": 27,
+              "emulation_rate": 0.48148148148148145,
+              "hybrid_rate": 0.2222222222222222,
+              "error_rate": 0.07407407407407407
+            },
+            {
+              "family": "Plankton",
+              "n": 13,
+              "emulation_rate": 0.38461538461538464,
+              "hybrid_rate": 0.15384615384615385,
+              "error_rate": 0.07692307692307693
+            },
+            {
+              "family": "Robtes",
+              "n": 45,
+              "emulation_rate": 0.6,
+              "hybrid_rate": 0.15555555555555556,
+              "error_rate": 0.044444444444444446
+            },
+            {
+              "family": "RuFraud",
+              "n": 20,
+              "emulation_rate": 0.85,
+              "hybrid_rate": 0.4,
+              "error_rate": 0.2
+            },
+            {
+              "family": "SMSSend",
+              "n": 61,
+              "emulation_rate": 0.22950819672131148,
+              "hybrid_rate": 0.11475409836065574,
+              "error_rate": 0.0
+            },
+            {
+              "family": "SMSreg",
+              "n": 1004,
+              "emulation_rate": 0.061752988047808766,
+              "hybrid_rate": 0.04183266932270916,
+              "error_rate": 0.0099601593625498
+            },
+            {
+              "family": "SMSspy",
+              "n": 24,
+              "emulation_rate": 0.16666666666666666,
+              "hybrid_rate": 0.08333333333333333,
+              "error_rate": 0.08333333333333333
+            },
+            {
+              "family": "SmForw",
+              "n": 16,
+              "emulation_rate": 0.0625,
+              "hybrid_rate": 0.0625,
+              "error_rate": 0.0
+            },
+            {
+              "family": "SmsPay",
+              "n": 10,
+              "emulation_rate": 0.2,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "TrojanSMS.Stealer",
+              "n": 16,
+              "emulation_rate": 0.25,
+              "hybrid_rate": 0.125,
+              "error_rate": 0.125
+            },
+            {
+              "family": "Vdloader",
+              "n": 51,
+              "emulation_rate": 0.17647058823529413,
+              "hybrid_rate": 0.0392156862745098,
+              "error_rate": 0.058823529411764705
+            },
+            {
+              "family": "Waps/Simhosy",
+              "n": 80,
+              "emulation_rate": 0.3625,
+              "hybrid_rate": 0.2125,
+              "error_rate": 0.125
+            },
+            {
+              "family": "Wooboo",
+              "n": 33,
+              "emulation_rate": 0.8181818181818182,
+              "hybrid_rate": 0.48484848484848486,
+              "error_rate": 0.15151515151515152
+            },
+            {
+              "family": "Youmi",
+              "n": 125,
+              "emulation_rate": 0.744,
+              "hybrid_rate": 0.352,
+              "error_rate": 0.304
+            },
+            {
+              "family": "benign",
+              "n": 7350,
+              "emulation_rate": 0.21306122448979592,
+              "hybrid_rate": 0.009523809523809525,
+              "error_rate": 0.004081632653061225
+            },
+            {
+              "family": "other",
+              "n": 274,
+              "emulation_rate": 0.4781021897810219,
+              "hybrid_rate": 0.24452554744525548,
+              "error_rate": 0.18248175182481752
+            },
+            {
+              "family": "unknown",
+              "n": 33,
+              "emulation_rate": 0.5757575757575758,
+              "hybrid_rate": 0.3333333333333333,
+              "error_rate": 0.3939393939393939
+            }
+          ]
+        },
+        "budget_curve": [
+          {
+            "budget_val": 0.1,
+            "emulation_rate": 0.138176,
+            "hybrid_rate": 0.070656,
+            "accuracy": 0.931968,
+            "balanced_accuracy": 0.9355346609943072,
+            "precision": 0.9957382458069838,
+            "recall_tpr": 0.8752870090634441,
+            "fpr": 0.004217687074829932,
+            "f1": 0.9316354749501576,
+            "mcc": 0.8716146059211236
+          },
+          {
+            "budget_val": 0.2,
+            "emulation_rate": 0.249984,
+            "hybrid_rate": 0.107328,
+            "accuracy": 0.946688,
+            "balanced_accuracy": 0.9494547547115524,
+            "precision": 0.9962656708455588,
+            "recall_tpr": 0.9027190332326284,
+            "fpr": 0.0038095238095238095,
+            "f1": 0.9471882330564888,
+            "mcc": 0.8980609191339078
+          },
+          {
+            "budget_val": 0.3,
+            "emulation_rate": 0.350336,
+            "hybrid_rate": 0.123904,
+            "accuracy": 0.953024,
+            "balanced_accuracy": 0.9554594405738127,
+            "precision": 0.9967066262679489,
+            "recall_tpr": 0.9143202416918429,
+            "fpr": 0.003401360544217687,
+            "f1": 0.9537375519979832,
+            "mcc": 0.9096869517931087
+          },
+          {
+            "budget_val": 0.4,
+            "emulation_rate": 0.457664,
+            "hybrid_rate": 0.136832,
+            "accuracy": 0.956224,
+            "balanced_accuracy": 0.9584729843599071,
+            "precision": 0.9965981944262724,
+            "recall_tpr": 0.9204833836858006,
+            "fpr": 0.0035374149659863946,
+            "f1": 0.9570297776102527,
+            "mcc": 0.9155532840328658
+          }
+        ]
+      },
+      "holdout": {
+        "n": 6220,
+        "approaches": {
+          "cascade_b": {
+            "threshold": 0.5,
+            "accuracy": 0.802572347266881,
+            "balanced_accuracy": 0.9012861736334405,
+            "precision": 1.0,
+            "recall_tpr": 0.802572347266881,
+            "fpr": 0.0,
+            "fnr": 0.19742765273311902,
+            "f1": 0.8904744916161255,
+            "mcc": 0.0,
+            "tp": 4992,
+            "fp": 0,
+            "tn": 0,
+            "fn": 1228
+          },
+          "static_only": {
+            "threshold": 0.8928568363189697,
+            "accuracy": 0.3377813504823151,
+            "balanced_accuracy": 0.6688906752411575,
+            "precision": 1.0,
+            "recall_tpr": 0.3377813504823151,
+            "fpr": 0.0,
+            "fnr": 0.6622186495176849,
+            "f1": 0.50498738132436,
+            "mcc": 0.0,
+            "tp": 2101,
+            "fp": 0,
+            "tn": 0,
+            "fn": 4119
+          },
+          "dynamic_only": {
+            "threshold": 0.8996427059173584,
+            "accuracy": 0.8247588424437299,
+            "balanced_accuracy": 0.912379421221865,
+            "precision": 1.0,
+            "recall_tpr": 0.8247588424437299,
+            "fpr": 0.0,
+            "fnr": 0.17524115755627012,
+            "f1": 0.903964757709251,
+            "mcc": 0.0,
+            "tp": 5130,
+            "fp": 0,
+            "tn": 0,
+            "fn": 1090
+          },
+          "hybrid_only": {
+            "threshold": 0.7761608573125275,
+            "accuracy": 0.8815112540192926,
+            "balanced_accuracy": 0.9407556270096463,
+            "precision": 1.0,
+            "recall_tpr": 0.8815112540192926,
+            "fpr": 0.0,
+            "fnr": 0.11848874598070736,
+            "f1": 0.9370246945227719,
+            "mcc": 0.0,
+            "tp": 5483,
+            "fp": 0,
+            "tn": 0,
+            "fn": 737
+          }
+        },
+        "cascade": {
+          "emulation_rate": 0.8369774919614148,
+          "n_emulated": 5206,
+          "hybrid_rate": 0.5308681672025723,
+          "n_hybrid": 3302,
+          "confident_errors": 425,
+          "per_family": [
+            {
+              "family": "Airpush/StopSMS",
+              "n": 6220,
+              "emulation_rate": 0.8369774919614148,
+              "hybrid_rate": 0.5308681672025723,
+              "error_rate": 0.19742765273311896
+            }
+          ]
+        },
+        "budget_curve": [
+          {
+            "budget_val": 0.1,
+            "emulation_rate": 0.5463022508038585,
+            "hybrid_rate": 0.3319935691318328,
+            "accuracy": 0.6255627009646302,
+            "balanced_accuracy": 0.8127813504823151,
+            "precision": 1.0,
+            "recall_tpr": 0.6255627009646302,
+            "fpr": 0.0,
+            "f1": 0.769656809415488,
+            "mcc": 0.0
+          },
+          {
+            "budget_val": 0.2,
+            "emulation_rate": 0.7541800643086817,
+            "hybrid_rate": 0.45980707395498394,
+            "accuracy": 0.735048231511254,
+            "balanced_accuracy": 0.867524115755627,
+            "precision": 1.0,
+            "recall_tpr": 0.735048231511254,
+            "fpr": 0.0,
+            "f1": 0.8472942920681986,
+            "mcc": 0.0
+          },
+          {
+            "budget_val": 0.3,
+            "emulation_rate": 0.8461414790996784,
+            "hybrid_rate": 0.5194533762057878,
+            "accuracy": 0.7858520900321544,
+            "balanced_accuracy": 0.8929260450160772,
+            "precision": 1.0,
+            "recall_tpr": 0.7858520900321544,
+            "fpr": 0.0,
+            "f1": 0.8800864241987757,
+            "mcc": 0.0
+          },
+          {
+            "budget_val": 0.4,
+            "emulation_rate": 0.9311897106109325,
+            "hybrid_rate": 0.5591639871382637,
+            "accuracy": 0.8204180064308682,
+            "balanced_accuracy": 0.9102090032154341,
+            "precision": 1.0,
+            "recall_tpr": 0.8204180064308682,
+            "fpr": 0.0,
+            "f1": 0.9013512320056521,
+            "mcc": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "seed": 1,
+      "thresholds": {
+        "static": 0.8574993014335632,
+        "dynamic": 0.916442334651947,
+        "hybrid": 0.7143309746761152
+      },
+      "band": {
+        "lo": 0.034744977951049805,
+        "hi": 0.9996600151062012
+      },
+      "budget_cutoffs": {
+        "0.1": 2.185666303080978,
+        "0.2": 4.024203193332352,
+        "0.3": 4.9828469158665305,
+        "0.4": 5.816750069218216
+      },
+      "validation": {
+        "n": 7037,
+        "approaches": {
+          "cascade_b": {
+            "threshold": 0.5,
+            "accuracy": 0.9748472360380844,
+            "balanced_accuracy": 0.973879048347477,
+            "precision": 0.9950264221324215,
+            "recall_tpr": 0.9521118381915527,
+            "fpr": 0.004353741496598639,
+            "fnr": 0.04788816180844735,
+            "f1": 0.9730962152302781,
+            "mcc": 0.9503155105439985,
+            "tp": 3201,
+            "fp": 16,
+            "tn": 3659,
+            "fn": 161
+          },
+          "static_only": {
+            "threshold": 0.8574993014335632,
+            "accuracy": 0.956657666619298,
+            "balanced_accuracy": 0.9550960919763504,
+            "precision": 0.9884947267497604,
+            "recall_tpr": 0.9199881023200476,
+            "fpr": 0.009795918367346938,
+            "fnr": 0.08001189767995243,
+            "f1": 0.9530118625789555,
+            "mcc": 0.9149146230335302,
+            "tp": 3093,
+            "fp": 36,
+            "tn": 3639,
+            "fn": 269
+          },
+          "dynamic_only": {
+            "threshold": 0.916442334651947,
+            "accuracy": 0.8750888162569277,
+            "balanced_accuracy": 0.8697302383178138,
+            "precision": 0.9859099804305284,
+            "recall_tpr": 0.7492563950029745,
+            "fpr": 0.009795918367346938,
+            "fnr": 0.2507436049970255,
+            "f1": 0.8514449890147033,
+            "mcc": 0.7680882373776916,
+            "tp": 2519,
+            "fp": 36,
+            "tn": 3639,
+            "fn": 843
+          },
+          "hybrid_only": {
+            "threshold": 0.7143309746761152,
+            "accuracy": 0.9826630666477192,
+            "balanced_accuracy": 0.9822740351345773,
+            "precision": 0.9900181488203267,
+            "recall_tpr": 0.9735276621058894,
+            "fpr": 0.008979591836734694,
+            "fnr": 0.02647233789411063,
+            "f1": 0.9817036592681464,
+            "mcc": 0.9653556741535372,
+            "tp": 3273,
+            "fp": 33,
+            "tn": 3642,
+            "fn": 89
+          }
+        },
+        "cascade": {
+          "emulation_rate": 0.3610913741651272,
+          "n_emulated": 2541,
+          "hybrid_rate": 0.08895836293875231,
+          "n_hybrid": 626,
+          "confident_errors": 36,
+          "per_family": [
+            {
+              "family": "Adwo",
+              "n": 6,
+              "emulation_rate": 0.8333333333333334,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.5
+            },
+            {
+              "family": "Agent",
+              "n": 294,
+              "emulation_rate": 0.46258503401360546,
+              "hybrid_rate": 0.16326530612244897,
+              "error_rate": 0.05102040816326531
+            },
+            {
+              "family": "AnServer/Answerbot",
+              "n": 29,
+              "emulation_rate": 0.7241379310344828,
+              "hybrid_rate": 0.10344827586206896,
+              "error_rate": 0.06896551724137931
+            },
+            {
+              "family": "BankBot",
+              "n": 129,
+              "emulation_rate": 0.07751937984496124,
+              "hybrid_rate": 0.015503875968992248,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Booster",
+              "n": 6,
+              "emulation_rate": 0.5,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Boxer",
+              "n": 359,
+              "emulation_rate": 0.958217270194986,
+              "hybrid_rate": 0.18662952646239556,
+              "error_rate": 0.008356545961002786
+            },
+            {
+              "family": "Coogos",
+              "n": 25,
+              "emulation_rate": 0.96,
+              "hybrid_rate": 0.28,
+              "error_rate": 0.04
+            },
+            {
+              "family": "Cosha",
+              "n": 7,
+              "emulation_rate": 0.7142857142857143,
+              "hybrid_rate": 0.7142857142857143,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Counterclank",
+              "n": 11,
+              "emulation_rate": 0.8181818181818182,
+              "hybrid_rate": 0.36363636363636365,
+              "error_rate": 0.18181818181818182
+            },
+            {
+              "family": "Dialer",
+              "n": 7,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Dnotua",
+              "n": 14,
+              "emulation_rate": 0.7857142857142857,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Dowgin",
+              "n": 114,
+              "emulation_rate": 0.5175438596491229,
+              "hybrid_rate": 0.14035087719298245,
+              "error_rate": 0.0
+            },
+            {
+              "family": "DroidDream",
+              "n": 9,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.5555555555555556,
+              "error_rate": 0.4444444444444444
+            },
+            {
+              "family": "DroidJack/SandoRAT",
+              "n": 5,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "DroidKungFu",
+              "n": 99,
+              "emulation_rate": 0.8888888888888888,
+              "hybrid_rate": 0.25252525252525254,
+              "error_rate": 0.030303030303030304
+            },
+            {
+              "family": "FakeAngry",
+              "n": 8,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.75,
+              "error_rate": 0.25
+            },
+            {
+              "family": "FakeApp",
+              "n": 99,
+              "emulation_rate": 0.5959595959595959,
+              "hybrid_rate": 0.41414141414141414,
+              "error_rate": 0.09090909090909091
+            },
+            {
+              "family": "FakeBank",
+              "n": 30,
+              "emulation_rate": 0.36666666666666664,
+              "hybrid_rate": 0.1,
+              "error_rate": 0.03333333333333333
+            },
+            {
+              "family": "FakeDoc",
+              "n": 15,
+              "emulation_rate": 0.6666666666666666,
+              "hybrid_rate": 0.2,
+              "error_rate": 0.0
+            },
+            {
+              "family": "FakeFlash",
+              "n": 5,
+              "emulation_rate": 0.2,
+              "hybrid_rate": 0.2,
+              "error_rate": 0.0
+            },
+            {
+              "family": "FakeInst",
+              "n": 238,
+              "emulation_rate": 0.5714285714285714,
+              "hybrid_rate": 0.24789915966386555,
+              "error_rate": 0.03361344537815126
+            },
+            {
+              "family": "Gamex",
+              "n": 7,
+              "emulation_rate": 0.2857142857142857,
+              "hybrid_rate": 0.14285714285714285,
+              "error_rate": 0.14285714285714285
+            },
+            {
+              "family": "Gappusin",
+              "n": 7,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.2857142857142857,
+              "error_rate": 0.2857142857142857
+            },
+            {
+              "family": "GinMaster",
+              "n": 82,
+              "emulation_rate": 0.6829268292682927,
+              "hybrid_rate": 0.24390243902439024,
+              "error_rate": 0.036585365853658534
+            },
+            {
+              "family": "GoldDream",
+              "n": 9,
+              "emulation_rate": 0.2222222222222222,
+              "hybrid_rate": 0.1111111111111111,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Gumen",
+              "n": 8,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.0
+            },
+            {
+              "family": "HiddenAds",
+              "n": 11,
+              "emulation_rate": 0.9090909090909091,
+              "hybrid_rate": 0.45454545454545453,
+              "error_rate": 0.0
+            },
+            {
+              "family": "HongTouTou/Adrd",
+              "n": 9,
+              "emulation_rate": 0.6666666666666666,
+              "hybrid_rate": 0.2222222222222222,
+              "error_rate": 0.2222222222222222
+            },
+            {
+              "family": "Iconosys",
+              "n": 15,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.5333333333333333,
+              "error_rate": 0.26666666666666666
+            },
+            {
+              "family": "Kmin",
+              "n": 8,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Ksapp",
+              "n": 15,
+              "emulation_rate": 0.3333333333333333,
+              "hybrid_rate": 0.06666666666666667,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Kuguo",
+              "n": 84,
+              "emulation_rate": 0.4642857142857143,
+              "hybrid_rate": 0.07142857142857142,
+              "error_rate": 0.047619047619047616
+            },
+            {
+              "family": "LinuxLotoor",
+              "n": 6,
+              "emulation_rate": 0.6666666666666666,
+              "hybrid_rate": 0.3333333333333333,
+              "error_rate": 0.16666666666666666
+            },
+            {
+              "family": "Locker/SLocker Ransomware",
+              "n": 184,
+              "emulation_rate": 0.6467391304347826,
+              "hybrid_rate": 0.20652173913043478,
+              "error_rate": 0.11413043478260869
+            },
+            {
+              "family": "Lovetrap/Luvrtrap",
+              "n": 5,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.4,
+              "error_rate": 0.6
+            },
+            {
+              "family": "Malap",
+              "n": 405,
+              "emulation_rate": 0.362962962962963,
+              "hybrid_rate": 0.07160493827160494,
+              "error_rate": 0.0024691358024691358
+            },
+            {
+              "family": "MimobSMS",
+              "n": 12,
+              "emulation_rate": 0.9166666666666666,
+              "hybrid_rate": 0.16666666666666666,
+              "error_rate": 0.0
+            },
+            {
+              "family": "MobiDash",
+              "n": 16,
+              "emulation_rate": 0.625,
+              "hybrid_rate": 0.125,
+              "error_rate": 0.0
+            },
+            {
+              "family": "MobileSpy/Godwon",
+              "n": 22,
+              "emulation_rate": 0.6818181818181818,
+              "hybrid_rate": 0.3181818181818182,
+              "error_rate": 0.09090909090909091
+            },
+            {
+              "family": "Mseg",
+              "n": 10,
+              "emulation_rate": 0.3,
+              "hybrid_rate": 0.3,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Nandrobox",
+              "n": 8,
+              "emulation_rate": 0.75,
+              "hybrid_rate": 0.375,
+              "error_rate": 0.125
+            },
+            {
+              "family": "OpFake",
+              "n": 13,
+              "emulation_rate": 0.7692307692307693,
+              "hybrid_rate": 0.3076923076923077,
+              "error_rate": 0.07692307692307693
+            },
+            {
+              "family": "Plankton",
+              "n": 6,
+              "emulation_rate": 0.6666666666666666,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.16666666666666666
+            },
+            {
+              "family": "Robtes",
+              "n": 22,
+              "emulation_rate": 0.6363636363636364,
+              "hybrid_rate": 0.18181818181818182,
+              "error_rate": 0.13636363636363635
+            },
+            {
+              "family": "RuFraud",
+              "n": 28,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.03571428571428571,
+              "error_rate": 0.0
+            },
+            {
+              "family": "SMSSend",
+              "n": 31,
+              "emulation_rate": 0.3225806451612903,
+              "hybrid_rate": 0.1935483870967742,
+              "error_rate": 0.03225806451612903
+            },
+            {
+              "family": "SMSreg",
+              "n": 502,
+              "emulation_rate": 0.1394422310756972,
+              "hybrid_rate": 0.05776892430278884,
+              "error_rate": 0.00398406374501992
+            },
+            {
+              "family": "SMSspy",
+              "n": 11,
+              "emulation_rate": 0.45454545454545453,
+              "hybrid_rate": 0.18181818181818182,
+              "error_rate": 0.09090909090909091
+            },
+            {
+              "family": "SmForw",
+              "n": 9,
+              "emulation_rate": 0.5555555555555556,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "SmsPay",
+              "n": 5,
+              "emulation_rate": 0.6,
+              "hybrid_rate": 0.2,
+              "error_rate": 0.0
+            },
+            {
+              "family": "TrojanSMS.Stealer",
+              "n": 8,
+              "emulation_rate": 0.375,
+              "hybrid_rate": 0.125,
+              "error_rate": 0.125
+            },
+            {
+              "family": "Vdloader",
+              "n": 25,
+              "emulation_rate": 0.4,
+              "hybrid_rate": 0.16,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Waps/Simhosy",
+              "n": 40,
+              "emulation_rate": 0.475,
+              "hybrid_rate": 0.2,
+              "error_rate": 0.075
+            },
+            {
+              "family": "Wooboo",
+              "n": 16,
+              "emulation_rate": 0.875,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.1875
+            },
+            {
+              "family": "Youmi",
+              "n": 62,
+              "emulation_rate": 0.7258064516129032,
+              "hybrid_rate": 0.27419354838709675,
+              "error_rate": 0.25806451612903225
+            },
+            {
+              "family": "benign",
+              "n": 3675,
+              "emulation_rate": 0.20952380952380953,
+              "hybrid_rate": 0.011156462585034013,
+              "error_rate": 0.004353741496598639
+            },
+            {
+              "family": "other",
+              "n": 136,
+              "emulation_rate": 0.6838235294117647,
+              "hybrid_rate": 0.3161764705882353,
+              "error_rate": 0.16911764705882354
+            },
+            {
+              "family": "unknown",
+              "n": 16,
+              "emulation_rate": 0.6875,
+              "hybrid_rate": 0.4375,
+              "error_rate": 0.5
+            }
+          ]
+        },
+        "budget_curve": [
+          {
+            "budget_val": 0.1,
+            "emulation_rate": 0.10018473781440955,
+            "hybrid_rate": 0.04007389512576382,
+            "accuracy": 0.9680261475060395,
+            "balanced_accuracy": 0.9667657735313042,
+            "precision": 0.9943271352032776,
+            "recall_tpr": 0.938429506246282,
+            "fpr": 0.004897959183673469,
+            "f1": 0.9655700076511095,
+            "mcc": 0.937136665711041
+          },
+          {
+            "budget_val": 0.2,
+            "emulation_rate": 0.20008526360665055,
+            "hybrid_rate": 0.0662214011652693,
+            "accuracy": 0.9737103879494102,
+            "balanced_accuracy": 0.9726892803522361,
+            "precision": 0.9950140230601433,
+            "recall_tpr": 0.9497323022010707,
+            "fpr": 0.004353741496598639,
+            "f1": 0.9718459899558667,
+            "mcc": 0.9481181322618293
+          },
+          {
+            "budget_val": 0.3,
+            "emulation_rate": 0.2999857893988916,
+            "hybrid_rate": 0.0775898820520108,
+            "accuracy": 0.9747051300270001,
+            "balanced_accuracy": 0.9737303273480719,
+            "precision": 0.9950248756218906,
+            "recall_tpr": 0.9518143961927424,
+            "fpr": 0.004353741496598639,
+            "f1": 0.972940103374886,
+            "mcc": 0.9500406134137132
+          },
+          {
+            "budget_val": 0.4,
+            "emulation_rate": 0.4000284212022169,
+            "hybrid_rate": 0.08640045473923547,
+            "accuracy": 0.9749893420491687,
+            "balanced_accuracy": 0.9740404359245185,
+            "precision": 0.9947204968944099,
+            "recall_tpr": 0.9527067221891731,
+            "fpr": 0.004625850340136055,
+            "f1": 0.9732604071710725,
+            "mcc": 0.9505695427507502
+          }
+        ]
+      },
+      "test": {
+        "n": 15625,
+        "approaches": {
+          "cascade_b": {
+            "threshold": 0.5,
+            "accuracy": 0.955264,
+            "balanced_accuracy": 0.9575742441991902,
+            "precision": 0.9967217414109625,
+            "recall_tpr": 0.9185498489425982,
+            "fpr": 0.003401360544217687,
+            "fnr": 0.08145015105740183,
+            "f1": 0.9560405005974466,
+            "mcc": 0.9138038607907629,
+            "tp": 7601,
+            "fp": 25,
+            "tn": 7325,
+            "fn": 674
+          },
+          "static_only": {
+            "threshold": 0.8574993014335632,
+            "accuracy": 0.888256,
+            "balanced_accuracy": 0.893976817313028,
+            "precision": 0.9896505174741262,
+            "recall_tpr": 0.7973413897280967,
+            "fpr": 0.009387755102040816,
+            "fnr": 0.20265861027190335,
+            "f1": 0.8831481729353501,
+            "mcc": 0.7951655884731723,
+            "tp": 6598,
+            "fp": 69,
+            "tn": 7281,
+            "fn": 1677
+          },
+          "dynamic_only": {
+            "threshold": 0.916442334651947,
+            "accuracy": 0.866752,
+            "balanced_accuracy": 0.8736442855087655,
+            "precision": 0.9884839880107272,
+            "recall_tpr": 0.7572205438066465,
+            "fpr": 0.009931972789115647,
+            "fnr": 0.2427794561933535,
+            "f1": 0.8575338716299439,
+            "mcc": 0.7596110879428355,
+            "tp": 6266,
+            "fp": 73,
+            "tn": 7277,
+            "fn": 2009
+          },
+          "hybrid_only": {
+            "threshold": 0.7143309746761152,
+            "accuracy": 0.973056,
+            "balanced_accuracy": 0.9741360955258236,
+            "precision": 0.9929701230228472,
+            "recall_tpr": 0.9558912386706948,
+            "fpr": 0.007619047619047619,
+            "fnr": 0.04410876132930519,
+            "f1": 0.9740779508650945,
+            "mcc": 0.9467918255219404,
+            "tp": 7910,
+            "fp": 56,
+            "tn": 7294,
+            "fn": 365
+          }
+        },
+        "cascade": {
+          "emulation_rate": 0.415744,
+          "n_emulated": 6496,
+          "hybrid_rate": 0.136704,
+          "n_hybrid": 2136,
+          "confident_errors": 190,
+          "per_family": [
+            {
+              "family": "Adwo",
+              "n": 12,
+              "emulation_rate": 0.9166666666666666,
+              "hybrid_rate": 0.25,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Agent",
+              "n": 586,
+              "emulation_rate": 0.5136518771331058,
+              "hybrid_rate": 0.15187713310580206,
+              "error_rate": 0.040955631399317405
+            },
+            {
+              "family": "Airpush/StopSMS",
+              "n": 1555,
+              "emulation_rate": 0.9054662379421222,
+              "hybrid_rate": 0.569774919614148,
+              "error_rate": 0.21028938906752412
+            },
+            {
+              "family": "AnServer/Answerbot",
+              "n": 59,
+              "emulation_rate": 0.7796610169491526,
+              "hybrid_rate": 0.11864406779661017,
+              "error_rate": 0.0847457627118644
+            },
+            {
+              "family": "BankBot",
+              "n": 259,
+              "emulation_rate": 0.09652509652509653,
+              "hybrid_rate": 0.015444015444015444,
+              "error_rate": 0.003861003861003861
+            },
+            {
+              "family": "Booster",
+              "n": 12,
+              "emulation_rate": 0.25,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Boxer",
+              "n": 720,
+              "emulation_rate": 0.9375,
+              "hybrid_rate": 0.15,
+              "error_rate": 0.011111111111111112
+            },
+            {
+              "family": "Coogos",
+              "n": 50,
+              "emulation_rate": 0.9,
+              "hybrid_rate": 0.28,
+              "error_rate": 0.02
+            },
+            {
+              "family": "Cosha",
+              "n": 13,
+              "emulation_rate": 0.5384615384615384,
+              "hybrid_rate": 0.07692307692307693,
+              "error_rate": 0.15384615384615385
+            },
+            {
+              "family": "Counterclank",
+              "n": 22,
+              "emulation_rate": 0.9545454545454546,
+              "hybrid_rate": 0.45454545454545453,
+              "error_rate": 0.18181818181818182
+            },
+            {
+              "family": "Dialer",
+              "n": 15,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.06666666666666667
+            },
+            {
+              "family": "Dnotua",
+              "n": 29,
+              "emulation_rate": 0.7241379310344828,
+              "hybrid_rate": 0.5172413793103449,
+              "error_rate": 0.034482758620689655
+            },
+            {
+              "family": "Dowgin",
+              "n": 228,
+              "emulation_rate": 0.4605263157894737,
+              "hybrid_rate": 0.12719298245614036,
+              "error_rate": 0.021929824561403508
+            },
+            {
+              "family": "DroidDream",
+              "n": 18,
+              "emulation_rate": 0.8333333333333334,
+              "hybrid_rate": 0.3888888888888889,
+              "error_rate": 0.2222222222222222
+            },
+            {
+              "family": "DroidJack/SandoRAT",
+              "n": 11,
+              "emulation_rate": 0.09090909090909091,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "DroidKungFu",
+              "n": 198,
+              "emulation_rate": 0.898989898989899,
+              "hybrid_rate": 0.31313131313131315,
+              "error_rate": 0.10101010101010101
+            },
+            {
+              "family": "FakeAngry",
+              "n": 18,
+              "emulation_rate": 0.8333333333333334,
+              "hybrid_rate": 0.1111111111111111,
+              "error_rate": 0.3888888888888889
+            },
+            {
+              "family": "FakeApp",
+              "n": 200,
+              "emulation_rate": 0.64,
+              "hybrid_rate": 0.365,
+              "error_rate": 0.12
+            },
+            {
+              "family": "FakeBank",
+              "n": 61,
+              "emulation_rate": 0.45901639344262296,
+              "hybrid_rate": 0.08196721311475409,
+              "error_rate": 0.01639344262295082
+            },
+            {
+              "family": "FakeDoc",
+              "n": 30,
+              "emulation_rate": 0.5666666666666667,
+              "hybrid_rate": 0.1,
+              "error_rate": 0.0
+            },
+            {
+              "family": "FakeFlash",
+              "n": 10,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "FakeInst",
+              "n": 477,
+              "emulation_rate": 0.6352201257861635,
+              "hybrid_rate": 0.2893081761006289,
+              "error_rate": 0.03773584905660377
+            },
+            {
+              "family": "Gamex",
+              "n": 15,
+              "emulation_rate": 0.6,
+              "hybrid_rate": 0.13333333333333333,
+              "error_rate": 0.13333333333333333
+            },
+            {
+              "family": "Gappusin",
+              "n": 14,
+              "emulation_rate": 0.9285714285714286,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.42857142857142855
+            },
+            {
+              "family": "GinMaster",
+              "n": 166,
+              "emulation_rate": 0.7469879518072289,
+              "hybrid_rate": 0.24096385542168675,
+              "error_rate": 0.060240963855421686
+            },
+            {
+              "family": "GoldDream",
+              "n": 18,
+              "emulation_rate": 0.16666666666666666,
+              "hybrid_rate": 0.05555555555555555,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Gumen",
+              "n": 17,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.11764705882352941,
+              "error_rate": 0.0
+            },
+            {
+              "family": "HiddenAds",
+              "n": 27,
+              "emulation_rate": 0.8888888888888888,
+              "hybrid_rate": 0.37037037037037035,
+              "error_rate": 0.0
+            },
+            {
+              "family": "HongTouTou/Adrd",
+              "n": 18,
+              "emulation_rate": 0.9444444444444444,
+              "hybrid_rate": 0.3333333333333333,
+              "error_rate": 0.16666666666666666
+            },
+            {
+              "family": "Iconosys",
+              "n": 30,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.16666666666666666
+            },
+            {
+              "family": "Kmin",
+              "n": 16,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.625,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Ksapp",
+              "n": 30,
+              "emulation_rate": 0.23333333333333334,
+              "hybrid_rate": 0.1,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Kuguo",
+              "n": 170,
+              "emulation_rate": 0.3764705882352941,
+              "hybrid_rate": 0.058823529411764705,
+              "error_rate": 0.058823529411764705
+            },
+            {
+              "family": "LinuxLotoor",
+              "n": 13,
+              "emulation_rate": 0.5384615384615384,
+              "hybrid_rate": 0.15384615384615385,
+              "error_rate": 0.5384615384615384
+            },
+            {
+              "family": "Locker/SLocker Ransomware",
+              "n": 368,
+              "emulation_rate": 0.6521739130434783,
+              "hybrid_rate": 0.27717391304347827,
+              "error_rate": 0.057065217391304345
+            },
+            {
+              "family": "Lovetrap/Luvrtrap",
+              "n": 11,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.18181818181818182,
+              "error_rate": 0.6363636363636364
+            },
+            {
+              "family": "Malap",
+              "n": 812,
+              "emulation_rate": 0.39532019704433496,
+              "hybrid_rate": 0.0812807881773399,
+              "error_rate": 0.008620689655172414
+            },
+            {
+              "family": "MimobSMS",
+              "n": 25,
+              "emulation_rate": 0.88,
+              "hybrid_rate": 0.24,
+              "error_rate": 0.0
+            },
+            {
+              "family": "MobiDash",
+              "n": 30,
+              "emulation_rate": 0.8,
+              "hybrid_rate": 0.43333333333333335,
+              "error_rate": 0.0
+            },
+            {
+              "family": "MobileSpy/Godwon",
+              "n": 45,
+              "emulation_rate": 0.5777777777777777,
+              "hybrid_rate": 0.1111111111111111,
+              "error_rate": 0.1111111111111111
+            },
+            {
+              "family": "Mseg",
+              "n": 20,
+              "emulation_rate": 0.05,
+              "hybrid_rate": 0.05,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Nandrobox",
+              "n": 15,
+              "emulation_rate": 0.8,
+              "hybrid_rate": 0.6666666666666666,
+              "error_rate": 0.0
+            },
+            {
+              "family": "OpFake",
+              "n": 27,
+              "emulation_rate": 0.5185185185185185,
+              "hybrid_rate": 0.2962962962962963,
+              "error_rate": 0.07407407407407407
+            },
+            {
+              "family": "Plankton",
+              "n": 13,
+              "emulation_rate": 0.6153846153846154,
+              "hybrid_rate": 0.38461538461538464,
+              "error_rate": 0.07692307692307693
+            },
+            {
+              "family": "Robtes",
+              "n": 45,
+              "emulation_rate": 0.6666666666666666,
+              "hybrid_rate": 0.24444444444444444,
+              "error_rate": 0.044444444444444446
+            },
+            {
+              "family": "RuFraud",
+              "n": 20,
+              "emulation_rate": 0.85,
+              "hybrid_rate": 0.3,
+              "error_rate": 0.2
+            },
+            {
+              "family": "SMSSend",
+              "n": 61,
+              "emulation_rate": 0.4918032786885246,
+              "hybrid_rate": 0.2459016393442623,
+              "error_rate": 0.01639344262295082
+            },
+            {
+              "family": "SMSreg",
+              "n": 1004,
+              "emulation_rate": 0.14840637450199204,
+              "hybrid_rate": 0.055776892430278883,
+              "error_rate": 0.008964143426294821
+            },
+            {
+              "family": "SMSspy",
+              "n": 24,
+              "emulation_rate": 0.375,
+              "hybrid_rate": 0.2916666666666667,
+              "error_rate": 0.041666666666666664
+            },
+            {
+              "family": "SmForw",
+              "n": 16,
+              "emulation_rate": 0.6875,
+              "hybrid_rate": 0.25,
+              "error_rate": 0.0
+            },
+            {
+              "family": "SmsPay",
+              "n": 10,
+              "emulation_rate": 0.7,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "TrojanSMS.Stealer",
+              "n": 16,
+              "emulation_rate": 0.25,
+              "hybrid_rate": 0.125,
+              "error_rate": 0.125
+            },
+            {
+              "family": "Vdloader",
+              "n": 51,
+              "emulation_rate": 0.23529411764705882,
+              "hybrid_rate": 0.0392156862745098,
+              "error_rate": 0.0392156862745098
+            },
+            {
+              "family": "Waps/Simhosy",
+              "n": 80,
+              "emulation_rate": 0.5125,
+              "hybrid_rate": 0.2625,
+              "error_rate": 0.15
+            },
+            {
+              "family": "Wooboo",
+              "n": 33,
+              "emulation_rate": 0.9696969696969697,
+              "hybrid_rate": 0.5757575757575758,
+              "error_rate": 0.15151515151515152
+            },
+            {
+              "family": "Youmi",
+              "n": 125,
+              "emulation_rate": 0.808,
+              "hybrid_rate": 0.4,
+              "error_rate": 0.272
+            },
+            {
+              "family": "benign",
+              "n": 7350,
+              "emulation_rate": 0.20204081632653062,
+              "hybrid_rate": 0.011156462585034013,
+              "error_rate": 0.003401360544217687
+            },
+            {
+              "family": "other",
+              "n": 274,
+              "emulation_rate": 0.6715328467153284,
+              "hybrid_rate": 0.2518248175182482,
+              "error_rate": 0.17883211678832117
+            },
+            {
+              "family": "unknown",
+              "n": 33,
+              "emulation_rate": 0.6363636363636364,
+              "hybrid_rate": 0.30303030303030304,
+              "error_rate": 0.42424242424242425
+            }
+          ]
+        },
+        "budget_curve": [
+          {
+            "budget_val": 0.1,
+            "emulation_rate": 0.137216,
+            "hybrid_rate": 0.0688,
+            "accuracy": 0.928128,
+            "balanced_accuracy": 0.9319397003514397,
+            "precision": 0.9962531223980017,
+            "recall_tpr": 0.8675528700906344,
+            "fpr": 0.003673469387755102,
+            "f1": 0.9274594664427362,
+            "mcc": 0.8649747012937397
+          },
+          {
+            "budget_val": 0.2,
+            "emulation_rate": 0.25472,
+            "hybrid_rate": 0.109248,
+            "accuracy": 0.948352,
+            "balanced_accuracy": 0.9510409601907228,
+            "precision": 0.9965425531914893,
+            "recall_tpr": 0.905619335347432,
+            "fpr": 0.0035374149659863946,
+            "f1": 0.9489078822412155,
+            "mcc": 0.9011316004991139
+          },
+          {
+            "budget_val": 0.3,
+            "emulation_rate": 0.355584,
+            "hybrid_rate": 0.125824,
+            "accuracy": 0.954496,
+            "balanced_accuracy": 0.9568491686704894,
+            "precision": 0.9967165747307591,
+            "recall_tpr": 0.9170996978851964,
+            "fpr": 0.003401360544217687,
+            "f1": 0.9552520611743974,
+            "mcc": 0.9123903920597329
+          },
+          {
+            "budget_val": 0.4,
+            "emulation_rate": 0.450368,
+            "hybrid_rate": 0.137088,
+            "accuracy": 0.957696,
+            "balanced_accuracy": 0.9598551082064245,
+            "precision": 0.9964788732394366,
+            "recall_tpr": 0.9233836858006043,
+            "fpr": 0.003673469387755102,
+            "f1": 0.9585397980304836,
+            "mcc": 0.9182542570357846
+          }
+        ]
+      },
+      "holdout": {
+        "n": 6220,
+        "approaches": {
+          "cascade_b": {
+            "threshold": 0.5,
+            "accuracy": 0.7863344051446945,
+            "balanced_accuracy": 0.8931672025723473,
+            "precision": 1.0,
+            "recall_tpr": 0.7863344051446945,
+            "fpr": 0.0,
+            "fnr": 0.21366559485530545,
+            "f1": 0.8803888038880389,
+            "mcc": 0.0,
+            "tp": 4891,
+            "fp": 0,
+            "tn": 0,
+            "fn": 1329
+          },
+          "static_only": {
+            "threshold": 0.8574993014335632,
+            "accuracy": 0.30836012861736334,
+            "balanced_accuracy": 0.6541800643086817,
+            "precision": 1.0,
+            "recall_tpr": 0.30836012861736334,
+            "fpr": 0.0,
+            "fnr": 0.6916398713826366,
+            "f1": 0.47136888670434995,
+            "mcc": 0.0,
+            "tp": 1918,
+            "fp": 0,
+            "tn": 0,
+            "fn": 4302
+          },
+          "dynamic_only": {
+            "threshold": 0.916442334651947,
+            "accuracy": 0.8215434083601286,
+            "balanced_accuracy": 0.9107717041800643,
+            "precision": 1.0,
+            "recall_tpr": 0.8215434083601286,
+            "fpr": 0.0,
+            "fnr": 0.17845659163987138,
+            "f1": 0.9020300088261254,
+            "mcc": 0.0,
+            "tp": 5110,
+            "fp": 0,
+            "tn": 0,
+            "fn": 1110
+          },
+          "hybrid_only": {
+            "threshold": 0.7143309746761152,
+            "accuracy": 0.8766881028938907,
+            "balanced_accuracy": 0.9383440514469453,
+            "precision": 1.0,
+            "recall_tpr": 0.8766881028938907,
+            "fpr": 0.0,
+            "fnr": 0.12331189710610935,
+            "f1": 0.9342928124732288,
+            "mcc": 0.0,
+            "tp": 5453,
+            "fp": 0,
+            "tn": 0,
+            "fn": 767
+          }
+        },
+        "cascade": {
+          "emulation_rate": 0.9019292604501608,
+          "n_emulated": 5610,
+          "hybrid_rate": 0.5495176848874598,
+          "n_hybrid": 3418,
+          "confident_errors": 510,
+          "per_family": [
+            {
+              "family": "Airpush/StopSMS",
+              "n": 6220,
+              "emulation_rate": 0.9019292604501608,
+              "hybrid_rate": 0.5495176848874598,
+              "error_rate": 0.21366559485530548
+            }
+          ]
+        },
+        "budget_curve": [
+          {
+            "budget_val": 0.1,
+            "emulation_rate": 0.522347266881029,
+            "hybrid_rate": 0.3157556270096463,
+            "accuracy": 0.5782958199356913,
+            "balanced_accuracy": 0.7891479099678457,
+            "precision": 1.0,
+            "recall_tpr": 0.5782958199356913,
+            "fpr": 0.0,
+            "f1": 0.7328104308851991,
+            "mcc": 0.0
+          },
+          {
+            "budget_val": 0.2,
+            "emulation_rate": 0.7882636655948553,
+            "hybrid_rate": 0.48536977491961414,
+            "accuracy": 0.7344051446945338,
+            "balanced_accuracy": 0.8672025723472669,
+            "precision": 1.0,
+            "recall_tpr": 0.7344051446945338,
+            "fpr": 0.0,
+            "f1": 0.8468668891360771,
+            "mcc": 0.0
+          },
+          {
+            "budget_val": 0.3,
+            "emulation_rate": 0.8678456591639871,
+            "hybrid_rate": 0.5340836012861736,
+            "accuracy": 0.7779742765273312,
+            "balanced_accuracy": 0.8889871382636656,
+            "precision": 1.0,
+            "recall_tpr": 0.7779742765273312,
+            "fpr": 0.0,
+            "f1": 0.8751243331223438,
+            "mcc": 0.0
+          },
+          {
+            "budget_val": 0.4,
+            "emulation_rate": 0.9339228295819936,
+            "hybrid_rate": 0.5792604501607717,
+            "accuracy": 0.8154340836012862,
+            "balanced_accuracy": 0.907717041800643,
+            "precision": 1.0,
+            "recall_tpr": 0.8154340836012862,
+            "fpr": 0.0,
+            "f1": 0.8983351044987603,
+            "mcc": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "seed": 2,
+      "thresholds": {
+        "static": 0.8889492750167847,
+        "dynamic": 0.874991774559021,
+        "hybrid": 0.7336453548492319
+      },
+      "band": {
+        "lo": 0.036412302404642105,
+        "hi": 0.999485969543457
+      },
+      "budget_cutoffs": {
+        "0.1": 2.153553013134295,
+        "0.2": 3.943549865840403,
+        "0.3": 5.144822830317942,
+        "0.4": 6.066713720203909
+      },
+      "validation": {
+        "n": 7037,
+        "approaches": {
+          "cascade_b": {
+            "threshold": 0.5,
+            "accuracy": 0.9718630098053148,
+            "balanced_accuracy": 0.970768573937606,
+            "precision": 0.9946841776110069,
+            "recall_tpr": 0.946162998215348,
+            "fpr": 0.004625850340136055,
+            "fnr": 0.053837001784652005,
+            "f1": 0.9698170731707316,
+            "mcc": 0.944532052191076,
+            "tp": 3181,
+            "fp": 17,
+            "tn": 3658,
+            "fn": 181
+          },
+          "static_only": {
+            "threshold": 0.8889492750167847,
+            "accuracy": 0.9485576239874947,
+            "balanced_accuracy": 0.9466189950102587,
+            "precision": 0.98828125,
+            "recall_tpr": 0.9030339083878643,
+            "fpr": 0.009795918367346938,
+            "fnr": 0.09696609161213565,
+            "f1": 0.9437364003730183,
+            "mcc": 0.8996270604706685,
+            "tp": 3036,
+            "fp": 36,
+            "tn": 3639,
+            "fn": 326
+          },
+          "dynamic_only": {
+            "threshold": 0.874991774559021,
+            "accuracy": 0.8796362086116243,
+            "balanced_accuracy": 0.8744766437211411,
+            "precision": 0.9864603481624759,
+            "recall_tpr": 0.7584770969660916,
+            "fpr": 0.009523809523809525,
+            "fnr": 0.24152290303390844,
+            "f1": 0.8575752480242138,
+            "mcc": 0.7760226657096602,
+            "tp": 2550,
+            "fp": 35,
+            "tn": 3640,
+            "fn": 812
+          },
+          "hybrid_only": {
+            "threshold": 0.7336453548492319,
+            "accuracy": 0.9823788546255506,
+            "balanced_accuracy": 0.98200192629104,
+            "precision": 0.9894195888754534,
+            "recall_tpr": 0.9735276621058894,
+            "fpr": 0.009523809523809525,
+            "fnr": 0.02647233789411063,
+            "f1": 0.9814092953523238,
+            "mcc": 0.9647779157208666,
+            "tp": 3273,
+            "fp": 35,
+            "tn": 3640,
+            "fn": 89
+          }
+        },
+        "cascade": {
+          "emulation_rate": 0.333522808014779,
+          "n_emulated": 2347,
+          "hybrid_rate": 0.07929515418502203,
+          "n_hybrid": 558,
+          "confident_errors": 36,
+          "per_family": [
+            {
+              "family": "Adwo",
+              "n": 6,
+              "emulation_rate": 0.6666666666666666,
+              "hybrid_rate": 0.3333333333333333,
+              "error_rate": 0.5
+            },
+            {
+              "family": "Agent",
+              "n": 294,
+              "emulation_rate": 0.4217687074829932,
+              "hybrid_rate": 0.1598639455782313,
+              "error_rate": 0.04421768707482993
+            },
+            {
+              "family": "AnServer/Answerbot",
+              "n": 29,
+              "emulation_rate": 0.2413793103448276,
+              "hybrid_rate": 0.06896551724137931,
+              "error_rate": 0.06896551724137931
+            },
+            {
+              "family": "BankBot",
+              "n": 129,
+              "emulation_rate": 0.3953488372093023,
+              "hybrid_rate": 0.007751937984496124,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Booster",
+              "n": 6,
+              "emulation_rate": 0.16666666666666666,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Boxer",
+              "n": 359,
+              "emulation_rate": 0.8607242339832869,
+              "hybrid_rate": 0.1671309192200557,
+              "error_rate": 0.008356545961002786
+            },
+            {
+              "family": "Coogos",
+              "n": 25,
+              "emulation_rate": 0.96,
+              "hybrid_rate": 0.36,
+              "error_rate": 0.04
+            },
+            {
+              "family": "Cosha",
+              "n": 7,
+              "emulation_rate": 0.5714285714285714,
+              "hybrid_rate": 0.42857142857142855,
+              "error_rate": 0.14285714285714285
+            },
+            {
+              "family": "Counterclank",
+              "n": 11,
+              "emulation_rate": 0.7272727272727273,
+              "hybrid_rate": 0.18181818181818182,
+              "error_rate": 0.2727272727272727
+            },
+            {
+              "family": "Dialer",
+              "n": 7,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Dnotua",
+              "n": 14,
+              "emulation_rate": 0.5714285714285714,
+              "hybrid_rate": 0.2857142857142857,
+              "error_rate": 0.14285714285714285
+            },
+            {
+              "family": "Dowgin",
+              "n": 114,
+              "emulation_rate": 0.47368421052631576,
+              "hybrid_rate": 0.14035087719298245,
+              "error_rate": 0.0
+            },
+            {
+              "family": "DroidDream",
+              "n": 9,
+              "emulation_rate": 0.8888888888888888,
+              "hybrid_rate": 0.4444444444444444,
+              "error_rate": 0.3333333333333333
+            },
+            {
+              "family": "DroidJack/SandoRAT",
+              "n": 5,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "DroidKungFu",
+              "n": 99,
+              "emulation_rate": 0.8787878787878788,
+              "hybrid_rate": 0.20202020202020202,
+              "error_rate": 0.04040404040404041
+            },
+            {
+              "family": "FakeAngry",
+              "n": 8,
+              "emulation_rate": 0.875,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.375
+            },
+            {
+              "family": "FakeApp",
+              "n": 99,
+              "emulation_rate": 0.6060606060606061,
+              "hybrid_rate": 0.3434343434343434,
+              "error_rate": 0.10101010101010101
+            },
+            {
+              "family": "FakeBank",
+              "n": 30,
+              "emulation_rate": 0.2,
+              "hybrid_rate": 0.06666666666666667,
+              "error_rate": 0.03333333333333333
+            },
+            {
+              "family": "FakeDoc",
+              "n": 15,
+              "emulation_rate": 0.4666666666666667,
+              "hybrid_rate": 0.06666666666666667,
+              "error_rate": 0.0
+            },
+            {
+              "family": "FakeFlash",
+              "n": 5,
+              "emulation_rate": 0.2,
+              "hybrid_rate": 0.2,
+              "error_rate": 0.0
+            },
+            {
+              "family": "FakeInst",
+              "n": 238,
+              "emulation_rate": 0.5,
+              "hybrid_rate": 0.2184873949579832,
+              "error_rate": 0.06302521008403361
+            },
+            {
+              "family": "Gamex",
+              "n": 7,
+              "emulation_rate": 0.2857142857142857,
+              "hybrid_rate": 0.14285714285714285,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Gappusin",
+              "n": 7,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.2857142857142857,
+              "error_rate": 0.2857142857142857
+            },
+            {
+              "family": "GinMaster",
+              "n": 82,
+              "emulation_rate": 0.5365853658536586,
+              "hybrid_rate": 0.21951219512195122,
+              "error_rate": 0.024390243902439025
+            },
+            {
+              "family": "GoldDream",
+              "n": 9,
+              "emulation_rate": 0.1111111111111111,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Gumen",
+              "n": 8,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.0
+            },
+            {
+              "family": "HiddenAds",
+              "n": 11,
+              "emulation_rate": 0.9090909090909091,
+              "hybrid_rate": 0.5454545454545454,
+              "error_rate": 0.0
+            },
+            {
+              "family": "HongTouTou/Adrd",
+              "n": 9,
+              "emulation_rate": 0.6666666666666666,
+              "hybrid_rate": 0.3333333333333333,
+              "error_rate": 0.2222222222222222
+            },
+            {
+              "family": "Iconosys",
+              "n": 15,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.4666666666666667,
+              "error_rate": 0.26666666666666666
+            },
+            {
+              "family": "Kmin",
+              "n": 8,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Ksapp",
+              "n": 15,
+              "emulation_rate": 0.26666666666666666,
+              "hybrid_rate": 0.06666666666666667,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Kuguo",
+              "n": 84,
+              "emulation_rate": 0.4166666666666667,
+              "hybrid_rate": 0.07142857142857142,
+              "error_rate": 0.047619047619047616
+            },
+            {
+              "family": "LinuxLotoor",
+              "n": 6,
+              "emulation_rate": 0.6666666666666666,
+              "hybrid_rate": 0.3333333333333333,
+              "error_rate": 0.16666666666666666
+            },
+            {
+              "family": "Locker/SLocker Ransomware",
+              "n": 184,
+              "emulation_rate": 0.5815217391304348,
+              "hybrid_rate": 0.23369565217391305,
+              "error_rate": 0.1358695652173913
+            },
+            {
+              "family": "Lovetrap/Luvrtrap",
+              "n": 5,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.2,
+              "error_rate": 0.8
+            },
+            {
+              "family": "Malap",
+              "n": 405,
+              "emulation_rate": 0.2617283950617284,
+              "hybrid_rate": 0.05925925925925926,
+              "error_rate": 0.0024691358024691358
+            },
+            {
+              "family": "MimobSMS",
+              "n": 12,
+              "emulation_rate": 0.8333333333333334,
+              "hybrid_rate": 0.3333333333333333,
+              "error_rate": 0.0
+            },
+            {
+              "family": "MobiDash",
+              "n": 16,
+              "emulation_rate": 0.625,
+              "hybrid_rate": 0.125,
+              "error_rate": 0.0
+            },
+            {
+              "family": "MobileSpy/Godwon",
+              "n": 22,
+              "emulation_rate": 0.5454545454545454,
+              "hybrid_rate": 0.18181818181818182,
+              "error_rate": 0.09090909090909091
+            },
+            {
+              "family": "Mseg",
+              "n": 10,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Nandrobox",
+              "n": 8,
+              "emulation_rate": 0.875,
+              "hybrid_rate": 0.375,
+              "error_rate": 0.125
+            },
+            {
+              "family": "OpFake",
+              "n": 13,
+              "emulation_rate": 0.7692307692307693,
+              "hybrid_rate": 0.23076923076923078,
+              "error_rate": 0.15384615384615385
+            },
+            {
+              "family": "Plankton",
+              "n": 6,
+              "emulation_rate": 0.6666666666666666,
+              "hybrid_rate": 0.3333333333333333,
+              "error_rate": 0.16666666666666666
+            },
+            {
+              "family": "Robtes",
+              "n": 22,
+              "emulation_rate": 0.6363636363636364,
+              "hybrid_rate": 0.13636363636363635,
+              "error_rate": 0.045454545454545456
+            },
+            {
+              "family": "RuFraud",
+              "n": 28,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.03571428571428571,
+              "error_rate": 0.0
+            },
+            {
+              "family": "SMSSend",
+              "n": 31,
+              "emulation_rate": 0.22580645161290322,
+              "hybrid_rate": 0.12903225806451613,
+              "error_rate": 0.0
+            },
+            {
+              "family": "SMSreg",
+              "n": 502,
+              "emulation_rate": 0.11752988047808766,
+              "hybrid_rate": 0.053784860557768925,
+              "error_rate": 0.00199203187250996
+            },
+            {
+              "family": "SMSspy",
+              "n": 11,
+              "emulation_rate": 0.2727272727272727,
+              "hybrid_rate": 0.09090909090909091,
+              "error_rate": 0.09090909090909091
+            },
+            {
+              "family": "SmForw",
+              "n": 9,
+              "emulation_rate": 0.3333333333333333,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "SmsPay",
+              "n": 5,
+              "emulation_rate": 0.4,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "TrojanSMS.Stealer",
+              "n": 8,
+              "emulation_rate": 0.375,
+              "hybrid_rate": 0.125,
+              "error_rate": 0.125
+            },
+            {
+              "family": "Vdloader",
+              "n": 25,
+              "emulation_rate": 0.36,
+              "hybrid_rate": 0.16,
+              "error_rate": 0.08
+            },
+            {
+              "family": "Waps/Simhosy",
+              "n": 40,
+              "emulation_rate": 0.425,
+              "hybrid_rate": 0.15,
+              "error_rate": 0.125
+            },
+            {
+              "family": "Wooboo",
+              "n": 16,
+              "emulation_rate": 0.6875,
+              "hybrid_rate": 0.25,
+              "error_rate": 0.1875
+            },
+            {
+              "family": "Youmi",
+              "n": 62,
+              "emulation_rate": 0.6774193548387096,
+              "hybrid_rate": 0.2903225806451613,
+              "error_rate": 0.27419354838709675
+            },
+            {
+              "family": "benign",
+              "n": 3675,
+              "emulation_rate": 0.20489795918367346,
+              "hybrid_rate": 0.011428571428571429,
+              "error_rate": 0.004625850340136055
+            },
+            {
+              "family": "other",
+              "n": 136,
+              "emulation_rate": 0.5735294117647058,
+              "hybrid_rate": 0.3014705882352941,
+              "error_rate": 0.19852941176470587
+            },
+            {
+              "family": "unknown",
+              "n": 16,
+              "emulation_rate": 0.5625,
+              "hybrid_rate": 0.125,
+              "error_rate": 0.5
+            }
+          ]
+        },
+        "budget_curve": [
+          {
+            "budget_val": 0.1,
+            "emulation_rate": 0.10004263180332527,
+            "hybrid_rate": 0.04177916725877505,
+            "accuracy": 0.9651840272843542,
+            "balanced_accuracy": 0.9638040201208383,
+            "precision": 0.9939778129952457,
+            "recall_tpr": 0.9327781082688875,
+            "fpr": 0.0051700680272108845,
+            "f1": 0.9624060150375939,
+            "mcc": 0.9316753029473653
+          },
+          {
+            "budget_val": 0.2,
+            "emulation_rate": 0.20008526360665055,
+            "hybrid_rate": 0.06536876509876367,
+            "accuracy": 0.9701577376723035,
+            "balanced_accuracy": 0.9689839219447447,
+            "precision": 0.9946641556811049,
+            "recall_tpr": 0.9425936942296252,
+            "fpr": 0.004625850340136055,
+            "f1": 0.9679291386682958,
+            "mcc": 0.9412518245227297
+          },
+          {
+            "budget_val": 0.3,
+            "emulation_rate": 0.30126474349865,
+            "hybrid_rate": 0.07602671593008384,
+            "accuracy": 0.9718630098053148,
+            "balanced_accuracy": 0.970768573937606,
+            "precision": 0.9946841776110069,
+            "recall_tpr": 0.946162998215348,
+            "fpr": 0.004625850340136055,
+            "f1": 0.9698170731707316,
+            "mcc": 0.944532052191076
+          },
+          {
+            "budget_val": 0.4,
+            "emulation_rate": 0.4000284212022169,
+            "hybrid_rate": 0.0839846525508029,
+            "accuracy": 0.9722893278385676,
+            "balanced_accuracy": 0.9712147369358214,
+            "precision": 0.9946891596376133,
+            "recall_tpr": 0.9470553242117787,
+            "fpr": 0.004625850340136055,
+            "f1": 0.9702879780588146,
+            "mcc": 0.9453535292497567
+          }
+        ]
+      },
+      "test": {
+        "n": 15625,
+        "approaches": {
+          "cascade_b": {
+            "threshold": 0.5,
+            "accuracy": 0.952512,
+            "balanced_accuracy": 0.9549608483876934,
+            "precision": 0.99644128113879,
+            "recall_tpr": 0.913595166163142,
+            "fpr": 0.003673469387755102,
+            "fnr": 0.08640483383685804,
+            "f1": 0.9532215357458076,
+            "mcc": 0.9087044368841406,
+            "tp": 7560,
+            "fp": 27,
+            "tn": 7323,
+            "fn": 715
+          },
+          "static_only": {
+            "threshold": 0.8889492750167847,
+            "accuracy": 0.882496,
+            "balanced_accuracy": 0.8886680231004789,
+            "precision": 0.9920525752712823,
+            "recall_tpr": 0.7844108761329305,
+            "fpr": 0.007074829931972789,
+            "fnr": 0.21558912386706952,
+            "f1": 0.8760966392225672,
+            "mcc": 0.7864249236855401,
+            "tp": 6491,
+            "fp": 52,
+            "tn": 7298,
+            "fn": 1784
+          },
+          "dynamic_only": {
+            "threshold": 0.874991774559021,
+            "accuracy": 0.86624,
+            "balanced_accuracy": 0.8730696508210535,
+            "precision": 0.9866247049567269,
+            "recall_tpr": 0.7577039274924471,
+            "fpr": 0.011564625850340135,
+            "fnr": 0.24229607250755292,
+            "f1": 0.857142857142857,
+            "mcc": 0.758140928094115,
+            "tp": 6270,
+            "fp": 85,
+            "tn": 7265,
+            "fn": 2005
+          },
+          "hybrid_only": {
+            "threshold": 0.7336453548492319,
+            "accuracy": 0.97312,
+            "balanced_accuracy": 0.9741965184865488,
+            "precision": 0.9929710053972637,
+            "recall_tpr": 0.956012084592145,
+            "fpr": 0.007619047619047619,
+            "fnr": 0.04398791540785496,
+            "f1": 0.9741411156261545,
+            "mcc": 0.9469148729092642,
+            "tp": 7911,
+            "fp": 56,
+            "tn": 7294,
+            "fn": 364
+          }
+        },
+        "cascade": {
+          "emulation_rate": 0.38656,
+          "n_emulated": 6040,
+          "hybrid_rate": 0.129664,
+          "n_hybrid": 2026,
+          "confident_errors": 196,
+          "per_family": [
+            {
+              "family": "Adwo",
+              "n": 12,
+              "emulation_rate": 0.8333333333333334,
+              "hybrid_rate": 0.3333333333333333,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Agent",
+              "n": 586,
+              "emulation_rate": 0.45733788395904434,
+              "hybrid_rate": 0.13822525597269625,
+              "error_rate": 0.04948805460750853
+            },
+            {
+              "family": "Airpush/StopSMS",
+              "n": 1555,
+              "emulation_rate": 0.8745980707395499,
+              "hybrid_rate": 0.5736334405144694,
+              "error_rate": 0.2012861736334405
+            },
+            {
+              "family": "AnServer/Answerbot",
+              "n": 59,
+              "emulation_rate": 0.3559322033898305,
+              "hybrid_rate": 0.13559322033898305,
+              "error_rate": 0.06779661016949153
+            },
+            {
+              "family": "BankBot",
+              "n": 259,
+              "emulation_rate": 0.38996138996138996,
+              "hybrid_rate": 0.023166023166023165,
+              "error_rate": 0.003861003861003861
+            },
+            {
+              "family": "Booster",
+              "n": 12,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Boxer",
+              "n": 720,
+              "emulation_rate": 0.85,
+              "hybrid_rate": 0.12916666666666668,
+              "error_rate": 0.0125
+            },
+            {
+              "family": "Coogos",
+              "n": 50,
+              "emulation_rate": 0.88,
+              "hybrid_rate": 0.3,
+              "error_rate": 0.04
+            },
+            {
+              "family": "Cosha",
+              "n": 13,
+              "emulation_rate": 0.46153846153846156,
+              "hybrid_rate": 0.07692307692307693,
+              "error_rate": 0.15384615384615385
+            },
+            {
+              "family": "Counterclank",
+              "n": 22,
+              "emulation_rate": 0.9545454545454546,
+              "hybrid_rate": 0.5,
+              "error_rate": 0.22727272727272727
+            },
+            {
+              "family": "Dialer",
+              "n": 15,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.06666666666666667
+            },
+            {
+              "family": "Dnotua",
+              "n": 29,
+              "emulation_rate": 0.5172413793103449,
+              "hybrid_rate": 0.3793103448275862,
+              "error_rate": 0.06896551724137931
+            },
+            {
+              "family": "Dowgin",
+              "n": 228,
+              "emulation_rate": 0.40350877192982454,
+              "hybrid_rate": 0.10526315789473684,
+              "error_rate": 0.017543859649122806
+            },
+            {
+              "family": "DroidDream",
+              "n": 18,
+              "emulation_rate": 0.7777777777777778,
+              "hybrid_rate": 0.3333333333333333,
+              "error_rate": 0.3333333333333333
+            },
+            {
+              "family": "DroidJack/SandoRAT",
+              "n": 11,
+              "emulation_rate": 0.8181818181818182,
+              "hybrid_rate": 0.09090909090909091,
+              "error_rate": 0.0
+            },
+            {
+              "family": "DroidKungFu",
+              "n": 198,
+              "emulation_rate": 0.8131313131313131,
+              "hybrid_rate": 0.31313131313131315,
+              "error_rate": 0.11616161616161616
+            },
+            {
+              "family": "FakeAngry",
+              "n": 18,
+              "emulation_rate": 0.7777777777777778,
+              "hybrid_rate": 0.2222222222222222,
+              "error_rate": 0.4444444444444444
+            },
+            {
+              "family": "FakeApp",
+              "n": 200,
+              "emulation_rate": 0.64,
+              "hybrid_rate": 0.33,
+              "error_rate": 0.135
+            },
+            {
+              "family": "FakeBank",
+              "n": 61,
+              "emulation_rate": 0.29508196721311475,
+              "hybrid_rate": 0.08196721311475409,
+              "error_rate": 0.01639344262295082
+            },
+            {
+              "family": "FakeDoc",
+              "n": 30,
+              "emulation_rate": 0.4,
+              "hybrid_rate": 0.13333333333333333,
+              "error_rate": 0.0
+            },
+            {
+              "family": "FakeFlash",
+              "n": 10,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "FakeInst",
+              "n": 477,
+              "emulation_rate": 0.5660377358490566,
+              "hybrid_rate": 0.2641509433962264,
+              "error_rate": 0.05870020964360587
+            },
+            {
+              "family": "Gamex",
+              "n": 15,
+              "emulation_rate": 0.4,
+              "hybrid_rate": 0.06666666666666667,
+              "error_rate": 0.13333333333333333
+            },
+            {
+              "family": "Gappusin",
+              "n": 14,
+              "emulation_rate": 0.8571428571428571,
+              "hybrid_rate": 0.2857142857142857,
+              "error_rate": 0.35714285714285715
+            },
+            {
+              "family": "GinMaster",
+              "n": 166,
+              "emulation_rate": 0.536144578313253,
+              "hybrid_rate": 0.12650602409638553,
+              "error_rate": 0.0783132530120482
+            },
+            {
+              "family": "GoldDream",
+              "n": 18,
+              "emulation_rate": 0.05555555555555555,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Gumen",
+              "n": 17,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.35294117647058826,
+              "error_rate": 0.0
+            },
+            {
+              "family": "HiddenAds",
+              "n": 27,
+              "emulation_rate": 0.8888888888888888,
+              "hybrid_rate": 0.4074074074074074,
+              "error_rate": 0.0
+            },
+            {
+              "family": "HongTouTou/Adrd",
+              "n": 18,
+              "emulation_rate": 0.8333333333333334,
+              "hybrid_rate": 0.3888888888888889,
+              "error_rate": 0.1111111111111111
+            },
+            {
+              "family": "Iconosys",
+              "n": 30,
+              "emulation_rate": 0.9666666666666667,
+              "hybrid_rate": 0.4666666666666667,
+              "error_rate": 0.2
+            },
+            {
+              "family": "Kmin",
+              "n": 16,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.875,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Ksapp",
+              "n": 30,
+              "emulation_rate": 0.3333333333333333,
+              "hybrid_rate": 0.16666666666666666,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Kuguo",
+              "n": 170,
+              "emulation_rate": 0.3,
+              "hybrid_rate": 0.052941176470588235,
+              "error_rate": 0.058823529411764705
+            },
+            {
+              "family": "LinuxLotoor",
+              "n": 13,
+              "emulation_rate": 0.6923076923076923,
+              "hybrid_rate": 0.15384615384615385,
+              "error_rate": 0.5384615384615384
+            },
+            {
+              "family": "Locker/SLocker Ransomware",
+              "n": 368,
+              "emulation_rate": 0.5733695652173914,
+              "hybrid_rate": 0.25815217391304346,
+              "error_rate": 0.10597826086956522
+            },
+            {
+              "family": "Lovetrap/Luvrtrap",
+              "n": 11,
+              "emulation_rate": 1.0,
+              "hybrid_rate": 0.2727272727272727,
+              "error_rate": 0.6363636363636364
+            },
+            {
+              "family": "Malap",
+              "n": 812,
+              "emulation_rate": 0.28201970443349755,
+              "hybrid_rate": 0.07266009852216748,
+              "error_rate": 0.011083743842364532
+            },
+            {
+              "family": "MimobSMS",
+              "n": 25,
+              "emulation_rate": 0.84,
+              "hybrid_rate": 0.2,
+              "error_rate": 0.08
+            },
+            {
+              "family": "MobiDash",
+              "n": 30,
+              "emulation_rate": 0.7666666666666667,
+              "hybrid_rate": 0.43333333333333335,
+              "error_rate": 0.0
+            },
+            {
+              "family": "MobileSpy/Godwon",
+              "n": 45,
+              "emulation_rate": 0.4,
+              "hybrid_rate": 0.08888888888888889,
+              "error_rate": 0.08888888888888889
+            },
+            {
+              "family": "Mseg",
+              "n": 20,
+              "emulation_rate": 0.0,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "Nandrobox",
+              "n": 15,
+              "emulation_rate": 0.9333333333333333,
+              "hybrid_rate": 0.7333333333333333,
+              "error_rate": 0.0
+            },
+            {
+              "family": "OpFake",
+              "n": 27,
+              "emulation_rate": 0.48148148148148145,
+              "hybrid_rate": 0.18518518518518517,
+              "error_rate": 0.14814814814814814
+            },
+            {
+              "family": "Plankton",
+              "n": 13,
+              "emulation_rate": 0.6153846153846154,
+              "hybrid_rate": 0.3076923076923077,
+              "error_rate": 0.07692307692307693
+            },
+            {
+              "family": "Robtes",
+              "n": 45,
+              "emulation_rate": 0.6444444444444445,
+              "hybrid_rate": 0.13333333333333333,
+              "error_rate": 0.044444444444444446
+            },
+            {
+              "family": "RuFraud",
+              "n": 20,
+              "emulation_rate": 0.9,
+              "hybrid_rate": 0.35,
+              "error_rate": 0.15
+            },
+            {
+              "family": "SMSSend",
+              "n": 61,
+              "emulation_rate": 0.45901639344262296,
+              "hybrid_rate": 0.21311475409836064,
+              "error_rate": 0.01639344262295082
+            },
+            {
+              "family": "SMSreg",
+              "n": 1004,
+              "emulation_rate": 0.11752988047808766,
+              "hybrid_rate": 0.05079681274900399,
+              "error_rate": 0.00796812749003984
+            },
+            {
+              "family": "SMSspy",
+              "n": 24,
+              "emulation_rate": 0.5,
+              "hybrid_rate": 0.08333333333333333,
+              "error_rate": 0.08333333333333333
+            },
+            {
+              "family": "SmForw",
+              "n": 16,
+              "emulation_rate": 0.4375,
+              "hybrid_rate": 0.125,
+              "error_rate": 0.0
+            },
+            {
+              "family": "SmsPay",
+              "n": 10,
+              "emulation_rate": 0.5,
+              "hybrid_rate": 0.0,
+              "error_rate": 0.0
+            },
+            {
+              "family": "TrojanSMS.Stealer",
+              "n": 16,
+              "emulation_rate": 0.25,
+              "hybrid_rate": 0.125,
+              "error_rate": 0.125
+            },
+            {
+              "family": "Vdloader",
+              "n": 51,
+              "emulation_rate": 0.23529411764705882,
+              "hybrid_rate": 0.09803921568627451,
+              "error_rate": 0.0196078431372549
+            },
+            {
+              "family": "Waps/Simhosy",
+              "n": 80,
+              "emulation_rate": 0.45,
+              "hybrid_rate": 0.2375,
+              "error_rate": 0.15
+            },
+            {
+              "family": "Wooboo",
+              "n": 33,
+              "emulation_rate": 0.8484848484848485,
+              "hybrid_rate": 0.5454545454545454,
+              "error_rate": 0.18181818181818182
+            },
+            {
+              "family": "Youmi",
+              "n": 125,
+              "emulation_rate": 0.792,
+              "hybrid_rate": 0.384,
+              "error_rate": 0.28
+            },
+            {
+              "family": "benign",
+              "n": 7350,
+              "emulation_rate": 0.20122448979591837,
+              "hybrid_rate": 0.008979591836734694,
+              "error_rate": 0.003673469387755102
+            },
+            {
+              "family": "other",
+              "n": 274,
+              "emulation_rate": 0.5328467153284672,
+              "hybrid_rate": 0.24817518248175183,
+              "error_rate": 0.19708029197080293
+            },
+            {
+              "family": "unknown",
+              "n": 33,
+              "emulation_rate": 0.48484848484848486,
+              "hybrid_rate": 0.18181818181818182,
+              "error_rate": 0.3939393939393939
+            }
+          ]
+        },
+        "budget_curve": [
+          {
+            "budget_val": 0.1,
+            "emulation_rate": 0.135872,
+            "hybrid_rate": 0.069504,
+            "accuracy": 0.92608,
+            "balanced_accuracy": 0.9299757486076002,
+            "precision": 0.9956836535783904,
+            "recall_tpr": 0.8641691842900302,
+            "fpr": 0.004217687074829932,
+            "f1": 0.9252765737206444,
+            "mcc": 0.8612525736260255
+          },
+          {
+            "budget_val": 0.2,
+            "emulation_rate": 0.254784,
+            "hybrid_rate": 0.107904,
+            "accuracy": 0.944192,
+            "balanced_accuracy": 0.9471058634934336,
+            "precision": 0.996379240981628,
+            "recall_tpr": 0.8978851963746224,
+            "fpr": 0.003673469387755102,
+            "f1": 0.9445715738621917,
+            "mcc": 0.8935690042271417
+          },
+          {
+            "budget_val": 0.3,
+            "emulation_rate": 0.356608,
+            "hybrid_rate": 0.125184,
+            "accuracy": 0.952,
+            "balanced_accuracy": 0.9544774647018929,
+            "precision": 0.9964375247394115,
+            "recall_tpr": 0.9126283987915408,
+            "fpr": 0.003673469387755102,
+            "f1": 0.9526933266052732,
+            "mcc": 0.9077662925384051
+          },
+          {
+            "budget_val": 0.4,
+            "emulation_rate": 0.451904,
+            "hybrid_rate": 0.136576,
+            "accuracy": 0.955328,
+            "balanced_accuracy": 0.9576118544094375,
+            "precision": 0.9963317175422508,
+            "recall_tpr": 0.9190332326283988,
+            "fpr": 0.0038095238095238095,
+            "f1": 0.9561227055569524,
+            "mcc": 0.9138597799536818
+          }
+        ]
+      },
+      "holdout": {
+        "n": 6220,
+        "approaches": {
+          "cascade_b": {
+            "threshold": 0.5,
+            "accuracy": 0.7929260450160772,
+            "balanced_accuracy": 0.8964630225080386,
+            "precision": 1.0,
+            "recall_tpr": 0.7929260450160772,
+            "fpr": 0.0,
+            "fnr": 0.20707395498392278,
+            "f1": 0.8845050215208036,
+            "mcc": 0.0,
+            "tp": 4932,
+            "fp": 0,
+            "tn": 0,
+            "fn": 1288
+          },
+          "static_only": {
+            "threshold": 0.8889492750167847,
+            "accuracy": 0.30337620578778135,
+            "balanced_accuracy": 0.6516881028938907,
+            "precision": 1.0,
+            "recall_tpr": 0.30337620578778135,
+            "fpr": 0.0,
+            "fnr": 0.6966237942122186,
+            "f1": 0.4655236215616134,
+            "mcc": 0.0,
+            "tp": 1887,
+            "fp": 0,
+            "tn": 0,
+            "fn": 4333
+          },
+          "dynamic_only": {
+            "threshold": 0.874991774559021,
+            "accuracy": 0.8255627009646302,
+            "balanced_accuracy": 0.9127813504823151,
+            "precision": 1.0,
+            "recall_tpr": 0.8255627009646302,
+            "fpr": 0.0,
+            "fnr": 0.17443729903536975,
+            "f1": 0.9044473800088068,
+            "mcc": 0.0,
+            "tp": 5135,
+            "fp": 0,
+            "tn": 0,
+            "fn": 1085
+          },
+          "hybrid_only": {
+            "threshold": 0.7336453548492319,
+            "accuracy": 0.8813504823151126,
+            "balanced_accuracy": 0.9406752411575563,
+            "precision": 1.0,
+            "recall_tpr": 0.8813504823151126,
+            "fpr": 0.0,
+            "fnr": 0.1186495176848874,
+            "f1": 0.9369338574602633,
+            "mcc": 0.0,
+            "tp": 5482,
+            "fp": 0,
+            "tn": 0,
+            "fn": 738
+          }
+        },
+        "cascade": {
+          "emulation_rate": 0.8652733118971061,
+          "n_emulated": 5382,
+          "hybrid_rate": 0.55,
+          "n_hybrid": 3421,
+          "confident_errors": 520,
+          "per_family": [
+            {
+              "family": "Airpush/StopSMS",
+              "n": 6220,
+              "emulation_rate": 0.8652733118971061,
+              "hybrid_rate": 0.55,
+              "error_rate": 0.20707395498392284
+            }
+          ]
+        },
+        "budget_curve": [
+          {
+            "budget_val": 0.1,
+            "emulation_rate": 0.5030546623794212,
+            "hybrid_rate": 0.3218649517684887,
+            "accuracy": 0.592443729903537,
+            "balanced_accuracy": 0.7962218649517685,
+            "precision": 1.0,
+            "recall_tpr": 0.592443729903537,
+            "fpr": 0.0,
+            "f1": 0.7440686521958607,
+            "mcc": 0.0
+          },
+          {
+            "budget_val": 0.2,
+            "emulation_rate": 0.75,
+            "hybrid_rate": 0.47717041800643084,
+            "accuracy": 0.732475884244373,
+            "balanced_accuracy": 0.8662379421221865,
+            "precision": 1.0,
+            "recall_tpr": 0.732475884244373,
+            "fpr": 0.0,
+            "f1": 0.8455827765404603,
+            "mcc": 0.0
+          },
+          {
+            "budget_val": 0.3,
+            "emulation_rate": 0.8480707395498392,
+            "hybrid_rate": 0.5430868167202573,
+            "accuracy": 0.787299035369775,
+            "balanced_accuracy": 0.8936495176848875,
+            "precision": 1.0,
+            "recall_tpr": 0.787299035369775,
+            "fpr": 0.0,
+            "f1": 0.8809930736709544,
+            "mcc": 0.0
+          },
+          {
+            "budget_val": 0.4,
+            "emulation_rate": 0.9133440514469453,
+            "hybrid_rate": 0.5807073954983922,
+            "accuracy": 0.8183279742765274,
+            "balanced_accuracy": 0.9091639871382637,
+            "precision": 1.0,
+            "recall_tpr": 0.8183279742765274,
+            "fpr": 0.0,
+            "f1": 0.9000884173297966,
+            "mcc": 0.0
+          }
+        ]
+      }
+    }
+  ],
+  "costs": null,
+  "assumed_emulation_s": null
+}

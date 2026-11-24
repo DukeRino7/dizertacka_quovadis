@@ -38,6 +38,7 @@ Neodhadovať neznáme vlastnosti dát ani nevymýšľať výsledky. Neurčené v
 - **Plán V3** (rozhodnuté 2026-11-04, pred výsledkami): `docs/12_plan_v3.md` – zdôvodnenie z analýzy príčin V2 (docs/10, oddiel 6).
 - **Výsledky V3:** `runs_v3/` (pracovný notebook, 2026-11-07), súhrn `docs/13_vysledky_v3.md`; celkové zhrnutie V1–V3 pre vedúcu `docs/14_zhrnutie_v1_v3.md`.
 - **V4 (iný dataset, rozhodnuté 2026-11-22 po konzultácii s vedúcou):** KronoDroid (Android) v `data/kronodroid`, overiť, či slabinou je kvalita dynamických dát (emulátor vs. skutočné zariadenie). Audit `docs/18_audit_kronodroid.md`; plán s kritériami `docs/19_plan_v4.md` (rozhodnuté 2026-11-22, pred tréningom); cieľ do Vianoc 2026.
+- **Výsledky V4:** `runs_v4/` (pracovný notebook, 2026-11-23), súhrn `docs/20_vysledky_v4.md`.
 
 ## Štruktúra projektu
 Každý priečinok má vlastný `CLAUDE.md` s popisom účelu, pravidiel a aktuálneho stavu. Pri zmene ho aktualizovať.
