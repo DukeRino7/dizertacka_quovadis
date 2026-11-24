@@ -26,6 +26,8 @@ Texty, z ktorých sa budú preberať informácie do práce. Číslované podľa 
 | `19_plan_v4.md` | **plán V4** (KronoDroid: emulátor vs. skutočné zariadenie na 63 316 rovnakých APK, vetvy real_full, real_P, emu_P; otázky O1, O2; všetky varianty kaskád a študentov ako V1/V2, špecialista V3, prehľad prevzatého a neprevzatého, kritériá vopred, implementácia) | rozhodnuté 2026-11-22 (autor), pred tréningom |
 | `20_vysledky_v4.md` | **výsledky V4** (`runs_v4/`): O1 a O1-Z splnené (dynamika pomáha, zero-day +11 p. b.), O2 nesplnené (+0,76), O2-Z splnené (+9,6), D-norm, tézy na 3 vetvách, špecialista B1–B3, porovnanie s Quo Vadis, obmedzenia | hotové 2026-11-24 |
 | `21_porovnanie_datasetov.pdf` | podrobný dokument pre vedúcu: oba datasety (obsah, výhody, obmedzenia, naše rozhodnutia, výsledky), porovnanie s grafmi, výklad rozdielu, analýza „je slabinou dataset?“ (požiadavky P1–P10, ostatné slabiny), stav téz na oboch datasetoch; zdroj HTML a grafy v `21_zdroj/` (`make_figures.py`, tlač cez Edge) | hotové 2026-11-24 |
+| `21_porovnanie_datasetov_v2.pdf` | **verzia 2** dokumentu 21: text, tabuľky a grafy z nezávislej verzie (Codex, `codex_porovnanie/`), doplnená schéma kaskád, skratky, priamy verdikt k domnienke (požiadavky 1–10), hlavné zistenie O2-Z, chýbajúce čísla (hybrid a pravidlo S∨D pri novej rodine); zdroj `21_zdroj_v2/` (`vytvorit_grafy.py`, tlač `vytvorit_pdf.ps1`) | hotové 2026-11-24 |
+| `codex_porovnanie/` | nezávislá verzia dokumentu 21 od Codexu (podklad pre v2, nemeniť) | 2026-11-24 |
 
 Pravidlá:
 - Uvádzať iba overené fakty s popisom, ako boli overené. Návrhy a otvorené rozhodnutia jasne označiť.

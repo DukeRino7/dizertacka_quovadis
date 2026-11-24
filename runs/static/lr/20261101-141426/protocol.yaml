@@ -1,0 +1,25 @@
+class_weight: balanced
+hpo:
+  n_trials: 30
+  timeout_s: 10800
+  objective: roc_auc
+  sampler_seed: 42
+  trial_seed: 42
+final:
+  seeds:
+  - 0
+  - 1
+  - 2
+  train_metrics_subsample: 10000
+thresholds:
+  fixed: 0.5
+  target_fpr: 0.01
+tpr_at_fpr:
+- 0.001
+- 0.01
+timing:
+  latency_samples: 500
+  warmup: 20
+  latency_threads: 1
+  throughput_threads: 12
+  gpu: true

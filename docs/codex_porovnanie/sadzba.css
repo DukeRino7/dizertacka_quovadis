@@ -1,0 +1,56 @@
+@page {
+  size: A4;
+  margin: 15mm 17mm 17mm;
+  @bottom-left { content:"Quo Vadis a KronoDroid"; color:#506575; font:8.5pt "Segoe UI"; }
+  @bottom-right { content:counter(page) " / " counter(pages); color:#506575; font:8.5pt "Segoe UI"; }
+}
+:root { --ink:#162b39; --muted:#475f70; --navy:#123d54; --teal:#006c68; --line:#c7d8df; --light:#edf6f6; --slate:#eaf0f5; --gold:#fff3df; }
+* { box-sizing:border-box; }
+body { margin:0; color:var(--ink); font:10.5pt/1.36 "Segoe UI", Arial, sans-serif; print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+.page { break-after:page; }
+.page:last-child { break-after:auto; }
+.eyebrow { color:var(--teal); font-size:8.8pt; font-weight:750; letter-spacing:.095em; text-transform:uppercase; border-bottom:1px solid var(--line); padding-bottom:2.5mm; margin-bottom:5mm; }
+h1,h2,h3,p,ol,ul,figure,blockquote { margin-top:0; }
+h1 { color:var(--navy); font-size:35pt; line-height:1.08; letter-spacing:-.035em; margin-bottom:4mm; }
+h2 { color:var(--navy); font-size:23pt; line-height:1.12; letter-spacing:-.025em; margin-bottom:4mm; }
+h3 { color:var(--navy); font-size:13.4pt; line-height:1.24; margin:4.1mm 0 1.6mm; break-after:avoid; }
+p { margin-bottom:2.55mm; orphans:3; widows:3; }
+strong { font-weight:700; }
+a { color:#075c72; text-underline-offset:2px; }
+.deck { color:var(--muted); font-size:15pt; line-height:1.27; margin-bottom:5mm; }
+.meta { font-size:10pt; color:var(--muted); margin-bottom:7mm; }
+.lead { font-size:11.55pt; line-height:1.38; }
+.callout { border-left:3px solid var(--teal); background:var(--light); padding:3mm 4mm; margin:3mm 0; break-inside:avoid; }
+.callout p:last-child { margin-bottom:0; }
+.limit { border-left-color:#a05c18; background:var(--gold); }
+.summary { display:grid; grid-template-columns:1fr 1fr; gap:3mm; margin:4mm 0; }
+.summary div { padding:3mm 3.5mm; background:var(--slate); }
+.summary b { display:block; color:var(--navy); margin-bottom:.6mm; }
+ul,ol { padding-left:5.5mm; margin-bottom:3mm; }
+li { margin-bottom:1.3mm; }
+.compact li { margin-bottom:.9mm; }
+.contents { list-style:none; margin:0; padding:0; }
+.contents li { display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding:1.05mm 0; margin:0; }
+.contents a { text-decoration:none; }
+table { width:100%; border-collapse:collapse; margin:2mm 0 1.35mm; color:var(--ink); font-size:9.65pt; line-height:1.23; }
+caption { text-align:left; color:var(--navy); font-weight:700; margin:0 0 1.5mm; }
+th { text-align:left; color:#fff; background:var(--navy); padding:1.7mm 1.9mm; font-weight:650; }
+td { border-bottom:1px solid var(--line); padding:1.4mm 1.9mm; vertical-align:top; }
+tbody tr:nth-child(even) { background:#f1f6f8; }
+tr { break-inside:avoid; }
+.num td:not(:first-child), .num th:not(:first-child) { text-align:right; font-variant-numeric:tabular-nums; }
+.tight td { padding-top:1.07mm; padding-bottom:1.07mm; }
+.small,.src,figcaption { color:var(--muted); font-size:9pt; line-height:1.28; }
+.src { margin-bottom:2.6mm; }
+.label { color:var(--teal); font-weight:750; }
+.status { color:#005b53; font-weight:700; }
+.no { color:#874718; font-weight:700; }
+figure { margin:3mm 0; break-inside:avoid; }
+figure img { display:block; width:100%; height:auto; }
+figcaption { margin-top:1.25mm; }
+blockquote { margin:3mm 0; padding:3mm 4mm; border-left:3px solid var(--teal); background:var(--light); font-size:11pt; }
+.references { font-size:9.25pt; line-height:1.3; }
+.references li { margin-bottom:1.35mm; }
+.code { font-family:"Consolas", monospace; font-size:.91em; overflow-wrap:anywhere; }
+.nowrap { white-space:nowrap; }
+@media screen { body { max-width:210mm; padding:15mm 17mm; margin:auto; } .page { border-bottom:1px solid var(--line); margin-bottom:10mm; padding-bottom:8mm; } }

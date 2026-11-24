@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<title>Statická, dynamická a hybridná detekcia malvéru — Quo Vadis a KronoDroid</title>
+<link rel="stylesheet" href="sadzba.css">
+</head>
+<body>
+<section class="page" id="start">
+<div class="eyebrow">Dizertačný výskum</div>
+<h1>Statická, dynamická a hybridná detekcia malvéru</h1>
+<p class="deck">Quo Vadis a KronoDroid<br>Porovnanie dát, výsledkov a hraníc dôkazov</p>
+<p class="meta">Experimenty V1–V4 · stav k 24. novembru 2026</p>
+<p class="lead">Práca skúma, či možno škodlivý softvér (malvér) spoľahlivejšie odhaliť spojením vlastností súboru, ktoré sa dajú získať bez jeho spustenia (<strong>statická detekcia</strong>), a prejavov pozorovaných počas behu alebo jeho napodobnenia (emulácie) (<strong>dynamická detekcia</strong>). <strong>Hybridný model</strong> používa oba druhy vstupov. <strong>Kaskáda</strong> zoradí viaceré modely do stupňov a zložitejší postup zapojí pri neistom alebo rozpornom rozhodnutí.</p>
+<div class="summary">
+<div><b>Quo Vadis · Windows</b>Správanie z emulácie Speakeasy pri testoch nových rodín spoľahlivo nezlepšilo detekciu oproti statickému modelu. Kaskáda zo stromových modelov znížila mieru falošných poplachov.</div>
+<div><b>KronoDroid · Android</b>Hybrid zlepšil detekciu, najvýraznejšie pri vynechaných rodinách. Pri rovnakých aplikáciách bola výhoda skutočného zariadenia presvedčivá práve v tomto scenári.</div>
+</div>
+<div class="callout"><p><strong>Posúdenie domnienky.</strong> Najvážnejšou dátovou slabinou pre vysvetlenie výsledkov je chýbajúce kontrolované porovnanie viacerých spôsobov zberu správania na rovnakých súboroch Windows. Oba datasety majú desaťtisíce spárovaných vzoriek. Pre tvrdenie o úspore celého systému má zásadný význam absencia merania od vstupného súboru po rozhodnutie.</p></div>
+<h3>Obsah</h3>
+<ol class="contents">
+<li><a href="#meranie">Ako sa výsledky merali a čo znamenajú použité pojmy</a><span>2</span></li>
+<li><a href="#quovadis">Quo Vadis · audit, rozhodnutia a výsledky V1–V3</a><span>3–5</span></li>
+<li><a href="#kronodroid">KronoDroid · audit, rozhodnutia a výsledky V4</a><span>6–9</span></li>
+<li><a href="#porovnanie">Porovnanie dát a výsledkov</a><span>10</span></li>
+<li><a href="#tezy">Stav štyroch téz</a><span>11</span></li>
+<li><a href="#domnienka">Kritické posúdenie hlavnej slabiny a návrh formulácie</a><span>12–13</span></li>
+<li><a href="#zaver">Záverečné zhrnutie a pramene</a><span>14</span></li>
+</ol>
+</section>
+<section class="page" id="meranie">
+<div class="eyebrow">Ako čítať výsledky</div>
+<h2>Spoločný experimentálny postup</h2>
+<p><strong>Príznak</strong> je merateľná vlastnosť vzorky a <strong>vektor príznakov</strong> je ich usporiadaný zoznam. Jedna vzorka je jeden súbor. <strong>Rodina</strong> je skupina malvéru podľa označenia v datasete. Označenie samo osebe nevylučuje podobnosť kódu medzi rodinami. <strong>Zero-day</strong> v tejto práci označuje laboratórny scenár, v ktorom sa vynechá jedna rodina z tréningu aj validácie. Vypovedá o prenose na nevidené označenie rodiny. Detekcia skutočne nového útoku v prevádzke vyžaduje ďalší dôkaz.</p>
+<p><strong>Tréning</strong> učí model aj transformácie vstupov. <strong>Validácia</strong> slúži na výber modelu, jeho nastavení a hraníc rozhodovania. <strong>Test</strong> vyhodnocuje už určený postup. Hlavné modely sa vyberali podľa citlivosti pri najviac 1 % falošných poplachov na validácii. Pri tesných výsledkoch rozhodoval výkon naprieč prahmi a potom čas procesora. Výsledky modelov sa spravidla priemerujú cez tri <strong>seedy</strong>, teda tri začiatočné nastavenia generátora náhody.</p>
+<table class="tight">
+<caption>Dve miery citlivosti odpovedajú na odlišné otázky</caption>
+<thead><tr><th style="width:32%">Miera</th><th>Význam</th></tr></thead>
+<tbody>
+<tr><td><strong>TPR a FPR pri prahu z validácie</strong></td><td><strong>TPR</strong> je podiel skutočne škodlivých vzoriek, ktoré model zachytí. <strong>FPR</strong> je podiel neškodných vzoriek, ktoré model omylom označí. <strong>Prah</strong> je hranica skóre, pri ktorej model zahlási malvér. Hranica z validácie sa prenesie na test a testovacie FPR sa môže od cieľa 1 % odchýliť. Týmto spôsobom sa hodnotia tézy.</td></tr>
+<tr><td><strong>TPR pri FPR 1 % z ROC testu</strong></td><td><strong>ROC krivka</strong> zobrazuje dvojice FPR a TPR pre rôzne prahy. Odčítanie pri najviac 1 % testovacieho FPR porovná schopnosť zoradiť vzorky pri rovnakom tolerovanom FPR. <strong>ROC-AUC</strong> je plocha pod krivkou a sumarizuje kvalitu poradia naprieč prahmi. Odčítaný bod opisuje testovacie skóre. Prah pre prevádzku sa z neho nevyberá.</td></tr>
+</tbody>
+</table>
+<p class="src"><strong>p. b.</strong> znamená percentuálny bod, čiže priamy rozdiel dvoch percent. <strong>Prevalencia</strong> je podiel malvéru medzi všetkými vzorkami. Počet falošných poplachov na jeden skutočný pri nízkej prevalencii je prepočet z TPR a FPR pri predpoklade, že sa tieto miery prenesú na nové zloženie prevádzky. [P1, P2, P4, P5]</p>
+<p><strong>LightGBM</strong> vytvára súbor rozhodovacích stromov, kde ďalšie stromy postupne opravujú chyby predchádzajúcich. Porovnávali sa aj logistická regresia (lineárne skóre), Random Forest (hlasovanie stromov), malé a veľké viacvrstvové neurónové siete (<strong>MLP</strong>) a pri Quo Vadis aj siete pracujúce s poradím volaní. Pri <strong>skorej fúzii</strong> sa spájajú vstupné príznaky a pri <strong>neskorej fúzii</strong> už vypočítané skóre.</p>
+<p><strong>Destilácia</strong> učí menší model (<strong>študenta</strong>) aj zo skóre referenčného modelu (<strong>učiteľa</strong>). Takéto mäkké označenie zachytáva aj mieru istoty. Učiteľ ho predpovedá modelom trénovaným bez príslušnej časti tréningu. Kontrola s rovnakou architektúrou používa iba označenia dát.</p>
+<p><strong>Kaskáda A</strong> potrebuje dynamiku pre každý súbor. Pri zhode statického a dynamického modelu rozhodnú ony a pri nezhode hybrid. <strong>Kaskáda B</strong> začína statickým modelom a dynamiku vyžiada iba pre neisté prípady. Toto postúpenie je <strong>eskalácia</strong>. V základných variantoch <em>baselines</em> sú v stupňoch vybrané samostatné modely LightGBM. Varianty <em>main</em> používajú študentov. <strong>Špecialista</strong> je druhý stupeň učený na vzorkách blízko prahu prvého modelu.</p>
+<p class="src">Čas CPU je čas procesora na výpočet z pripravených vstupov vrátane transformácie modelu. Dávkový čas opisuje spracovanie viacerých vzoriek naraz. [P1–P5]</p>
+</section>
+
+<section class="page" id="quovadis">
+<div class="eyebrow">Quo Vadis · dáta</div>
+<h2>Windows s bohatou statikou a nerovnomernou emuláciou</h2>
+<p><span class="label">Overené.</span> Projekt použil verejné vydania Quo Vadis s <strong>PE</strong> súbormi pre 32-bitovú architektúru (Portable Executable je formát spustiteľných súborov Windows). <strong>EMBER</strong> je štandardizovaný spôsob opisu takýchto súborov. Má 2 381 číselných príznakov v deviatich skupinách vrátane histogramov bajtov, textových reťazcov, hlavičiek, sekcií a importovaných funkcií. <strong>Speakeasy</strong> emuluje vybrané časti prostredia Windows. Dynamický report zaznamenáva najmä volania <strong>API</strong>, teda funkcií, cez ktoré program využíva služby systému. Ide o emuláciu správania. Samotné spustiteľné súbory a kontextové cesty z pôvodného výskumu projekt nemal k dispozícii. [L1, P3]</p>
+<table class="num tight">
+<caption>Spoločné rozdelenie po očistení · počet súborov</caption>
+<thead><tr><th>Označenie</th><th>Tréning · január</th><th>Validácia · január</th><th>Test · apríl</th></tr></thead>
+<tbody>
+<tr><td>Neškodné</td><td>21 974</td><td>2 442</td><td>7 940</td></tr>
+<tr><td>Malvér spolu</td><td>44 857</td><td>4 984</td><td>9 399</td></tr>
+<tr><td>Backdoor</td><td>9 955</td><td>1 106</td><td>1 940</td></tr>
+<tr><td>Coinminer</td><td>5 893</td><td>655</td><td>1 684</td></tr>
+<tr><td>Dropper</td><td>7 419</td><td>824</td><td>252</td></tr>
+<tr><td>Keylogger</td><td>3 539</td><td>393</td><td>1 041</td></tr>
+<tr><td>Ransomware</td><td>8 665</td><td>962</td><td>2 139</td></tr>
+<tr><td>RAT</td><td>1 527</td><td>170</td><td>1 258</td></tr>
+<tr><td>Trojan</td><td>7 859</td><td>874</td><td>1 085</td></tr>
+<tr><td><strong>Spolu</strong></td><td><strong>66 831</strong></td><td><strong>7 426</strong></td><td><strong>17 339</strong></td></tr>
+</tbody></table>
+<p class="src">Rok 2022. Finálny index má 91 596 unikátnych párov. Pôvodne malo použiteľnú statiku 74 703 tréningových a 17 339 testovacích záznamov. [P3]</p>
+<p><span class="label">Rozhodnutia.</span> Dáta sa párovali podľa SHA-256, digitálneho odtlačku súboru, a spájali všetky časti jeho reportu. Zlyhané extrakcie EMBER sa vyradili (366 evidovaných chýb vrátane jedného pomocného súboru). Všetkých 446 identických záznamov prekryvu tréningu a testu patrilo medzi keyloggery. Vyradili sa z tréningu, aby pôvodný aprílový test ostal zachovaný a model v ňom nevidel trénované súbory. Validácia tvorí približne desatinu januárových dát a zachováva zastúpenie rodín. Skupiny s identickým statickým vektorom sa nedelia. [P3]</p>
+<p><span class="label">Výhoda.</span> Každý pár má statický aj dynamický vstup, test pochádza z neskoršieho zberu a reporty umožňujú študovať poradie volaní aj príčiny ukončenia emulácie. Na hlavný tabuľkový vstup sa použilo 2 000 najčastejších jednotlivých volaní a dvojíc po sebe idúcich volaní, vybraných z tréningu. Sekvenčné modely použili najviac 1 024 volaní. Ostatné udalosti a sumárne opisné stĺpce zostali v kontrolnom experimente, aby sa obmedzila závislosť od znakov konkrétnej konfigurácie emulátora. Krátke reporty zostali v spoločnom teste. [P3]</p>
+<div class="callout limit"><p><strong>Overené obmedzenie.</strong> Audit reportov považuje <em>unsupported_api</em> za najčastejší dôvod ukončenia v teste, v tréningu a validácii sa tento dôvod nevyskytol. Audit hlavného vstupného bodu programu eviduje v teste 9 472 prípadov (54,6 %). Samostatná kategória vo V1 má 9 094 z 17 339 vzoriek, pretože veľmi krátke reporty majú pri triedení prednosť. Odlišný zápis chýb aj prudká zmena výskytu udalostí naznačujú zmenu verzie alebo nastavenia. Presná príčina nebola doložená. [P3, R1]</p></div>
+</section>
+<section class="page" id="quovadis_v12">
+<div class="eyebrow">Quo Vadis · výsledky V1 a V2</div>
+<h2>Statika je silná. Kaskáda obmedzuje poplachy.</h2>
+<p>Vo V1 vybrala validácia LightGBM pre všetky tri druhy vstupu. Najlepší hybrid spájal príznaky skorej fúzie. Dvojvetvová sieť mala osobitnú vetvu pre statiku a osobitnú pre postupnosť volaní. V tabuľke sú miery pri prenesenom prahu a pri rovnakom FPR výslovne označené. [R1]</p>
+<table class="num tight">
+<caption>V1 · aprílový test · percentá</caption>
+<thead><tr><th>Model</th><th>TPR<br>prah z validácie</th><th>FPR<br>prah z validácie</th><th>TPR z ROC<br>FPR 1 %</th><th>TPR z ROC<br>FPR 0,1 %</th></tr></thead>
+<tbody>
+<tr><td>Statický LightGBM</td><td>98,43</td><td>0,48</td><td>99,43</td><td>96,99</td></tr>
+<tr><td>Dynamický LightGBM</td><td>65,72</td><td>1,98</td><td>58,49</td><td>31,39</td></tr>
+<tr><td>Hybridný LightGBM</td><td>98,42</td><td>0,47</td><td>99,15</td><td>93,29</td></tr>
+<tr><td>Hybridná dvojvetvová sieť</td><td>97,67</td><td>0,58</td><td>98,93</td><td>81,73</td></tr>
+<tr><td>A-main · študenti</td><td>95,79</td><td>0,26</td><td>—</td><td>—</td></tr>
+<tr><td>A-baselines · LightGBM</td><td>98,31</td><td>0,39</td><td>—</td><td>—</td></tr>
+</tbody></table>
+<p class="src">Priemer troch behov. Kaskády sú tu vyhodnotené ako hotové rozhodnutia. [R1]</p>
+<p><strong>Časový posun a vzájomné dopĺňanie.</strong> Dynamický LightGBM klesol z ROC-AUC 0,997 na validácii na 0,956 v teste. Doplnenie udalostí a sumárnych príznakov znížilo testové ROC-AUC na 0,9415. V podskupine ukončení <em>unsupported_api</em> bolo TPR dynamického modelu pri validačnom prahu približne 51 % a v kategórii ostatných reportov 83 %. Vynechanie podpisu, údajov o certifikáte a času zostavenia znižuje citlivosť statického LightGBM pri 1 % FPR o 0,4 p. b. To zmierňuje podozrenie zo závislosti od týchto štyroch stĺpcov. Dynamický model pri prahoch z validácie zachytil 23,3 zo 147,7 škodlivých súborov, ktoré statický model minul, a správne rozpoznal 32,3 z 38,3 neškodných vzoriek, pri ktorých sa statický model zmýlil. Ide o priemerné počty cez seedy. [R1]</p>
+<p><strong>V2 · vynechané rodiny.</strong> Na aprílových vzorkách siedmich vynechaných rodín dosiahli pri prahu z validácie statický, dynamický a hybridný LightGBM priemerné TPR 79,22 %, 50,9 % a 78,70 %. Kaskády A-main a B-main dosiahli 73,9 % a 73,1 % a zaostali za statikou pri každej rodine. Keylogger dosiahol so statikou 24,1 % v apríli a 42,9 % v januári. Skóre bez časového posunu aj výsledky po rodinách pomáhajú odlíšiť náročnosť rodiny od zmeny zloženia vzoriek. [R2, R3]</p>
+<p><strong>Výber prípadov na emuláciu.</strong> Pri variante B-baselines znamenal rozpočet 10 % výber desatiny validačných súborov blízko rozhodovacieho prahu. Hranica prenesená na test viedla k emulácii 21,5 % súborov (22,8 % v scenári vynechaných rodín). Kaskáda dosiahla časové TPR 98,31 % a FPR 0,39 %. Hlavné pásmo neistoty pre ten istý variant vyžiadalo emuláciu 0,4 % súborov a TPR pokleslo na 92,41 %. Pri B-main bolo dynamicky analyzovaných 10,7 % súborov a TPR kleslo na 95,87 %. [R2]</p>
+<div class="callout"><p><span class="label">Interpretácia.</span> Pravidlo „statický alebo dynamický model označí malvér“ zdvihlo priemerné TPR vynechanej rodiny len z 79,2 % na 79,8 % pri náraste FPR približne z 0,47 % na 2,2 %. Je to hranica pre toto spojenie hotových pozitívnych predikcií. Nový model pracujúci s pôvodnými príznakmi môže mať odlišné možnosti. [R2]</p></div>
+</section>
+<section class="page" id="quovadis_v3">
+<div class="eyebrow">Quo Vadis · výsledky V3 a robustnosť</div>
+<h2>Čo vysvetľuje slabý prínos dynamiky?</h2>
+<p><strong>Špecialista.</strong> Druhý model kaskády B-spec sa učil na pätine tréningových vzoriek najbližších k statickému prahu. Hodnotil sa aj variant B-spec-dyn, ktorý zo statiky dostal iba skóre prvého stupňa. Výber tréningových vzoriek nemal pri ich skórovaní prístup k ich vlastným označeniam. Rozpočet získavania dynamiky bol určený na validácii. [P4, R3]</p>
+<table class="tight">
+<caption>Vopred určené kritériá a verdikt pre hlavného špecialistu</caption>
+<thead><tr><th style="width:16%">Kritérium</th><th>Požiadavka</th><th style="width:28%">Quo Vadis</th></tr></thead>
+<tbody>
+<tr><td><strong>B1</strong><br>Nová rodina</td><td>TPR aspoň o 1 p. b. nad statikou, FPR najviac ako statika. Špecialista dosiahne aspoň TPR statiky v 5 zo 7 rodín (vo V4 v 4 z 5).</td><td><span class="no">Nesplnené.</span> 79,03 % vs. 79,22 %. FPR 0,55 % vs. 0,47 %. Kritérium počtu rodín splnené.</td></tr>
+<tr><td><strong>B2</strong><br>Poplachy</td><td>FPR nižšie než pri statike aj dynamike a TPR najviac 1 p. b. pod statikou. Hlavný aj zero-day test.</td><td><span class="no">Nesplnené.</span> V oboch testoch FPR vyššie ako pri statike.</td></tr>
+<tr><td><strong>B3</strong><br>Prínos stupňa</td><td>TPR vynechanej rodiny aspoň o 1 p. b. nad B-baselines (rozpočet 10 %). FPR vyššie najviac o 0,1 p. b.</td><td><span class="no">Nesplnené.</span> TPR 79,03 % vs. 77,97 %. FPR 0,55 % vs. 0,36 %.</td></tr>
+</tbody></table>
+<p class="src">B1 až B3 podľa [P4, P5], výsledky [R3]. B-spec-dyn prešiel B2 iba v časovom teste. Variant s užším tréningom na 10 % dosiahol 81,76 % TPR, mal vyššie FPR a splnil podmienku TPR len v 4 zo 7 rodín.</p>
+<p><strong>Neistota odhadov.</strong> <strong>Párový bootstrap</strong> opakovane vyberá testovacie vzorky s opakovaním a pre oba modely používa ten istý výber v každej triede. <strong>95 % interval spoľahlivosti (IS)</strong> tu tvorí rozsah medzi 2,5. a 97,5. percentilom z 2 000 takýchto opakovaní. Zachytáva neistotu z výberu vzoriek pri daných modeloch. Rozdiely medzi seedmi alebo spôsobmi zberu tým nie sú pokryté. Podľa vopred určeného pravidla je celý interval rozdielu medzi hybridom LightGBM a statikou vo vymedzení ±1 p. b. v časovom teste (−0,01 p. b., IS −0,11 až +0,09) aj pri vynechaných rodinách (−0,51 p. b., IS −0,83 až −0,22). Obe miery sú pri prahu z validácie. [P4, R3]</p>
+<p><strong>Podskupina úspešnejšej emulácie.</strong> Po vylúčení prípadov <em>unsupported_api</em> a reportov s najviac piatimi volaniami ostalo 4 407 škodlivých a 3 174 neškodných súborov. Modely ani prahy sa nemenili. Pri vynechaných rodinách pridalo pravidlo „statický alebo dynamický“ +0,65 p. b. (IS +0,39 až +0,92), hybrid stratil −4,21 p. b. (−5,10 až −3,28) a špecialista −2,78 p. b. (−3,63 až −1,88). Kritérium citlivostnej analýzy, označené R2 v pláne robustnosti, je splnené. Podskupina je vybraná podľa výsledku emulácie a jej súbory boli ľahšie aj pre statiku. Pokus neopravuje emulátor ani neobnovuje chýbajúce pozorovania. [P4, R3]</p>
+<p><strong>Scenár C · prekalibrovanie.</strong> Prekalibrovanie znamená nastavenie hranice už natrénovaného modelu na nových neškodných súboroch. Pri približne 1 600 aprílových vzorkách oddelených od hodnotenia stúplo TPR statického modelu pri novej rodine o 3,58 p. b. (interval párových rozdielov cez rozdelenia a seedy +0,76 až +6,14) pri FPR približne 0,9 %. Pri asi 400 súboroch interval zahŕňa nulu. Pri približne porovnateľnom FPR sa výhoda špecialistu nepreukázala. Tento scenár dopĺňa pôvodný test. V3 bola navrhnutá na základe analýzy testu V2, čo obmedzuje nezávislosť potvrdenia. [P4, R3]</p>
+</section>
+
+<section class="page" id="kronodroid">
+<div class="eyebrow">KronoDroid · dáta</div>
+<h2>Rovnaké aplikácie Androidu v dvoch prostrediach</h2>
+<p><span class="label">Overené.</span> KronoDroid poskytuje štyri tabuľky. Oddeľujú neškodné a škodlivé aplikácie podľa prostredia zberu. Jedna <strong>APK</strong> je inštalačný balík Androidu. Statiku tvoria oprávnenia, ktoré aplikácia deklaruje, a opisné údaje, napríklad veľkosť súboru a počty komponentov. Dynamika má 288 počtov <strong>systémových volaní</strong>, teda požiadaviek aplikácie na jadro operačného systému. Stĺpec <em>nr_syscalls</em> je ich súčet. Emulátor Androidu spúšťa operačný systém vo virtuálnom prostredí. Druhý zdroj tvorí skutočné zariadenie. [L2, P6]</p>
+<table class="num tight">
+<caption>Verejné tabuľky pred očistením · počet riadkov alebo označení rodín</caption>
+<thead><tr><th>Položka</th><th>Emulátor</th><th>Zariadenie</th></tr></thead>
+<tbody>
+<tr><td>Neškodné aplikácie</td><td>35 246</td><td>36 755</td></tr>
+<tr><td>Malvér</td><td>28 745</td><td>41 382</td></tr>
+<tr><td>Spolu</td><td>63 991</td><td>78 137</td></tr>
+<tr><td>Rodiny malvéru</td><td>209</td><td>240</td></tr>
+<tr><td>Riadky s nulovým počtom volaní</td><td>94</td><td>471</td></tr>
+</tbody></table>
+<p class="src">Pôvodná štúdia a audit stiahnutých tabuliek. [L2, P6]</p>
+<table class="num tight">
+<caption>Spoločné rozdelenie použité vo V4 · neškodné / malvér</caption>
+<thead><tr><th>Vetva</th><th>Tréning</th><th>Validácia</th><th>Test</th></tr></thead>
+<tbody>
+<tr><td><strong>real_full</strong> · 78 129, zariadenie</td><td>25 726 / 28 964</td><td>3 675 / 4 139</td><td>7 350 / 8 275</td></tr>
+<tr><td><strong>real_P / emu_P</strong> · 63 316 v každej</td><td>24 505 / 19 831</td><td>3 489 / 2 835</td><td>6 983 / 5 673</td></tr>
+</tbody></table>
+<p class="src">Vetvy na prekrytí majú totožné súbory v tej istej časti. real_P používa dynamiku zo zariadenia a emu_P z emulátora. [P5, P6]</p>
+<p><span class="label">Rozhodnutia.</span> Vyradili sa štyri odtlačky s rozpornými označeniami. V každom zdroji sa tým odstránili dva záznamy na odtlačok. Po očistení z pôvodných 63 320 spoločných odtlačkov ostalo 63 316. Identifikátory, rodina, dátumy a údaje z VirusTotal (služba zhromažďujúca výsledky bezpečnostných nástrojov) boli z predikčných vstupov vylúčené. Ponechané boli označenia autorov. V emulátore chýbal počet súborov vnútri APK pre všetok malvér, preto sa stĺpec vypustil v oboch prostrediach. Výsledná statika má 185 vstupov (173 súvisiacich s oprávneniami, 11 opisných a príznak chýbania). Doplnenie z druhého zdroja pomohlo pri 264 súboroch. Zvyšných 379 dostalo nulu a indikátor chýbania. [P5, P6]</p>
+<p><span class="label">Overené obmedzenia.</span> Riadky neobsahujú poradie volaní ani čas behu konkrétnej vzorky. Surové záznamy a APK boli dostupné na vyžiadanie, v projekte sa pracovalo s hotovými tabuľkami. Aj pri rovnakom súbore sa správanie mení. V audite bolo na pôvodnom prekrytí zhodných len 38 dynamických vektorov. Medián celkového počtu volaní sa podľa triedy obracia (emulátor 2 958 neškodné a 2 363 malvér, zariadenie 1 148 a 3 258). Nenulový podiel detekcií podľa VirusTotal má 12,6 % a 13,2 % neškodných riadkov. Je to signál možného šumu v označeniach. Samotné oprávnenia vytvorili mnoho zhodných vstupov. Audit našiel 53 128 opakovaných riadkov v emulátore a 64 424 v dátach zariadenia pri porovnaní iba týchto vektorov. [P6]</p>
+</section>
+<section class="page" id="kronodroid_otazky">
+<div class="eyebrow">KronoDroid · dizajn a hlavné výsledky</div>
+<h2>Kedy pomáha dynamika zo zariadenia?</h2>
+<p><strong>O1</strong> skúma, o koľko v hlavnej vetve so zariadením hybrid zlepší TPR oproti statike. <strong>O2</strong> porovná tento prírastok medzi zariadením a emulátorom na identických aplikáciách. Statický model, rozdelenie, označenia a formát príznakov sú v párovom porovnaní rovnaké. Prípona <strong>–Z</strong> znamená scenár vynechanej rodiny. Vopred určené kritérium pre O1, O2 a ich obdoby pri vynechanej rodine vyžaduje bodový prírastok aspoň 1 p. b. a dolnú hranicu 95 % IS nad nulou. [P5]</p>
+<figure>
+<img src="graf_otazky.svg" alt="Rozdiel TPR a 95-percentné intervaly pre O1, O1-Z, O2 a O2-Z. O2 s hodnotou 0,76 p. b. nedosahuje kritérium jedného bodu.">
+<figcaption><strong>Obr. 1.</strong> Prírastky TPR v percentuálnych bodoch pri FPR 1 % z ROC testu. Rozdiely pre O2 sú rozdielmi dvoch prírastkov. Prerušovaná čiara označuje hranicu 1 p. b. pre bodový odhad. Párové 95 % IS zo zdroja [R4].</figcaption>
+</figure>
+<p><strong>Hlavné rozdelenie.</strong> Na celom zariadení je náhodné, približne 70 % tréning, 10 % validácia a 20 % test. Pri rozdeľovaní sa zohľadní pomer tried aj rodín a vzorky s rovnakým statickým vektorom zostanú spolu. Dátumy pochádzajú z obsahu APK. Audit eviduje neplatné záznamy, predvolené roky 1980 a výrazný súvis roku s triedou. Preto má náhodné rozdelenie interpretáciu zmesi obdobia zberu. [P5, P6]</p>
+<p><strong>O1 a O1-Z sú splnené.</strong> Prírastok hybridu na zariadení je +1,78 p. b. na hlavnom rozdelení (IS +1,15 až +2,38) a +11,38 p. b. pri vynechaných rodinách (+9,70 až +13,00). Na spoločných aplikáciách je prírastok +2,76 p. b. na zariadení (IS +2,01 až +3,46) a +2,00 p. b. v emulátore (+1,32 až +2,63). <strong>O2 je nesplnené.</strong> Rozdiel +0,76 p. b. má interval +0,30 až +1,28 p. b. Bodový prírastok leží pod 1 p. b. <strong>O2-Z je splnené</strong> s rozdielom +9,60 p. b. (IS +8,33 až +10,82). [P5, R4]</p>
+<p><strong>D-norm</strong> je kontrola, v ktorej sa každý počet volaní vyjadrí ako podiel z celkovej aktivity a celkový počet sa vynechá. Hybrid s touto úpravou stále pridáva +1,74 p. b. na real_full (IS +1,14 až +2,36), +2,33 na real_P (+1,56 až +3,06) a +1,57 na emu_P (+0,88 až +2,20). Výsledok oslabuje vysvetlenie založené výhradne na celkovom množstve aktivity. Podiely môžu stále niesť znaky spôsobu zberu. [P5, R4]</p>
+</section>
+
+<section class="page" id="kronodroid_modely">
+<div class="eyebrow">KronoDroid · modely a citlivosť podľa rodiny</div>
+<h2>Najväčší prínos sa sústreďuje na niektoré rodiny</h2>
+<table class="num tight">
+<caption>Modely LightGBM · TPR (%) pri FPR 1 % z testovacej ROC krivky</caption>
+<thead><tr><th>Scenár a vetva</th><th>Statický</th><th>Dynamický</th><th>Hybridný</th></tr></thead>
+<tbody>
+<tr><td>Hlavný · real_full</td><td>96,03</td><td>87,30</td><td>97,81</td></tr>
+<tr><td>Hlavný · real_P</td><td>95,07</td><td>85,86</td><td>97,83</td></tr>
+<tr><td>Hlavný · emu_P</td><td>95,07</td><td>84,88</td><td>97,07</td></tr>
+<tr><td>Vynechaná rodina · real_full</td><td>73,50</td><td>65,46</td><td>84,87</td></tr>
+<tr><td>Vynechaná rodina · real_P</td><td>74,21</td><td>67,31</td><td>88,38</td></tr>
+<tr><td>Vynechaná rodina · emu_P</td><td>74,21</td><td>48,07</td><td>78,77</td></tr>
+<tr><td>Doplnkový časový posun malvéru · real_time</td><td>84,56</td><td>64,67</td><td>89,96</td></tr>
+</tbody></table>
+<p class="src">Prírastky a rozdiely uvedené samostatne vychádzajú z nezaokrúhlených hodnôt. [R4]</p>
+<figure>
+<img src="graf_rodiny.svg" alt="Päť rodín KronoDroid na spoločných aplikáciách. Najväčšie rozdiely medzi hybridmi zo zariadenia a z emulátora sú pri Locker/SLocker a Airpush/StopSMS.">
+<figcaption><strong>Obr. 2.</strong> TPR jednotlivých vynechaných rodín pri FPR 1 % z ROC testu. Porovnanie na rovnakých aplikáciách real_P a emu_P, spoločná statika. V zátvorke je počet APK vo vynechanej rodine na prekrytí. [P6, R4]</figcaption>
+</figure>
+<p>Päť dostatočne veľkých a konkrétne označených rodín sa postupne vylúčilo z učenia aj validácie. Hodnotia sa všetky ich vzorky, teda pôvodný test spolu s odloženými tréningovými a validačnými exemplármi. FPR sa počíta na neškodnom teste. Na prekrytí je rozdiel medzi hybridmi najväčší pri Locker/SLocker (63,21 % vs. 41,15 %) a Airpush/StopSMS (88,41 % vs. 67,11 %). V real_full je hybrid nad statikou vo všetkých piatich rodinách. Pri Locker/SLocker zaostáva za dynamickým modelom (45,59 % vs. 49,96 %). [P5, R4, oddiel 3]</p>
+<p><strong>Doplnkový časový scenár.</strong> Malvér s použiteľným rokom 2008–2014 patrí podľa protokolu do učenia a validácie, roky 2015–2020 do testu. Skupiny rovnakých statických vektorov sa držia spolu. Neškodná časť vychádza z hlavného rozdelenia. Vylúčilo sa 448 škodlivých súborov s neplatným rokom. Hybrid pridáva +5,40 p. b. (IS +3,98 až +7,20). Výsledok podporuje prínos pri tomto posune malvéru. Dátum súboru v APK je len približný ukazovateľ jeho veku. [P5, P6, R4]</p>
+</section>
+<section class="page" id="kronodroid_kaskady">
+<div class="eyebrow">KronoDroid · kaskády a špecialista</div>
+<h2>LightGBM pomáha pri rozhodovaní aj pri úspore behov</h2>
+<table class="num tight">
+<caption>Vybrané prístupy v real_full · pri prahoch z validácie</caption>
+<thead><tr><th>Prístup</th><th>Hlavný<br>TPR (%)</th><th>Hlavný<br>FPR (%)</th><th>Hlavný podiel<br>dynamiky (%)</th><th>Nová rodina<br>TPR (%)</th></tr></thead>
+<tbody>
+<tr><td>Statický LightGBM</td><td>94,59</td><td>0,62</td><td>0</td><td>67,81</td></tr>
+<tr><td>Dynamický LightGBM</td><td>86,88</td><td>0,90</td><td>100</td><td>63,53</td></tr>
+<tr><td>Hybridný LightGBM</td><td>97,24</td><td>0,76</td><td>100</td><td>—</td></tr>
+<tr><td>A-baselines</td><td>96,87</td><td>0,40</td><td>100</td><td>79,02</td></tr>
+<tr><td>B-baselines · hlavné pásmo</td><td>96,56</td><td>0,42</td><td>16,61</td><td>77,23</td></tr>
+<tr><td>B-baselines · rozpočet 10 %</td><td>96,17</td><td>0,38</td><td>10,31</td><td>75,74</td></tr>
+<tr><td>A-main · študenti</td><td>93,97</td><td>0,30</td><td>100</td><td>76,19</td></tr>
+<tr><td>B-main · študenti</td><td>93,69</td><td>0,29</td><td>38,31</td><td>74,39</td></tr>
+<tr><td>B-direct · pri neistote rovno hybrid</td><td>96,92</td><td>0,68</td><td>38,31</td><td>81,74</td></tr>
+<tr><td>B-spec · rozpočet 10 %</td><td>97,40</td><td>0,94</td><td>10,31</td><td>81,32</td></tr>
+</tbody></table>
+<p class="src">Podiel dynamiky vyjadruje podiel súborov poslaných na dynamickú analýzu. Pre samostatný hybrid je v tejto tabuľke uvedený hlavný test. [R4, D1]</p>
+<p><strong>Komplementarita</strong> vyjadruje, kedy jeden model napraví chybu druhého. Dynamický model v hlavnom teste zachytil v priemere 298,7 zo 447,3 škodlivých súborov, ktoré statika minula. Hybrid opravil 290,0 takýchto chýb a 71,3 pôvodne správnych rozhodnutí o malvéri zmenil na chybné. Pri neškodných má hybrid 55,7 chýb oproti 45,3 pri statike. Kaskády z LightGBM v troch vetvách dosiahli vyššie hlavné TPR a nižšie FPR než statika s párovými IS mimo nuly. [R4, R5]</p>
+<p><strong>Dôležitosť príznakov.</strong> Premiešanie jednej skupiny príznakov na validácii naruší ich vzťah k výsledku a umožní sledovať pokles výkonu. Pri hybride LightGBM zo zariadenia kleslo ROC-AUC po premiešaní oprávnení o 0,1985 a po premiešaní počtov podľa typu volania o 0,1314. Po premiešaní celkového počtu je pokles pri uvedenej presnosti 0,0000. Test opisuje využitie skupín vyškoleným modelom na validácii pri seede 0. [R5]</p>
+<p><strong>Špecialista.</strong> Pri prahu z validácie má B-spec vyššiu citlivosť ako statika vo všetkých piatich rodinách každej vetvy. B1 a B3 nesplnil v žiadnej vetve. V real_full je oproti B-baselines s tým istým rozpočtom TPR novej rodiny 81,32 % vs. 75,74 %. Nárast FPR z 0,40 % na 0,87 % prekračuje toleranciu 0,1 p. b. Pri real_full je pri vynechaných rodinách FPR 0,87 % oproti statickým 0,63 % a pri real_P 0,87 % oproti 0,71 %. Aj v emu_P je FPR pri vynechaných rodinách vyššie (0,76 % vs. 0,71 %). B2 v emu_P prejde na hlavnom rozdelení, v zero-day ho nesplní. Podľa požiadavky oboch testov teda B2 neprešiel v žiadnej vetve. Vyššia citlivosť pri týchto prahoch ponecháva otvorenú otázku výkonu pri zhodnom FPR. [P5, R4, D1]</p>
+</section>
+
+<section class="page" id="porovnanie">
+<div class="eyebrow">Porovnanie datasetov a výsledkov</div>
+<h2>Rovnaká miera, odlišné testovacie situácie</h2>
+<table class="tight">
+<caption>Čo sa pri prechode z Windows na Android mení</caption>
+<thead><tr><th style="width:20%">Rozmer</th><th style="width:40%">Quo Vadis · V1–V3</th><th>KronoDroid · V4</th></tr></thead>
+<tbody>
+<tr><td>Vzorky a statika</td><td>91 596 PE, 2 381 príznakov EMBER vrátane štruktúry súboru.</td><td>78 129 APK na zariadení, 63 316 párov APK medzi zdrojmi. 185 príznakov prevažne z oprávnení.</td></tr>
+<tr><td>Správanie</td><td>Emulované volania Windows API, dostupné poradie a príčiny ukončenia. Žiadny paralelný zdroj dynamiky pre tie isté PE.</td><td>Počty systémových volaní, dostupné pre dve prostredia na rovnakých APK. Chýba poradie, priebeh a trvanie konkrétneho behu.</td></tr>
+<tr><td>Hlavný test</td><td>Neskorší aprílový zber oproti januáru v tom istom roku.</td><td>Náhodný test. Doplnkový časový posun malvéru podľa dátumov v APK.</td></tr>
+<tr><td>Vynechaná rodina</td><td>Sedem označení. Hlavný výsledok na aprílových exemplároch, doplnkovo január.</td><td>Päť označení. TPR zahŕňa všetky exempláre vynechanej rodiny, FPR vychádza z neškodného testu.</td></tr>
+</tbody>
+</table>
+<p class="src">Rozsah je počet vzoriek v experimentálnom spracovaní. [P3, P5, P6]</p>
+<figure>
+<img src="graf_porovnanie.svg" alt="Prírastok hybridu nad statikou pri rovnakom FPR, záporný alebo blízky nule pri Quo Vadis a kladný pri KronoDroid.">
+<figcaption><strong>Obr. 3.</strong> Rozdiel TPR hybridu a statiky pri FPR 1 % z ROC testu. Pri Quo Vadis sa rovnaký výpočet zopakoval z uložených predikcií vrátane citlivostnej verzie s aprílom aj januárom. Pri KronoDroid sú uvedené párové 95 % IS. Zloženie testov zostáva odlišné. [R1, R2, R4, D1]</figcaption>
+</figure>
+<p><strong>Porovnateľné popisne.</strong> Smer a veľkosť prírastku oproti vlastnej statike možno čítať pri tej istej miere. Napríklad pri vynechaných rodinách na Quo Vadis je TPR z ROC testu 83,81 % pre statiku a 81,33 % pre hybrid. Pri započítaní aj odloženého januára je to 88,17 % a 87,85 %. Porovnať sa dá aj charakter vzájomného dopĺňania pri validačných prahoch, verdikty téz a podiel dynamickej analýzy pri zaznamenanej kvalite. Rozpočet 10 % je určený na validácii a skutočný podiel na teste je samostatný údaj. [R2, R4, R5, D1]</p>
+<p><strong>Hranice porovnania.</strong> Absolútne TPR, FPR ani ROC-AUC neurčujú, ktorý dataset je „lepší“. Zmenila sa trieda súborov, pôvod označení, sila statiky, spôsob zberu správania aj časové usporiadanie testu. Prepad pri vynechaní rodiny aj rýchlosť sa dajú porovnať v rámci konkrétneho protokolu, medzidatasetovo len opisne. Priame porovnanie poradia volaní a celkového času zberu dynamiky nie je dostupné. Párovanie prostredia izoluje zdroj záznamu v rámci Android experimentu. Vetvy real_full a real_P sa líšia veľkosťou aj skladbou dát. Rozdiel ich výkonu teda neurčuje účinok samotnej veľkosti tréningu. [P3, P5, P6, R1–R5]</p>
+</section>
+<section class="page" id="tezy">
+<div class="eyebrow">Tézy dizertačnej práce</div>
+<h2>Podpora závisí od tézy a variantu</h2>
+<p>V tézach 1 a 2 „hybridný prístup“ znamená kaskádu. Pri téze 4 rozhoduje kaskáda B a podiel vzoriek vyžadujúcich dynamiku. Stabilitu pri téze 1 opisuje smerodajná odchýlka, ktorá meria typickú veľkosť odchýlenia TPR jednotlivých rodín od priemeru. Kritériá pre jednotlivé fázy pochádzajú z vopred zapísaných plánov. [P1, P2, P4, P5]</p>
+<table class="tight">
+<caption>Vyhodnotenie pri prahoch z validácie</caption>
+<thead><tr><th style="width:18%">Téza</th><th style="width:40%">Quo Vadis</th><th>KronoDroid</th></tr></thead>
+<tbody>
+<tr><td><strong>1 · Nové rodiny</strong><br>Vyššia citlivosť a stabilita kaskády</td><td><span class="no">Nepotvrdená.</span> Statický LightGBM 79,22 % a A-baselines 77,97 %. Odchýlka cez rodiny 27,7 a 30,0 p. b. Kaskády so študentmi zaostávajú ešte viac. B1 pre špecialistu nesplnené.</td><td><span class="status">Potvrdená pre vybrané varianty.</span> V4 vyžaduje priemer ≥ statický + 1 p. b. a FPR ≤ statický. V real_full A-baselines 79,02 % vs. 67,81 %, s nižším FPR. Odchýlky 22,66 a 25,66 p. b. Prešlo 12 z 13 bežných variantov v real_full, 10 v real_P a 4 v emu_P. Špecialisti neprešli.</td></tr>
+<tr><td><strong>2 · Falošné poplachy</strong><br>Zníženie pri zachovaní citlivosti</td><td><span class="status">Potvrdená pre LightGBM.</span> A-baselines a B-baselines s rozpočtom 10 % prešli v časovom aj zero-day teste. B-baselines dosiahla TPR/FPR 98,31 %/0,39 % v časovom teste a 95,36 %/0,36 % pre všetok malvér v zero-day behoch. Pri kaskádach so študentmi citlivosť klesla nad toleranciu.</td><td><span class="status">Potvrdená pre vybrané varianty.</span> FPR musí byť nižšie ako pri statike aj dynamike a TPR najviac 1 p. b. pod statikou. V oboch scenároch prešlo 10 bežných variantov v real_full, 6 v real_P a 4 v emu_P. Vo všetkých vetvách prešli A-baselines aj B-baselines pri rozpočte 10 %.</td></tr>
+<tr><td><strong>3 · Destilácia</strong><br>Rýchlejší študent s porovnateľným TPR</td><td><span class="status">Čiastočne potvrdená.</span> Statický študent dvojvetvovej siete má rozdiel +0,06 p. b. na novej rodine (95 % IS −0,34 až +0,45 v tolerancii ±1 p. b.) a približne 107× nižší dávkový čas CPU. V porovnaní s vybraným hybridom LightGBM je pomalší a menej citlivý.</td><td><span class="no">Nepotvrdená.</span> Komplexným referenčným hybridom je veľká MLP. Menšie siete boli v dávke rýchlejšie, v real_full stratili pri vynechaných rodinách približne 25 až 34 p. b. Hranicu 1 p. b. nesplnila žiadna vetva. Kontrola bez destilácie na hlavnom rozdelení dosahuje so statickým študentom porovnateľný výsledok.</td></tr>
+<tr><td><strong>4 · Náročnosť</strong><br>Menej dynamických analýz</td><td><span class="status">Potvrdená v podiele emulácie.</span> B-baselines pri rozpočte 10 % potrebuje 21,5 % behov v časovom teste a 22,8 % pri vynechaných rodinách oproti 100 % pri hybride či A. B-main s 10,7 % neudržal TPR.</td><td><span class="status">Potvrdená v podiele behov.</span> Pri splnení tézy 2 malo B-baselines s rozpočtom 10 % v hlavnom teste 10,31 % behov v real_full a 10,64 % na prekrytí. V zero-day behoch ide o 12,78 % a 12,88 % bežnej testovacej časti.</td></tr>
+</tbody>
+</table>
+<p class="src">Vo V4 vytlačený súhrn pri téze 2 v zero-day používa TPR vynechanej rodiny. Doplňujúci výpočet s TPR všetkého malvéru na bežnej testovacej časti podľa V2 dáva rovnaké počty variantov, ktoré spĺňajú podmienku súčasne v hlavnom aj zero-day teste. Niektoré verdikty mimo tohto prieniku sa v real_P líšia. [P2, P5, R2–R4, D1]</p>
+<p>Pri 0,1 % prevalencii vychádza z prahov hlavného testu vo V1 na jeden správny poplach približne 4,90 falošných pri statike a 3,97 pri A-baselines. Vo V4 real_full je to približne 6,51 pri statike a 3,96 pri B-baselines s rozpočtom 10 %. Ide o laboratórny prepočet v rámci každého testu. [R1, D1]</p>
+</section>
+
+<section class="page" id="domnienka">
+<div class="eyebrow">Kritické posúdenie domnienky autora</div>
+<h2>„Chýba nám kvalitný veľký dataset“</h2>
+<p class="lead">Domnienka „Najväčšou slabinou tejto práce je, že nemáme kvalitný veľký dataset so statickými aj dynamickými dátami“ spája veľkosť súboru dát, kvalitu merania správania a schopnosť vysvetliť rozdiel medzi platformami. Každá z týchto vlastností má iný dôsledok pre platnosť záverov.</p>
+<table class="tight">
+<caption>Čo mení odpoveď na domnienku</caption>
+<thead><tr><th style="width:25%">Rozmer</th><th>Argument v prospech domnienky</th><th>Protiargument a hranica dôkazu</th></tr></thead>
+<tbody>
+<tr><td><strong>Veľkosť a pokrytie</strong></td><td>Počet súborov môže maskovať malý počet rôznych druhov a období. Quo Vadis má sedem označení malvéru a iba 32-bitový Windows. Android má veľa rodín, ale vopred určené pravidlo pre vynechanie spĺňa päť.</td><td>91 596 párov v Quo Vadis a 78 129 párov v hlavnej vetve KronoDroid umožňujú laboratórne porovnania. Samotný počet vzoriek nevysvetľuje rozdiel. Počet súborov aj ich nezávislá rozmanitosť sú relevantné pri veľmi nízkom FPR. [P3, P5, P6]</td></tr>
+<tr><td><strong>Konzistentný zber</strong></td><td>Na Quo Vadis sa s časom menia API stopy aj evidencia chýb. Dynamický model na teste stráca rozlišovaciu schopnosť. Pre tie isté PE chýba druhý zdroj správania.</td><td>Pri priaznivejšej emulácii ostáva zisk jednoduchého spojenia malý a hybrid klesá pod statiku. Technické ukončenia teda samy nedávajú úplné vysvetlenie. Vyfiltrovaná podskupina nie je opakované meranie. [R1–R3]</td></tr>
+<tr><td><strong>Zdroj dynamiky</strong></td><td>O2-Z na zhodných APK ukazuje veľkú výhodu zariadenia v teste nových rodín. O1-Z dokladá prínos dynamiky nad statický model v hlavnej vetve.</td><td>Na hlavnom rozdelení leží bodový odhad O2 pod vopred dohodnutou hranicou. Dynamika z emulátora v KronoDroid tiež pomáha. O2-Z porovnáva dve konkrétne prostredia Androidu a neurčuje, aký efekt by mal iný zber pre Quo Vadis. [P5, R4]</td></tr>
+<tr><td><strong>Obsah príznakov</strong></td><td>KronoDroid umožňuje kontrolované párovanie, ale bez poradia či dĺžky behu. Quo Vadis má sekvencie, ale z emulátora s neúplným pokrytím a bez originálnych PE v použitých dátach.</td><td>Odlišná statika môže vysvetliť rozdiel v prírastku hybridu. EMBER opisuje štruktúru súboru a statike môže ponechať menej priestoru na zlepšenie. Párové O2 drží statiku konštantnú len v rámci KronoDroid. [P3, P5, P6, R4]</td></tr>
+<tr><td><strong>Merateľnosť nákladov</strong></td><td>Neznáme časy získania príznakov a konkrétnych behov bránia potvrdiť celkový výpočtový prínos. Rozpočet môže meniť aj výber dlhších či kratších behov.</td><td>Úspora počtu dynamických analýz je merateľná už z uložených výsledkov a platí pre zodpovedajúcu mieru tézy 4. Na kvalitu detekcie pri dodaných vstupoch možno odpovedať samostatne. [R1–R4]</td></tr>
+</tbody>
+</table>
+<div class="callout"><p><span class="label">Interpretácia.</span> Pre otázku, či slabý prínos dynamiky na Windows vysvetľuje zber, má najväčšiu váhu chýbajúce párové overenie na tých istých PE pri stabilných podmienkach. Pre otázku, či konkrétna kaskáda dosiahne prijateľnú citlivosť s menším podielom dynamických behov, poskytujú oba datasety priamu laboratórnu evidenciu.</p></div>
+</section>
+<section class="page" id="obmedzenia">
+<div class="eyebrow">Hranice záverov a formulácia do dizertácie</div>
+<h2>Ktoré ďalšie slabiny sú závažné?</h2>
+<table class="tight">
+<caption>Závažnosť podľa tvrdenia, ktoré slabina ovplyvňuje</caption>
+<thead><tr><th style="width:31%">Slabina a závažnosť</th><th>Dôsledok pre záver</th></tr></thead>
+<tbody>
+<tr><td><strong>Vysoká · prenos do prevádzky</strong><br>Chýba skutočný čas celého procesu.</td><td>Merania CPU dávky začínajú pri hotových vstupoch. Pre real_full má B-baselines s 10 % rozpočtom odhad 0,2362 ms/vzorku oproti 0,2054 pri statike a 0,1787 pri hybride. Vo V1 je A-main drahšia než vybraný hybrid (0,6209 vs. 0,0858 ms). Celú kaskádu nahrádza súčet časov komponentov a ich podielov. Pre Speakeasy je 60 s horná hranica z konfigurácie. Skutočný čas analýzy môže závisieť aj od vzorky. [R1, R3, R4]</td></tr>
+<tr><td><strong>Vysoká · všeobecnosť detekcie</strong><br>Odlišné protokoly a označenia.</td><td>Pri Quo Vadis sa mieša posun v čase a v meraní. Pri KronoDroid hlavný náhodný test nehodnotí budúci zber. Odlišné dátové zdroje, neisté dátumy a označenia, malý počet vynechaných rodín a možný zdieľaný kód obmedzujú prenos na iné populácie. [P3, P5, P6, R2]</td></tr>
+<tr><td><strong>Vysoká pre tézu 3 · referenčný model a kapacita</strong></td><td>Študent dostáva priamo iba jeden typ vstupu. Destilácia môže pomôcť len v rozsahu, ktorý sa dá odhadnúť z dostupných príznakov a ktorý zvládne jeho architektúra. Porovnateľnosť s pomalou dvojvetvovou sieťou nepreukazuje výhodu voči LightGBM. Pravidlo desaťnásobnej úspory je samostatná podmienka overenia študenta. Pri porovnaní s vybraným LightGBM vo V1 sa nesplnila a úspora vo V4 oproti veľkej MLP dosiahla približne dvojnásobok až osemnásobok. Menší model môže mať nízku dávkovú cenu a zároveň slabú citlivosť. [P1, R1, R2, R4]</td></tr>
+<tr><td><strong>Stredná až vysoká · nezávislosť overenia</strong></td><td>V3 vyšla z analýzy toho istého aprílového testu. V oboch štúdiách prešli nastavenia modelov do pokusov s vynechanou rodinou z hlavného scenára, kde sa táto rodina mohla podieľať na pôvodnej voľbe. Priame učenie a validácia rodinu v príslušnom pokuse vynechali. Párový bootstrap neobsahuje neistotu z výberu iných rodín alebo datasetov. [P2, P4, P5]</td></tr>
+<tr><td><strong>Významná pre nízke FPR · posun prahu</strong></td><td>Tesné výsledky môžu závisieť od niekoľkých neškodných súborov a pracovný bod sa po časovom posune mení. V3 ukazuje zlepšenie po prekalibrovaní aj bez nového malvéru. V interných súhrnoch V4 sa nepodarilo doložiť osobitné výsledky pre neškodné APK s nenulovým podielom detekcií VirusTotal a pre nulový počet volaní. [P4–P6, R3, R4]</td></tr>
+</tbody>
+</table>
+<h3>Návrh formulácie do práce</h3>
+<blockquote>Hlavným dátovým obmedzením je chýbajúce kontrolované porovnanie alternatívnych zdrojov behaviorálnych dát na rovnakých súboroch Windows pri konzistentnom zbere. Verejné súbory dát umožnili rozsiahle laboratórne porovnania a na Androide aj párové porovnanie prostredí. Rozdiely v platforme, reprezentácii, označeniach a testovacom protokole však neumožňujú prisúdiť rozdiel v prínose hybridnej detekcie jedinému faktoru.</blockquote>
+<p><span class="label">Návrh doplňujúceho overenia.</span> Pre dizertačnú diskusiu je najinformatívnejší opakovaný záznam správania pre tie isté PE vo viacerých konzistentne zdokumentovaných prostrediach a časovo oddelený zber neškodných aj škodlivých vzoriek. Meranie času od vstupu po rozhodnutie by zodpovedalo samostatnú otázku nákladov. Tieto merania sú návrhom pre samostatné overenie.</p>
+</section>
+<section class="page" id="zaver">
+<div class="eyebrow">Záver a pramene</div>
+<h2>Čo výsledky obhajujú</h2>
+<p><strong>Na Quo Vadis</strong> dominuje silný statický model. Pridanie dynamiky zo Speakeasy pri vynechaných rodinách neprinieslo spoľahlivý zisk a samotná chyba ukončenia emulácie tento výsledok nevysvetlí. Kaskády z LightGBM znížili falošné poplachy pri zachovanej citlivosti v stanovenej tolerancii. Prekalibrovanie na dostatočnom počte nových neškodných súborov pomohlo obnoviť plánovaný pracovný bod.</p>
+<p><strong>Na KronoDroid</strong> hybrid zvyšuje citlivosť oproti statike. Zdroj správania na rovnakých APK priniesol prínos nad rozhodovaciu hranicu pri nevidených rodinách. Pri hlavnom náhodnom teste zostal rozdiel zdrojov pod hranicou. Kaskády zo základných modelov LightGBM splnili kritérium pre falošné poplachy vo všetkých troch vetvách. Destilovaní študenti v tomto datasete nedosiahli požadovanú citlivosť.</p>
+<p><strong>Spoločný výsledok</strong> je menší počet dynamických analýz pri zachovaní dohodnutej úrovne detekcie v úspešných konfiguráciách kaskády B. Dôkaz o nákladoch celého systému by vyžadoval meranie zberu príznakov. Rozdiel oboch datasetov je dôvod zúžiť výklad na konkrétne dáta, protokoly a architektúry.</p>
+<h3>Publikácie a verejné vydania</h3>
+<ul class="references compact">
+<li><strong>[L1]</strong> Trizna, D. (2022). <em>Quo Vadis: Hybrid Machine Learning Meta-Model Based on Contextual and Behavioral Malware Representations.</em> AISec ’22, 127–136. <a href="https://doi.org/10.1145/3560830.3563726">DOI</a> · <a href="https://arxiv.org/abs/2208.12248">autorský rukopis</a> · <a href="https://huggingface.co/datasets/dtrizna/quovadis-ember">EMBER</a> · <a href="https://huggingface.co/datasets/dtrizna/quovadis-speakeasy">Speakeasy</a>.</li>
+<li><strong>[L2]</strong> Guerra-Manzanares, A., Bahsi, H., Nõmm, S. (2021). <em>KronoDroid: Time-based hybrid-featured dataset for effective Android malware detection and characterization.</em> Computers &amp; Security, 110, 102399. <a href="https://doi.org/10.1016/j.cose.2021.102399">DOI</a> · <a href="https://github.com/aleguma/kronodroid">verejné vydanie</a>.</li>
+</ul>
+<h3>Podklady v repozitári</h3>
+<ul class="references compact">
+<li><strong>[P1]</strong> <span class="code">CLAUDE.md</span> a <span class="code">docs/00, 03, 05</span> · tézy, výber modelov a destilácia. <strong>[P2]</strong> <span class="code">docs/09_plan_v2.md</span> · V2. <strong>[P3]</strong> <span class="code">docs/01, 02, 04</span>, <span class="code">processed/index/README.md</span>, <span class="code">processed/dynamic/audit/AUDIT.md</span> · audity a príprava Quo Vadis.</li>
+<li><strong>[P4]</strong> <span class="code">docs/12_plan_v3.md</span> a <span class="code">docs/16_plan_robustnost.md</span> · V3 a robustnosť. <strong>[P5]</strong> <span class="code">docs/19_plan_v4.md</span> · V4. <strong>[P6]</strong> <span class="code">docs/18_audit_kronodroid.md</span> a <span class="code">processed/kronodroid/README.md</span> · audit a spracovanie V4.</li>
+<li><strong>[R1]</strong> <span class="code">docs/07_vysledky_v1.md</span> a <span class="code">runs_final/comparison/</span> (<em>final</em>, <em>subsets</em>, <em>complementarity</em>). <strong>[R2]</strong> <span class="code">docs/10_vysledky_v2.md</span> a <span class="code">runs_v2/comparison/v2/</span> (README, BUDGET, ANALYSIS).</li>
+<li><strong>[R3]</strong> <span class="code">docs/13, 14, 17</span> a <span class="code">runs_v3/comparison/</span> (<em>v3</em>, <em>robustness</em>). <strong>[R4]</strong> <span class="code">docs/20_vysledky_v4.md</span> a <span class="code">runs_v4/comparison/v4/README.md</span> (súhrn <span class="code">v4_report.py</span>). <strong>[R5]</strong> <span class="code">runs_v4/real_full/full/comparison/</span> (<em>complementarity/README.md</em>, <em>hybrid/IMPORTANCE.md</em>).</li>
+<li><strong>[D1]</strong> Vlastný prepočet z predikcií <span class="code">runs_final/, runs_v2/, runs_v4/</span> skriptom <span class="code">overit_predikcie.py</span>, ktorý volá existujúce funkcie <span class="code">src/evaluation/v4_report.py</span> a <span class="code">src/evaluation/metrics.py</span>. Body ROC, stabilita cez rodiny, podiely a rozhodnutia V4 v zero-day a prepočet nízkej prevalencie sú v <span class="code">overene_hodnoty.json</span>. Výpočet pre Quo Vadis je bodový.</li>
+</ul>
+</section>
+</body>
+</html>
