@@ -1,0 +1,75 @@
+# Komplementarita statického, dynamického a hybridného modelu (test)
+
+> Generované `src/evaluation/complementarity.py`. Vybrané modely z `selection/`; prah z validácie (FPR ≤ 1%), test sa na nič nenastavuje. Počty vzoriek, priemer cez seedy 0–2.
+
+Modely: static = `runs_v4/real_p/full/static/lightgbm/20261122-231010`, dynamic = `runs_v4/real_p/full/dynamic/lightgbm/20261122-233440`, hybrid = `runs_v4/real_p/full/hybrid/lightgbm/20261122-235912`
+
+## Súhrn (priemer cez seedy)
+
+| trieda | n | chyby statický | chyby dynamický | chyby hybrid | hybrid opraví chybu statického | hybrid pokazí správne statického | dynamický správne pri chybe statického | chyba všetkých troch |
+|---|---|---|---|---|---|---|---|---|
+| benign | 6983.0 | 56.0 | 51.3 | 43.3 | 39.3 | 26.7 | 52.7 | 3.0 |
+| malware | 5673.0 | 315.7 | 876.3 | 165.0 | 215.3 | 64.7 | 209.0 | 78.0 |
+
+## Podľa rodiny (seed 0)
+
+| rodina | n | chyby statický | chyby dynamický | chyby hybrid | dynamický správne pri chybe statického |
+|---|---|---|---|---|---|
+| Adwo | 6 | 0 | 1 | 0 | 0 |
+| Agent | 393 | 14 | 77 | 11 | 3 |
+| Airpush/StopSMS | 1308 | 84 | 176 | 38 | 66 |
+| AnServer/Answerbot | 7 | 1 | 0 | 0 | 1 |
+| BankBot | 245 | 0 | 7 | 1 | 0 |
+| Booster | 11 | 0 | 0 | 0 | 0 |
+| Boxer | 709 | 1 | 28 | 2 | 1 |
+| Coogos | 23 | 2 | 9 | 1 | 1 |
+| Cosha | 9 | 2 | 5 | 1 | 1 |
+| Counterclank | 15 | 5 | 2 | 0 | 5 |
+| Dialer | 12 | 0 | 2 | 1 | 0 |
+| Dnotua | 20 | 0 | 11 | 0 | 0 |
+| Dowgin | 171 | 1 | 20 | 2 | 0 |
+| DroidDream | 11 | 4 | 1 | 0 | 4 |
+| DroidJack/SandoRAT | 11 | 0 | 1 | 0 | 0 |
+| DroidKungFu | 58 | 9 | 22 | 12 | 4 |
+| FakeAngry | 11 | 4 | 7 | 2 | 1 |
+| FakeApp | 190 | 21 | 30 | 8 | 20 |
+| FakeBank | 60 | 0 | 2 | 1 | 0 |
+| FakeDoc | 30 | 0 | 0 | 0 | 0 |
+| FakeFlash | 10 | 0 | 1 | 0 | 0 |
+| FakeInst | 426 | 8 | 67 | 5 | 4 |
+| Gamex | 11 | 1 | 1 | 1 | 1 |
+| Gappusin | 12 | 4 | 5 | 3 | 2 |
+| GinMaster | 112 | 3 | 15 | 2 | 1 |
+| GoldDream | 15 | 1 | 4 | 0 | 1 |
+| HiddenAds | 27 | 0 | 2 | 0 | 0 |
+| HongTouTou/Adrd | 17 | 0 | 3 | 0 | 0 |
+| Iconosys | 30 | 2 | 1 | 0 | 2 |
+| Kmin | 16 | 0 | 2 | 0 | 0 |
+| Ksapp | 11 | 0 | 5 | 1 | 0 |
+| Kuguo | 98 | 5 | 23 | 4 | 3 |
+| LinuxLotoor | 8 | 2 | 3 | 3 | 1 |
+| Locker/SLocker Ransomware | 325 | 13 | 92 | 3 | 10 |
+| Lovetrap/Luvrtrap | 8 | 0 | 0 | 0 | 0 |
+| Malap | 501 | 19 | 30 | 2 | 14 |
+| MimobSMS | 20 | 0 | 2 | 0 | 0 |
+| MobiDash | 29 | 0 | 0 | 0 | 0 |
+| MobileSpy/Godwon | 44 | 3 | 8 | 3 | 2 |
+| Mseg | 17 | 0 | 7 | 1 | 0 |
+| Nandrobox | 13 | 0 | 8 | 0 | 0 |
+| OpFake | 23 | 1 | 5 | 1 | 0 |
+| Plankton | 8 | 2 | 3 | 0 | 2 |
+| Robtes | 29 | 1 | 8 | 0 | 1 |
+| RuFraud | 11 | 1 | 3 | 1 | 1 |
+| SMSSend | 42 | 1 | 8 | 1 | 0 |
+| SMSreg | 82 | 6 | 17 | 3 | 3 |
+| SMSspy | 10 | 0 | 4 | 1 | 0 |
+| SmForw | 7 | 0 | 1 | 0 | 0 |
+| SmsPay | 5 | 0 | 0 | 0 | 0 |
+| TrojanSMS.Stealer | 16 | 0 | 1 | 1 | 0 |
+| Vdloader | 5 | 0 | 0 | 0 | 0 |
+| Waps/Simhosy | 41 | 7 | 16 | 6 | 4 |
+| Wooboo | 28 | 2 | 14 | 3 | 0 |
+| Youmi | 93 | 26 | 36 | 13 | 18 |
+| benign | 6983 | 63 | 55 | 44 | 61 |
+| other | 204 | 27 | 55 | 18 | 13 |
+| unknown | 19 | 7 | 11 | 5 | 2 |

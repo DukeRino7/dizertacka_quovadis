@@ -1,0 +1,13 @@
+name: rf
+approach: static
+model: random_forest
+description: Random Forest (pôvodné hodnoty príznakov)
+protocol: configs/protocol.yaml
+search_space:
+  n_estimators: {type: int, low: 100, high: 500, step: 50}
+  max_depth: {type: categorical, choices: [16, 24, 32, null]}        # obmedzenie hĺbky = regularizácia
+  min_samples_leaf: {type: int, low: 1, high: 20, log: true}
+  max_features: {type: categorical, choices: [sqrt, log2, 0.05]}
+fixed_params: {}
+smoke_overrides:
+  n_estimators: 20

@@ -1,0 +1,7 @@
+# runs_v4/real_p/lofo/FakeInst/static/lightgbm/
+
+Behy modelu (generované automaticky po každom behu). Detail behu v jeho `README.md`.
+
+| beh | ROC-AUC val | ROC-AUC test | TPR@FPR1% test | F1 test (prah z val) | CPU latencia [ms] | veľkosť [MB] |
+|---|---|---|---|---|---|---|
+| [`20261123-184203`](20261123-184203/README.md) | 0.9940 | 0.9949 ± 0.0001 | 0.9451 | 0.9626 | 0.081 | 11.47 |
